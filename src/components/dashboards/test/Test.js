@@ -117,7 +117,7 @@ const Test = () => {
                   </button>
                 ))}
               </div>
-              <button className="bg-gray-800 py-1 rounded-md">Submit</button>
+              <button className="bg-slate-800 shadow-md font-semibold py-1 rounded-md">Submit</button>
             </div>
           </div>
         </div>

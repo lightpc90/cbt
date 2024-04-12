@@ -3,10 +3,15 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center gap-[150px]">
-      <div className="h-12 bg-slate-800 text-white w-full flex justify-center items-center ">
+    <main className="flex min-h-screen flex-col items-center gap-[150px] bg-slate-800 text-white">
+      <div className="h-12 bg-slate-950 text-white w-full flex justify-center items-center shadow-md ">
         <h1 className="font-bold text-xl">CBT System</h1>
       </div>
+      <div className="flex flex-col items-center">
+        <p className="text-4xl font-bold ">Folahan Institute of Technology</p>
+        <p className="text-gray-400">Center of Excellence</p>
+      </div>
+
       {/* links to the pages */}
       <div className="flex flex-col gap-3 items-center bg-white p-16 shadow-md rounded-md border-2 border-blue ">
         <Link

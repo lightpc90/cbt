@@ -18,6 +18,11 @@ const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
     setAnswers({ ...answers, [question]: answer }); 
   }
 
+  const numberToAlphabet = (number) => {
+    let alphabetValue = number + 64
+    let alphabetChar = String.fromCharCode(alphabetValue)
+    return alphabetChar
+  }
   
   
   useEffect(() => {
@@ -44,7 +49,8 @@ const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
         {/* Options section */}
         <div className="bg-gray-700 max-h-[310px] rounded-md p-3 shadow-md overflow-auto">
           {currentSubject.options.map((option, index) => (
-            <div key={index}>
+            <div key={index} className="flex flex-wrap ">
+              <p>{numberToAlphabet(1+index)}</p>
               <input
                 type="radio"
                 id={`opt${index}`}
@@ -55,7 +61,7 @@ const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
                   handleChange(currentSubject.question, option);
                 }}
               />
-              <label htmlFor={`opt${index}`}>{option}</label>
+              <label htmlFor={`opt${index}`} className="ml-2">{option}</label>
             </div>
           ))}
         </div>

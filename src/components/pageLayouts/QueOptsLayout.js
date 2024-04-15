@@ -7,8 +7,6 @@ const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
 
   const { answers, setAnswers } = useAppContext()
   console.log("answer after  setting", answers)
-  currentSubject = { ...currentSubject, options: [...currentSubject.incorrectAnswers, currentSubject.correctAnswer] }
-
 
   const handleChange = (question, answer) => {
      localStorage.setItem(

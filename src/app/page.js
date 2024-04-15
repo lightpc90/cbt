@@ -8,7 +8,7 @@ export default function Home() {
         <h1 className="font-bold text-xl">CBT System</h1>
       </div>
       <div className="flex flex-col items-center">
-        <p className="text-4xl font-bold ">Folahan Institute of Technology</p>
+        <p className="text-4xl font-bold ">Folahan Institute of Technology, Wakanda</p>
         <p className="text-gray-400">Center of Excellence</p>
       </div>
 

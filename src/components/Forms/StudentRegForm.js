@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const StudentRegForm = () => {
   const initialFormData = {
-    username: "",
+    middlename: "",
     password: "",
     firstname: "",
     lastname: "",
@@ -19,10 +19,10 @@ const StudentRegForm = () => {
     event.preventDefault();
   };
   return (
-    <div className="bg-slate-300 min-h-[300px] w-3/12 flex flex-col justify-center items-center gap-3 rounded-md shadow-md ">
-      <h1 className="font-bold text-lg">Examniner Registraton Form</h1>
+    <div className="bg-slate-300 min-h-[300px] px-10 flex flex-col justify-center items-center gap-3 rounded-md shadow-md py-10 ring-4 ring-white">
+      <h1 className="font-bold text-lg">Student Test Account Creation Form</h1>
       {/* Student Registration form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-8/12">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-10/12">
         {/* firstname input */}
         <input
           value={formData.firstname}
@@ -32,6 +32,18 @@ const StudentRegForm = () => {
           type="text"
           name="firstname"
           placeholder="First Name"
+          className="p-2 rounded-md"
+        />
+
+        {/* middle name input */}
+        <input
+          value={formData.middlename}
+          onChange={(e) => {
+            setFormData({ ...formData, middlename: e.target.value });
+          }}
+          type="text"
+          name="lastname"
+          placeholder="Middle Name"
           className="p-2 rounded-md"
         />
 
@@ -86,7 +98,7 @@ const StudentRegForm = () => {
           type="submit"
           className="bg-slate-800 p-1 rounded-md shadow-md font-semibold text-lg text-white hover:text-gray-800 hover:bg-white"
         >
-          Register
+          Create Account
         </button>
       </form>
     </div>

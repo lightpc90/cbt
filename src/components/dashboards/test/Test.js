@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
-import { General_Knowledge } from "@/data/testModel/test_model";
+import { shuffledGeneral_Knowledge } from "@/data/Subjects";
 import QueOptsLayout from "@/components/pageLayouts/QueOptsLayout";
 import { Subjects } from "@/data/Subjects";
 const Test = () => {
   const { answers } = useAppContext();
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
-  const [currentSubject, setCurrentSubject] = useState(General_Knowledge); // Current Test Subject
+  const [currentSubject, setCurrentSubject] = useState(shuffledGeneral_Knowledge); // Current Test Subject
 
   console.log(answers);
   // function to handle next button
@@ -51,7 +51,7 @@ const Test = () => {
           <div>
             <p className="text-gray-500 font-bold">CBT SYSTEM</p>
             <p className="text-2xl font-bold">
-              Folahan Institute of Technology
+              Folahan Institute of Technology, Wakanda
             </p>
           </div>
           {/* Student name and picture */}
@@ -99,15 +99,16 @@ const Test = () => {
               </div>
             </div>
             {/* Questions selection section */}
-            <div className="flex flex-col justify-between p-2 bg-gray-700 w-2/12 rounded-md shadow-md h-[400px] overflow-auto">
-              <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col justify-between p-2 bg-gray-700 w-3/12 h-[500px] overflow-auto rounded-md shadow-md ">
+              {/* section holding  the question number selectors */}
+              <div className="flex flex-wrap gap-2 h-[400px] p-2 overflow-auto bg-slate-900 rounded-lg">
                 {currentSubject.map(({ question }, i) => (
                   <button
                     onClick={() => {
                       setCurrentQueNumber(i);
                     }}
                     key={i}
-                    className={`h-[40px] w-[40px] rounded-full flex justify-center items-center font-bold text-xl hover:ring-2 hover:ring-white bg-gray-500 ${
+                    className={`h-[40px] w-[40px] rounded-full flex justify-center items-center font-bold text-xl hover:ring-2 hover:ring-[#facc15] bg-gray-500 ${
                       currentQueNumber === i ? "ring-2 ring-white" : ""
                     } ${
                       answers?.hasOwnProperty(question) ? "bg-gray-800" : ""
@@ -117,7 +118,9 @@ const Test = () => {
                   </button>
                 ))}
               </div>
-              <button className="bg-slate-800 shadow-md font-semibold py-1 rounded-md">Submit</button>
+              <button className="bg-slate-900 shadow-md font-semibold py-1 rounded-md">
+                Submit
+              </button>
             </div>
           </div>
         </div>

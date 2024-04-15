@@ -1,7 +1,8 @@
 import React from "react";
+import Examiner from "@/components/dashboards/examiner/Examiner";
 
 const Page = () => {
-  return <div>Examiner/Lecturer Dashboard</div>;
+  return <Examiner/>;
 };
 
 export default Page;

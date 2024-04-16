@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const QuestionsComponent = () => {
   const [questions, setQuestions] = useState([
-    { question: "", options: ["", "", "", ""] },
+    { question: "", answer: "", options: ["", "", "", ""] },
   ]);
 
   const addQuestion = () => {
@@ -26,6 +26,16 @@ const QuestionsComponent = () => {
     setQuestions(updatedQuestions);
   };
 
+  const handleQuestionDelete = (questionIndex) => {
+    questions.splice(questionIndex, 1);
+    setQuestions([...questions]);
+  }
+
+  const handleSetAnswer = (questionIndex, option) => {
+    questions[questionIndex].answer = option;
+    setQuestions([...questions])
+  }
+
   return (
     <div className="flex flex-col gap-10">
       <div>
@@ -39,7 +49,12 @@ const QuestionsComponent = () => {
       </div>
       {questions.map((q, questionIndex) => (
         <div key={questionIndex} className="flex flex-col w-5/12 gap-2">
-          <p>Question {1 + questionIndex}</p>
+          <div className="flex gap-2 items-center">
+            {/* delete button */}
+            <button className="h-[15px] w-[15px] ring-1 ring-white rounded-sm shadow-md bg-red-800 flex justify-center items-center" onClick={()=>{handleQuestionDelete(questionIndex)}} >x</button>
+            <p>Question {1 + questionIndex}</p>
+          </div>
+
           <textarea
             placeholder="Enter question"
             value={q.question}
@@ -65,9 +80,12 @@ const QuestionsComponent = () => {
                 id={`opt-${questionIndex}-${optionIndex}`}
                 name={`opt-${questionIndex}`}
                 value={option}
+                disabled={!option}
+                onClick={()=>{handleSetAnswer(questionIndex, option)}}
               />
             </div>
           ))}
+          <div>{ `answer: ${questions[questionIndex].answer}`}</div>
         </div>
       ))}
       <div className="flex-inline gap-3">

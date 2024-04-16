@@ -37,6 +37,7 @@ const Examiner = () => {
           <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
         <div className="">
+          <p className="text-4xl font-bold my-5">Set Test Questions</p>
           <QuestionsComponent />
         </div>
       </div>

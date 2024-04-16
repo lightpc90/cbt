@@ -42,7 +42,7 @@ const StudentRegForm = () => {
             setFormData({ ...formData, middlename: e.target.value });
           }}
           type="text"
-          name="lastname"
+          name="middlename"
           placeholder="Middle Name"
           className="p-2 rounded-md"
         />
@@ -66,8 +66,8 @@ const StudentRegForm = () => {
             setFormData({ ...formData, studentID: e.target.value });
           }}
           type="text"
-          name="examinerId"
-          placeholder="Examiner ID"
+          name="studentId"
+          placeholder="Student ID"
           className="p-2 rounded-md"
         />
 

@@ -1,20 +1,22 @@
 'use client'
 
-import {useState} from "react";
+import { useState } from "react";
 import QuestionsComponent from "./QuestionsComponent";
+import CourseManagement from "./CourseManagement";
+import Result from "./Result";
 
 const Examiner = () => {
-  const [menu, setMenu] = useState({'questionSet': false, 'courseManagement': false, 'result': false})
+  const [menu, setMenu] = useState({ 'questionSet': false, 'courseManagement': false, 'result': false })
 
-  const handleMenuChange=(menubutton)=>{
-    
+  const handleMenuChange = (menubutton) => {
+
     menu[menubutton] = true
-    for(const key in menu){
-      if(key != menubutton){
+    for (const key in menu) {
+      if (key != menubutton) {
         menu[key] = false
       }
     }
-    setMenu({...menu})
+    setMenu({ ...menu })
   }
   return (
     <div className="h-screen bg-slate-900 text-white flex">
@@ -31,13 +33,13 @@ const Examiner = () => {
           <hr />
           {/* Navigation section */}
           <div className="flex flex-col mt-10 gap-3">
-            <button onClick={()=>handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-yellow-500`: ``} `}>
+            <button onClick={() => handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-yellow-500` : ``} `}>
               Set Test Questions
             </button>
-            <button onClick={()=>handleMenuChange('courseManagement')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.courseManagement ? `ring-2 ring-yellow-500`: ``} `}>
+            <button onClick={() => handleMenuChange('courseManagement')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.courseManagement ? `ring-2 ring-yellow-500` : ``} `}>
               Manage Courses
             </button>
-            <button onClick={()=>handleMenuChange('result')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-yellow-500`: ``} `}>
+            <button onClick={() => handleMenuChange('result')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-yellow-500` : ``} `}>
               Results
             </button>
           </div>
@@ -48,12 +50,24 @@ const Examiner = () => {
         </button>
       </div>
       {/* Right Pane */}
-          <div className="text-white w-10/12 py-5 px-10 overflow-auto">
+      <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
-        <div className="">
+        {menu.questionSet && <div className="">
           <p className="text-4xl font-bold my-5">Set Test Questions</p>
           <QuestionsComponent />
-        </div>
+        </div>}
+        {/* Course management subpage */}
+        {menu.courseManagement && <div>
+          <CourseManagement />
+        </div>}
+        {/* Result subpage */}
+        {menu.result && <div>
+          <Result />
+        </div>}
+      {/* At initial page load when no menu has been selected */}
+      {!menu?.courseManagement && !menu?.questionSet && !menu?.result && <div>
+        <p>Start by choosing any of your menu button</p>
+        </div>}
       </div>
     </div>
   );

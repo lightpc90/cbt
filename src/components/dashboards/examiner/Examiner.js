@@ -1,14 +1,28 @@
-import React from "react";
+'use client'
+
+import {useState} from "react";
 import QuestionsComponent from "./QuestionsComponent";
 
 const Examiner = () => {
+  const [menu, setMenu] = useState({'questionSet': false, 'courseManagement': false, 'result': false})
+
+  const handleMenuChange=(menubutton)=>{
+    
+    menu[menubutton] = true
+    for(const key in menu){
+      if(key != menubutton){
+        menu[key] = false
+      }
+    }
+    setMenu({...menu})
+  }
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}
       <div className="w-2/12 flex flex-col bg-slate-950 h-full p-5 justify-between border-r-2">
         <div>
           {/* profile section */}
-          <div className="p-2 flex flex-col justify-center items-center mb-10">
+          <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
             <p>Dr. J. Awonika</p>
             <p>Robotics Engineering</p>
@@ -17,13 +31,13 @@ const Examiner = () => {
           <hr />
           {/* Navigation section */}
           <div className="flex flex-col mt-10 gap-3">
-            <button className="bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white">
+            <button onClick={()=>handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-yellow-500`: ``} `}>
               Set Test Questions
             </button>
-            <button className="bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white">
+            <button onClick={()=>handleMenuChange('courseManagement')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.courseManagement ? `ring-2 ring-yellow-500`: ``} `}>
               Manage Courses
             </button>
-            <button className="bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white">
+            <button onClick={()=>handleMenuChange('result')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-yellow-500`: ``} `}>
               Results
             </button>
           </div>

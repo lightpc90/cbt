@@ -33,13 +33,13 @@ const Examiner = () => {
           <hr />
           {/* Navigation section */}
           <div className="flex flex-col mt-10 gap-3">
-            <button onClick={() => handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-yellow-500` : ``} `}>
+            <button onClick={() => handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-rose-800` : ``} `}>
               Set Test Questions
             </button>
-            <button onClick={() => handleMenuChange('courseManagement')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.courseManagement ? `ring-2 ring-yellow-500` : ``} `}>
+            <button onClick={() => handleMenuChange('courseManagement')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.courseManagement ? `ring-2 ring-rose-800` : ``} `}>
               Manage Courses
             </button>
-            <button onClick={() => handleMenuChange('result')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-yellow-500` : ``} `}>
+            <button onClick={() => handleMenuChange('result')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-rose-800` : ``} `}>
               Results
             </button>
           </div>

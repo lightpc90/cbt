@@ -1,0 +1,1 @@
+export const Courses = ['Gns101', 'Gst102', 'Bio101', 'Chem201', 'Phy103' ]

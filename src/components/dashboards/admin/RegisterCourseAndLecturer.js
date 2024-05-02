@@ -11,7 +11,7 @@ const RegisterCourseAndLecturer = () => {
           <div className='flex flex-col gap-2 '>
             <input type='text' name='courseTitle' placeholder='Course Title' required className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
             <input type='text' name='courseCode' placeholder='Course Code' required className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
-            <button className='bg-slate-700 rounded-md'>Register Course</button>
+            <button className='bg-slate-700 rounded-md hover:bg-rose-800 hover:text-white'>Register Course</button>
           </div>
         </div>
         <hr className='m-12' />
@@ -23,21 +23,24 @@ const RegisterCourseAndLecturer = () => {
             <input type='text' name='mName' placeholder='Middle Name' className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
             <input type='text' name='lName' placeholder='Last Name' required className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
             <input type='email' name='lEmail' placeholder='Email' required className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
-            <input type='text' name='lCode' placeholder='Lecturer Code' required className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
+            <input type='text' name='lId' placeholder='Lecturer ID' required className='p-1 rounded-md border-b-2 border-b-rose-800 bg-inherit' />
             {/* courses button container */}
             <p className='text-sm'>Bind Lecturer to his course(s) by choosing from the list of registered Courses below</p>
             <div className='flex flex-wrap gap-2 my-4'>
               {/* map department here */}
               {Courses.map((course, i) => (
-                <button className={`ring-2 ring-rose-800 p-1 text-sm rounded-md`} key={i}>{course}</button>
+                <button className={`ring-2 ring-rose-800 p-1 text-sm rounded-md hover:bg-rose-800 hover:text-white`} key={i}>{course}</button>
               ))}
             </div>
 
-            <button className='bg-slate-700 rounded-md'>Register Lecturer</button>
+            <button className='bg-slate-700 rounded-md hover:bg-rose-800 hover:text-white'>Register Lecturer</button>
           </div>
         </div>
 
       </div>
+
+
+
       {/* Courses and lectures view container */}
       <div className='w-6/12 bg-slate-500 h-[700px] py-2'>
         

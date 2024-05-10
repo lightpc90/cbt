@@ -32,7 +32,8 @@ const Examiner = () => {
           </div>
           <hr />
           {/* Navigation section */}
-          <div className="flex flex-col mt-10 gap-3">
+          <div className="flex flex-col mt-10 gap-3 ">
+            <p className="text-center">Menu Navigation</p>
             <button onClick={() => handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-rose-800` : ``} `}>
               Set Test Questions
             </button>

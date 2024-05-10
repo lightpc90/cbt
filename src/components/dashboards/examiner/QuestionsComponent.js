@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 
 const QuestionsComponent = () => {
   const [questions, setQuestions] = useState([
     { question: "", answer: "", options: ["", "", "", ""] },
   ]);
 
-  const [examPara, setExamPara] = useState({ course: '', hourDuration: '', minDuration: '', session: '' })
+  const [examPara, setExamPara] = useState({ course: '', hourDuration: '', minDuration: '', session: '', dateAndTime: '' })
 
   const addQuestion = () => {
     setQuestions([
@@ -39,8 +40,8 @@ const QuestionsComponent = () => {
   }
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex gap-2 items-center">
+    <div className="flex flex-col gap-10 relative">
+      <div className="flex gap-2 items-center ">
         {/* Course choose input */}
         <div>
           <p className="font-bold mb-2">Choose Course</p>
@@ -73,12 +74,19 @@ const QuestionsComponent = () => {
         {/* Session set input */}
         <div>
           <p>Exam Session</p>
-          <input type="text" placeholder="2021/2022" className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md" value={examPara.session} onChange={(e)=>{setExamPara({...examPara, session: e.target.value})}} />
+          <input type="text" placeholder="2021/2022" className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1" value={examPara.session} onChange={(e)=>{setExamPara({...examPara, session: e.target.value})}} />
+        </div>
+
+        {/* Exam date */}
+        <div className="flex flex-col gap-1 ">
+          <label>Exam Date and Time</label>
+          <input value={examPara.dateAndTime} onChange={(e)=>{setExamPara({...examPara, dateAndTime: e.target.value})}} type="datetime-local" className="bg-rose-800 rounded-md p-1"/>
+          <p>{examPara.dateAndTime}</p>
         </div>
 
       </div>
       {questions.map((q, questionIndex) => (
-        <div key={questionIndex} className="flex flex-col w-5/12 gap-2">
+        <div key={questionIndex} className="flex flex-col w-5/12 gap-2 ">
           <div className="flex gap-2 items-center">
             {/* delete button */}
             <button className="h-[15px] w-[15px] ring-1 ring-white rounded-sm shadow-md bg-red-800 flex justify-center items-center" onClick={() => { handleQuestionDelete(questionIndex) }} >x</button>
@@ -98,7 +106,7 @@ const QuestionsComponent = () => {
             <div key={optionIndex} className="flex gap-2">
               <input
                 type="text"
-                placeholder={`Option ${optionIndex + 1}`}
+                placeholder={`Option ${numberToAlphabet(optionIndex + 1)}`}
                 value={option}
                 onChange={(e) =>
                   handleOptionChange(questionIndex, optionIndex, e)

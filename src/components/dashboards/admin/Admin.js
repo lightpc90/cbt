@@ -4,9 +4,12 @@ import { useState } from "react";
 import ManageExam from "./ManageExam";
 import RegisterCourseAndLecturer from "./RegisterCourseAndLecturer";
 import Result from "./ViewResult";
+import { useSearchParams } from "next/navigation";
 
 const Admin = () => {
   const [menu, setMenu] = useState({ 'registerCourseAndLecturer': false, 'manageExam': false, 'result': false })
+
+  // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
 
   const handleMenuChange = (menubutton) => {
 

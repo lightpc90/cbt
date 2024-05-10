@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "@/appContext/appState";
+import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 
 const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
 
@@ -14,12 +15,6 @@ const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
        JSON.stringify({ ...answers, [question]: answer })
      );
     setAnswers({ ...answers, [question]: answer }); 
-  }
-
-  const numberToAlphabet = (number) => {
-    let alphabetValue = number + 64
-    let alphabetChar = String.fromCharCode(alphabetValue)
-    return alphabetChar
   }
   
   

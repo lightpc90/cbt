@@ -1,14 +1,24 @@
-import connectDB from "@/models/connectDB";
+import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Staff from "@/models/Staff";
 
 export async function POST(req) {
-  const eventDoc = await req.json();
+  const staffData = await req.json();
+  console.log("staff data: ", staffData)
+  const _email = staffData.email.toLowerCase()
+  staffData.email = _email
   try {
     await connectDB();
 
+    const existingStaff = await Staff.findOne({email: _email})
+    if(existingStaff){
+      return NextResponse.json({
+        success: false,
+        error: "email already existing!"
+      }, {status: 400})
+    }
     //  CREATE A NEW STAFF ENTRY
-    const newStaff = await Staff.create(eventDoc);
+    const newStaff = await Staff.create(staffData);
 
     //   IF NEW STAFF IS NOT CREATED AND RETURNED FROM THE DATABASE
     if (!newStaff) {

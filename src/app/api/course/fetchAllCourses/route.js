@@ -1,4 +1,4 @@
-import connectDB from "@/models/connectDB";
+import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Course from "@/models/Course";
 
@@ -6,11 +6,11 @@ export async function GET(req) {
   try {
     await connectDB();
 
-    //   FIND THE USER INFO USING THE USER ID
+    //   FIND THE COURSE INFO USING THE USER ID
     const courses = await Course.find({});
 
     //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
-    if (!courses) {
+    if (courses.length === 0) {
       console.log("No course Registered");
       return NextResponse.json({
         success: false,

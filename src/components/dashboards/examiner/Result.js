@@ -1,6 +1,16 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
+import { useAppContext } from '@/appContext/appState'
 
 const Result = () => {
+    const {coursesData} = useAppContext()
+
+    const [activeCourse, setActiveCourse] = useState({})
+
+    const handleActiveCourse=(course)=>{
+        setActiveCourse(()=>{return course})
+    }
     return (
         
         <div>
@@ -9,9 +19,9 @@ const Result = () => {
                 {/* List of Courses, */}
             <div className='h-[800px] overflow-auto bg-slate-300 rounded-md w-8/12'>
                 <div className='bg-rose-800 h-[50px] overflow-auto flex items-center p-2 gap-2'>
-                    <button className={`ring-2 ring-white p-1 rounded-md text-sm shadow-md hover:ring-yellow-500`}>Course1</button>
-                    <button className={`ring-2 ring-white p-1 rounded-md text-sm shadow-md hover:ring-yellow-500`}>Course2</button>
-                    <button className={`ring-2 ring-white p-1 rounded-md text-sm shadow-md hover:ring-yellow-500`}>Course3</button>
+                   {coursesData.map((course, i)=>(
+                     <button onClick={()=>handleActiveCourse(course)} key={i} className={`ring-2 ring-white p-1 rounded-md text-sm shadow-md hover:ring-yellow-500 ${course.code === activeCourse.code ? `bg-slate-800`: ``} `}>{course.code}</button>
+                   ))}
                 </div>
                 {/*  Students and their Results */}
                 <div className='p-2 text-sm h-[750px] overflow-auto gap-2 flex flex-col'>
@@ -131,8 +141,15 @@ const Result = () => {
                 </div>
             </div>
             {/* Info of the selected course */}
-            <div className='h-[300px] overflow-auto bg-slate-300 rounded-md w-3/12 p-2 text-slate-800 font-semibold'>
-                <p>Course Basic Info</p>
+            <div className='h-[300px] overflow-auto bg-slate-300 rounded-md w-3/12 p-2 text-slate-800'>
+                <p className='text-rose-800 font-semibold'>Course Basic Info</p>
+                <div className='flex flex-col mt-5 gap-1'>
+                    <p>Course Title: {activeCourse?.title}</p>
+                    <p>Course Code: {activeCourse?.code}</p>
+                    <hr className='my-2 border-1 border-slate-500'/>
+                    <p>No of Lecturer: {activeCourse?.staff?.length}</p>
+                    <p>No of Students: {activeCourse?.student?.length}</p>
+                </div>
             </div>
         </div>
         </div>

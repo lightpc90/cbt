@@ -23,6 +23,9 @@ const StudentSchema = new mongoose.Schema(
     hashedPwd: {
       type: String,
     },
+    results: {
+      type: [Object],
+    },
     username: {
       type: String,
     },

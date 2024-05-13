@@ -22,15 +22,9 @@ const StaffSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       index: true,
-      validate(value) {
-          if (!validator.isEmail(value)) {
-              throw new Error('Invalid Email');
-          }
-      },
     },
     courses: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'Course'
+      type: [String],
     },
     tempPwd: {
       type: String,

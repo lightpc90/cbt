@@ -29,8 +29,8 @@ export const AppProvider = ({ children }) => {
     // State for the app context.
     const [loading, setLoading] = useState(true);
     const [answers, setAnswers] = useState(typeof window !== 'undefined' ? localStorage.getItem('answers') & JSON.parse(localStorage.getItem('answers')) : {})
-    const [staffsData, setStaffsfData] = useState({});
-    const [coursesData, setCoursesData] = useState({})
+    const [staffsData, setStaffsData] = useState([]);
+    const [coursesData, setCoursesData] = useState([])
 
     const [users, setUsers] = useState(null);
     const [verify, setVerify] = useState(false);
@@ -41,21 +41,21 @@ export const AppProvider = ({ children }) => {
 
     //   fetch all staffs
     const fetchStaffs = async () => {
-        if (staffsData) { return }
+        if (staffsData.length !== 0) { return }
         const res = await fetch('/api/staff/fetchAllStaffs')
         const _res = await res?.json()
         if (_res.error) {
             console.log("error getting staffs: ", _res.error)
         }
         else if (_res.success) {
-            setStaffsfData(_res.data)
+            setStaffsData(_res.data)
         }
-
+        console.log("staffs data from effect: ",staffsData)
     }
 
     //  fetch all courses
     const fetchCourses = async () => {
-        if (coursesData) { return }
+        if (coursesData.length !== 0) { return }
         const res = await fetch('/api/course/fetchAllCourses')
         const _res = await res?.json()
         if (_res.error) {
@@ -64,6 +64,7 @@ export const AppProvider = ({ children }) => {
         else if (_res.success) {
             setCoursesData(_res.data)
         }
+        console.log("courses data from effect: ",coursesData)
     }
 
 
@@ -104,5 +105,5 @@ export const AppProvider = ({ children }) => {
         fetchStaffs()
     }, [])
 
-    return <AppContext.Provider value={{ answers, setAnswers, staffsData, setStaffsfData, coursesData, setCoursesData }}>{children}</AppContext.Provider>
+    return <AppContext.Provider value={{ answers, setAnswers, staffsData, setStaffsData, coursesData, setCoursesData }}>{children}</AppContext.Provider>
 }

@@ -1,4 +1,4 @@
-import connectDB from "@/models/connectDB";
+import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Staff from "@/models/Staff";
 
@@ -10,7 +10,7 @@ export async function GET(req) {
     const staffs = await Staff.find({})
 
     //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
-    if (!staffs) {
+    if (staffs.length === 0) {
       console.log("No staff Registered");
       return NextResponse.json({
         success: false,

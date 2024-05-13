@@ -185,7 +185,7 @@ const RegisterCourseAndLecturer = () => {
         </div>
         {/* View Registered Lecturer Container */}
         <p className='bg-rose-800 p-1 text-sm mt-5'>Registered Lecturer</p>
-        <div className='bg-white h-[65%] overflow-auto text-black flex flex-wrap gap-2 p-2'>
+        <div className=' bg-white h-[65%] overflow-auto text-black p-2 gap-3'>
           {/* list of lecturers */}
         {staffsData.map((staff, i)=>(
           <StaffLayout key={i} staff={staff}/>

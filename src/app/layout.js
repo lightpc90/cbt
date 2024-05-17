@@ -12,8 +12,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} `}>
+        {/* block access to smaller screen devices */}
+        <div className="hidden lg:block">
         <AppProvider>{children}</AppProvider>
+        </div>
+        {/* What to show on smaller screens */}
+        <div className="lg:hidden h-screen flex flex-col items-center justify-center">
+          <p className="text-2xl">No Access!</p>
+          <p>
+            Please use a device with bigger screen to access the software. For example, a laptop
+          </p>
+        </div>
       </body>
     </html>
   );

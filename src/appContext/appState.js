@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
     // const [users, setUsers] = useState(null);
     const [verify, setVerify] = useState(false);
 
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState(typeof window !== 'undefined' ? localStorage.getItem('userData') : {})
     const [currentUserId, setCurrentUserId] = useState(typeof window !== 'undefined' ? localStorage.getItem('currentUserId') : {})
 
     const [accessToken, setAccessToken] = useState(
@@ -79,12 +79,14 @@ export const AppProvider = ({ children }) => {
         }
     }
     // signin function
-    const signIn = (token, userId) => {
+    const signIn = (token, userId, data) => {
         console.log("signing in...")
         localStorage.setItem("accessToken", token);
         localStorage.setItem("currentUserId", userId);
+        localStorage.setItem("userData", data)
         setAccessToken(token);
         setCurrentUserId(userId);
+        setUserData(data)
         setVerify(true)
     };
 

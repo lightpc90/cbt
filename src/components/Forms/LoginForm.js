@@ -44,8 +44,7 @@ const LoginForm = ({admin=false}) => {
     if(_res.success){
       console.log(_res.message)
       console.log("user data login: ", _res.data)
-      setUserData(_res.data)
-      signIn(_res.accessToken, _res.data._id)
+      signIn(_res.accessToken, _res.data._id, _res.data)
       if(_res.data.admin){
         router.push('/admin')
       }

@@ -3,39 +3,40 @@
 import { useState } from "react";
 
 const StudentTestLoginForm = () => {
-  const initialFormData = { username: "", password: "" };
+  const initialFormData = { matricNo: "", surname: "" };
   const [formData, setFormData] = useState(initialFormData);
 
   // handle form data on change
   const handleSubmit = async (event) => {
     event.preventDefault();
   };
+
   return (
-    <div className="bg-slate-300 min-h-[300px] w-3/12 flex flex-col justify-center items-center gap-3 rounded-md shadow-md ">
+    <div className="bg-slate-300 text-black min-h-[300px] hover:ring hover:ring-slate-800 w-full flex flex-col justify-center items-center gap-3 rounded-md shadow-md ">
       <h1 className="font-bold text-lg">Login to Start Your Test</h1>
       {/* admin login form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-8/12">
-        {/* username input */}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-3">
+        {/* matricNo input */}
         <input
-          value={formData.username}
+          value={formData.matricNo}
           onChange={(e) =>
-            setFormData({ ...formData, username: e.target.value })
+            setFormData({ ...formData, matricNo: e.target.value })
           }
           type="text"
-          name="username"
-          placeholder="Username"
+          name="matricNo"
+          placeholder="Matric No"
           className="p-2 rounded-md "
         />
 
-        {/* password input */}
+        {/* surname input */}
         <input
-          value={formData.password}
+          value={formData.surname}
           onChange={(e) => {
-            setFormData({ ...formData, password: e.target.value });
+            setFormData({ ...formData, surname: e.target.value });
           }}
           type="password"
-          name="password"
-          placeholder="Password"
+          name="surname"
+          placeholder="Surname"
           className="p-2 rounded-md "
         />
         <button

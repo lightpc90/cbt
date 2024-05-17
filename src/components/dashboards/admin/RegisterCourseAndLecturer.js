@@ -158,7 +158,7 @@ const RegisterCourseAndLecturer = () => {
         <div className='my-5'>
           <p className='text-gray-500'>Register a Lecturer</p>
           <div className='flex flex-col gap-2'>
-            <select value={staffData.title} onChange={e=>setStaffData({...staffData, title: e.target.value})} required>
+            <select value={staffData.title} onChange={e=>setStaffData({...staffData, title: e.target.value})} required className='bg-inherit border rounded-md p-2'>
               {Titles.map((Title, i)=>(
                 <option key={i} value={Title.value}>{Title.name}</option>
               ))}

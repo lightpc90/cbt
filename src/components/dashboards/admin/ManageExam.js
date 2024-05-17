@@ -13,7 +13,7 @@ const ManageExam = () => {
   }
 
   return (
-    <div className='h-screen'>
+    <div className=''>
       <p>Manage Examination</p>
       <div className='flex gap-2'>
         {/* All Questions container */}
@@ -35,8 +35,8 @@ const ManageExam = () => {
         </div>
 
         {/* published question container */}
-        <div className='bg-slate-700 h-[300px] w-[30%] rounded-md overflow-auto'>
-          <p className='bg-green-500 p-1'>Live Question</p>
+        <div className='bg-slate-700 h-[600px] w-[30%] rounded-md overflow-auto'>
+          <p className='bg-green-500 p-1'>Uploaded Exams</p>
           {/* list of Questions */}
           <div className='h-[80%] overflow-auto flex flex-wrap p-2'>
             {/* get published questions */}
@@ -52,7 +52,7 @@ const ManageExam = () => {
                 <button className='bg-rose-500 hover:bg-slate-500 px-1'>Pull Down</button>
               </div>}
               
-            </div>)) : `No Live Questions`}
+            </div>)) : `No Ongoing Exams`}
           </div>
         </div>
       </div>

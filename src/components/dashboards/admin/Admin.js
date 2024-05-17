@@ -44,8 +44,8 @@ const Admin = () => {
           <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
             <p>{`${userData?.title} ${userData?.firstname} ${userData?.lastname}`}</p>
-            <p>Robotics Engineering</p>
-            <p>{userData?.staffId}</p>
+            <p>{`${userData?.dept}`}</p>
+            <p>{userData?.staffID}</p>
           </div>
           <hr />
           {/* Navigation section */}

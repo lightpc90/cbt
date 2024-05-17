@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Student from "./Student";
 
 const CourseSchema = new mongoose.Schema(
   {
@@ -24,6 +25,12 @@ const CourseSchema = new mongoose.Schema(
     },
     question: {
         type: Object
+    },
+    results: {
+      type: [{questions: [{question: String, answer: String}], studentId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: Student
+      }, score: String}]
     },
     published: {
         type: Boolean,

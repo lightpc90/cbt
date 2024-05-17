@@ -1,15 +1,29 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ManageExam from "./ManageExam";
 import RegisterCourseAndLecturer from "./RegisterCourseAndLecturer";
 import Result from "./ViewResult";
 import { useSearchParams } from "next/navigation";
+import { useAppContext } from "@/appContext/appState";
+import { useRouter } from "next/navigation";
 
 const Admin = () => {
   const [menu, setMenu] = useState({ 'registerCourseAndLecturer': false, 'manageExam': false, 'result': false })
-
+  const router = useRouter()
   // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
+  const {getAccessToken, staffsData, currentUserId, setUserData, userData,} = useAppContext()
+
+  useEffect(() => {
+    const verify = getAccessToken()
+    console.log("userData: ", userData)
+
+    if (!verify || userData?.admin !== true) { 
+      console.log("inside verify: ", verify, "user isAdmin: ", userData?.admin)
+      router.push('/') }
+    else {console.log("staffs data: ", staffsData)} 
+    console.log("outside verify: ", verify, "user isAdmin: ", userData?.admin)
+  }, [])
 
   const handleMenuChange = (menubutton) => {
 
@@ -29,9 +43,9 @@ const Admin = () => {
           {/* profile section */}
           <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
-            <p>Dr. J. Awonika</p>
+            <p>{`${userData?.title} ${userData?.firstname} ${userData?.lastname}`}</p>
             <p>Robotics Engineering</p>
-            <p>2019/RTE/2055</p>
+            <p>{userData?.staffId}</p>
           </div>
           <hr />
           {/* Navigation section */}

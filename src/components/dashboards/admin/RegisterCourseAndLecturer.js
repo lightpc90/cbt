@@ -1,17 +1,26 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Courses } from '@/data/courses'
 import { useAppContext } from '@/appContext/appState'
 import CourseLayout from './CourseLayout'
 import StaffLayout from './StaffLayout'
+
+const Titles = [
+  {value: '', name: 'Choose Title'},
+  {value: 'Mr.', name: 'Mr.'},
+  {value: 'Ms.', name: 'Ms.'},
+  {value: 'Mrs.', name: 'Mrs.'},
+  {value: 'Engr.', name: 'Engr.'},
+  {value: 'Dr.', name: 'Dr.'},
+  {value: 'Prof.', name: 'Prof.'},
+]
 
 const RegisterCourseAndLecturer = () => {
 
   const { coursesData, setCoursesData, staffsData, setStaffsData } = useAppContext()
 
   const initialCourseData = { title: '', code: '', dept: '', level: '' }
-  const initialStaffData = { firstname: '', middlename: '', lastname: '', email: '', staffSchoolID: '', tempPwd: '', courses: [] }
+  const initialStaffData = { firstname: '', middlename: '', lastname: '', email: '', dept: '', staffID: '', tempPwd: '', courses: [], title: '' }
 
   const [loadingCourse, setLoadingCourse] = useState(false)
   const [loadingStaff, setLoadingStaff] = useState(false)
@@ -149,11 +158,17 @@ const RegisterCourseAndLecturer = () => {
         <div className='my-5'>
           <p className='text-gray-500'>Register a Lecturer</p>
           <div className='flex flex-col gap-2'>
+            <select value={staffData.title} onChange={e=>setStaffData({...staffData, title: e.target.value})} required>
+              {Titles.map((Title, i)=>(
+                <option key={i} value={Title.value}>{Title.name}</option>
+              ))}
+            </select>
             <input value={staffData.firstname} onChange={e => setStaffData({ ...staffData, firstname: e.target.value })} type='text' name='firstname' placeholder='First Name' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             <input value={staffData.middlename} onChange={e => setStaffData({ ...staffData, middlename: e.target.value })} type='text' name='middlename' placeholder='Middle Name' className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             <input value={staffData.lastname} onChange={e => setStaffData({ ...staffData, lastname: e.target.value })} type='text' name='lastname' placeholder='Last Name' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             <input value={staffData.email} onChange={e => setStaffData({ ...staffData, email: e.target.value })} type='email' name='email' placeholder='Email' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
-            <input value={staffData.staffSchoolID} onChange={e => setStaffData({ ...staffData, staffSchoolID: e.target.value })} type='text' name='staffSchoolID' placeholder='School Staff ID' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
+            <input value={staffData.dept} onChange={e => setStaffData({ ...staffData, dept: e.target.value })} type='text' name='dept' placeholder='Dept' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
+            <input value={staffData.staffID} onChange={e => setStaffData({ ...staffData, staffID: e.target.value })} type='text' name='staffID' placeholder='School Staff ID' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             {/* courses button container */}
             <p className='text-sm'>Bind Lecturer to his course(s) by choosing from the list of registered Courses below</p>
             <div className='flex flex-wrap gap-2 my-4'>

@@ -1,13 +1,30 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuestionsComponent from "./QuestionsComponent";
 import CourseManagement from "./CourseManagement";
 import Result from "./Result";
+import { useAppContext } from "@/appContext/appState";
+import { useRouter } from "next/navigation";
 
 const Examiner = () => {
+  const { getAccessToken, staffsData, currentUserId, setUserData, userData, } = useAppContext()
+
   const [menu, setMenu] = useState({ 'questionSet': false, 'courseManagement': false, 'result': false })
 
+  // check if user is logged in
+  const router = useRouter()
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const verify = getAccessToken()
+    if (!verify) { router.push('/') }
+    console.log("staffs data: ", staffsData)
+  }, [])
+
+
+  
   const handleMenuChange = (menubutton) => {
 
     menu[menubutton] = true
@@ -26,9 +43,9 @@ const Examiner = () => {
           {/* profile section */}
           <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
-            <p>Dr. J. Awonika</p>
-            <p>Robotics Engineering</p>
-            <p>2019/RTE/2055</p>
+            <p>{`${userData?.title} ${userData?.firstname} ${userData?.lastname}`}</p>
+            <p>{`Dept: ${userData?.dept}`}</p>
+            <p>{`${userData?.staffID}`}</p>
           </div>
           <hr />
           {/* Navigation section */}
@@ -65,9 +82,9 @@ const Examiner = () => {
         {menu.result && <div>
           <Result />
         </div>}
-      {/* At initial page load when no menu has been selected */}
-      {!menu?.courseManagement && !menu?.questionSet && !menu?.result && <div>
-        <p>Start by choosing any of your menu button</p>
+        {/* At initial page load when no menu has been selected */}
+        {!menu?.courseManagement && !menu?.questionSet && !menu?.result && <div>
+          <p>Start by choosing any of your menu button</p>
         </div>}
       </div>
     </div>

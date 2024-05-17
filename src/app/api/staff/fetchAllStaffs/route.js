@@ -5,7 +5,6 @@ import Staff from "@/models/Staff";
 export async function GET(req) {
   try {
     await connectDB();
-
     //   FIND THE USER INFO USING THE USER ID
     const staffs = await Staff.find({})
 

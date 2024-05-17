@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 
 export async function POST(req) {
   try {
-    const { email, pwd } = await req.json();
+    const { email, pwd, admin } = await req.json();
 
     // check if email and password is entered
     if (!(email && pwd)) {
@@ -22,7 +22,7 @@ export async function POST(req) {
     const _email = email.toLowerCase();
     // LOGGIN IN WITH EMAIL
     const staff = await Staff.findOne({ email: _email });
-    console.log("retrieved Staff Lastname: ", staff);
+    console.log("retrieved Staff: ", staff);
   
     // if no user was found
     if (!staff || !staff.hashedPwd) {
@@ -44,8 +44,19 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+    // check if he is an admin if admin passed in the login form
+    if(admin){
+      if(staff.admin === false){
+        return NextResponse.json({
+          success: false,
+          errror: 'You are not an admin'
+        }, {status: 401})
+      }
+    }
+
     // create a token for the user
     const _staff = { ...staff, hashedPwd: "" };
+    console.log("staff object: ", _staff)
     const staffData = _staff._doc
     const _staffData = {...staffData, hashedPwd: ""}
     console.log("staff data passed to accesstoken: ", _staffData)

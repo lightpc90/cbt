@@ -20,7 +20,7 @@ const Result = () => {
             }
             getCourse()
         }
-    }, [activeCode, coursesData, getCourse])
+    }, [activeCode, coursesData])
 
     const handleActiveCode = (code) => {
         setActiveCode(() => { return code })

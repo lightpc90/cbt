@@ -28,7 +28,7 @@ const QuestionsComponent = () => {
     if(savedObject?.examPara){setExamPara(()=>{return savedObject.examPara})}
     console.log("exam questions: ", questions)
     console.log("exam para: ", examPara)
-  });
+  }, [questions, examPara]);
 
   const addQuestion = () => {
     setQuestions((prev)=>{return [

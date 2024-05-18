@@ -104,8 +104,7 @@ export const AppProvider = ({ children }) => {
         console.log("staffs data from effect: ", staffsData)
         fetchCourses()
         console.log("courses data from effect: ", coursesData)
-
-    }, [staffsData])
+    })
 
 
 

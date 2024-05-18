@@ -117,10 +117,10 @@ const QuestionsComponent = () => {
       <div className="flex gap-2 items-center ">
         {/* Course choose input */}
         <div className="mr-3"> 
-          <p className="font-bold mb-2">{userData.courses.length > 0 ? `Choose Course` : `No Course Registered`}</p>
+          <p className="font-bold mb-2">{userData?.courses?.length > 0 ? `Choose Course` : `No Course Registered`}</p>
           <select
             className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md"
-            value={examPara.course}
+            value={examPara?.course}
             onChange={(e) => {handleSetExamPara(e, 'course')}}
             required
           >
@@ -136,12 +136,12 @@ const QuestionsComponent = () => {
           <div className="flex gap-1">
             {/* Hour set input */}
             <div className="flex flex-col w-3/12 relative">
-              <input type="number" placeholder="0" disabled={userData.courses.length < 1} className="text-rose-800 px-2 bg-inherit border-b border-rose-800 " value={examPara?.testHourDuration} onChange={(e) => { handleSetExamPara(e, 'testHourDuration') }} />
+              <input type="number" placeholder="0" disabled={userData?.courses?.length < 1} className="text-rose-800 px-2 bg-inherit border-b border-rose-800 " value={examPara?.testHourDuration} onChange={(e) => { handleSetExamPara(e, 'testHourDuration') }} />
               <label className="absolute right-[30px] text-slate-400 ">Hour</label>
             </div>
             {/* Minute set input */}
             <div className="flex flex-col w-3/12 relative ">
-              <input type="number" placeholder="00" disabled={userData.courses.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={examPara?.testMinDuration} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />
+              <input type="number" placeholder="00" disabled={userData?.courses?.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={examPara?.testMinDuration} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />
               <label className="absolute right-[30px] text-slate-400 ">Min</label>
             </div>
           </div>
@@ -151,13 +151,13 @@ const QuestionsComponent = () => {
         {/* Session set input */}
         <div>
           <p>Exam Session</p>
-          <input type="text" placeholder="2021/2022" disabled={userData.courses.length < 1} className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1" value={examPara?.schoolSession} onChange={(e) => { handleSetExamPara(e, 'schoolSession') }} />
+          <input type="text" placeholder="2021/2022" disabled={userData?.courses?.length < 1} className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1" value={examPara?.schoolSession} onChange={(e) => { handleSetExamPara(e, 'schoolSession') }} />
         </div>
 
         {/* Exam date */}
         <div className="flex flex-col gap-1 ">
           <label>Exam Date and Time</label>
-          <input value={examPara?.dateAndTime} disabled={userData.courses.length < 1} onChange={(e) => { handleSetExamPara(e, 'dateAndTime')  }} type="datetime-local" className="bg-rose-800 rounded-md p-1" />
+          <input value={examPara?.dateAndTime} disabled={userData?.courses?.length < 1} onChange={(e) => { handleSetExamPara(e, 'dateAndTime')  }} type="datetime-local" className="bg-rose-800 rounded-md p-1" />
           <p>{examPara?.dateAndTime}</p>
         </div>
 
@@ -173,7 +173,7 @@ const QuestionsComponent = () => {
           <textarea
             placeholder="Enter question"
             value={q.question}
-            disabled={userData.courses.length < 1}
+            disabled={userData?.courses?.length < 1}
             onChange={(e) => handleQuestionChange(questionIndex, e)}
             className="p-2 bg-inherit ring-2 ring-white rounded-md"
           />
@@ -209,13 +209,13 @@ const QuestionsComponent = () => {
         <button
           className="bg-slate-800 p-2 rounded-md mr-3"
           onClick={addQuestion}
-          disabled={userData.courses.length < 1}
+          disabled={userData?.courses?.length < 1}
         >
           Add Question
         </button>
         <button
           className="ring-2 ring-white p-2 rounded-md"
-          disabled={userData.courses.length < 1 || loading }
+          disabled={userData?.courses?.length < 1 || loading }
           onClick={handleQuestionSaving}
         >
           {loading ? `Saving...`: `Save Questions`}

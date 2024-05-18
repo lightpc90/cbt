@@ -8,8 +8,14 @@ export async function POST(req) {
     await connectDB();
 
     const rowToSearch = data.params.course
+    console.log("row to search and update", rowToSearch)
+
+    const find= await Course.findOne({code: rowToSearch})
+    console.log("find: ", find)
     //   FIND THE USER INFO USING THE USER ID
     const modifiedDoc = await Course.findOneAndUpdate({code: rowToSearch}, {question: data}, {new: true})
+
+    console.log("modified doc: ", modifiedDoc)
 
     //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
     if (!modifiedDoc) {

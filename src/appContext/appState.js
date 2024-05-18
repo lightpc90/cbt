@@ -94,14 +94,9 @@ export const AppProvider = ({ children }) => {
     const signOut = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("currentUserId");
+        localStorage.removeItem("userData")
         router.push("/");
     };
-
-    // load logged in user data
-    const userInfo = () => {
-        const currentUser = staffsData?.find((staff) => (staff._id == currentUserId))
-        setUserData(()=>{return currentUser})
-    }
 
     // fetch staffs and courses from database
     useEffect(() => {
@@ -109,11 +104,6 @@ export const AppProvider = ({ children }) => {
         console.log("staffs data from effect: ", staffsData)
         fetchCourses()
         console.log("courses data from effect: ", coursesData)
-        // extract the logged in user data if staffsData is fetched
-        if (staffsData.length > 0 && currentUserId) { 
-            console.log("staffsData fetched, fetching userInfo...")
-            userInfo() 
-        }
 
     }, [staffsData])
 

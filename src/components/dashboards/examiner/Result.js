@@ -56,8 +56,8 @@ const Result = () => {
                     {/*  Students and their Results */}
                     <div className='p-2 text-sm h-[750px] overflow-auto gap-2 flex flex-col'>
                         {/* Dynamic result shows here */}
-                        {selectedCourse?.results?.length > 0 ? selectedCourse.results.map((result) => (
-                            <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
+                        {selectedCourse?.results?.length > 0 ? selectedCourse.results.map((result, i) => (
+                            <div key={i} className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
                                 <p>{result?.studentId}</p>
                                 <div className='flex gap-3'>
                                     <p>{result?.score}</p>

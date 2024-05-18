@@ -44,7 +44,7 @@ const CourseManagement = () => {
       getPublishedQuestions()
     }
 
-  },[])
+  })
   
 
   return (

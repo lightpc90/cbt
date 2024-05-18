@@ -21,7 +21,7 @@ const Examiner = () => {
     const verify = getAccessToken()
     if (!verify) { router.push('/') }
     console.log("staffs data: ", staffsData)
-  }, [])
+  })
 
 
   

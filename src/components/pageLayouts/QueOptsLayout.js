@@ -28,7 +28,7 @@ const QueOptsLayout = ({ currentSubject, currentQueNumber }) => {
     } else {
       setAnswers(savedAnswers);
     }
-    }, []);
+    });
   
   
   return (

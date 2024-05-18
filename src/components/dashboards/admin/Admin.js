@@ -23,7 +23,7 @@ const Admin = () => {
       router.push('/') }
     else {console.log("staffs data: ", staffsData)} 
     console.log("outside verify: ", verify, "user isAdmin: ", userData?.admin)
-  }, [])
+  })
 
   const handleMenuChange = (menubutton) => {
 

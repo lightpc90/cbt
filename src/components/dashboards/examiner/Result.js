@@ -19,7 +19,7 @@ const Result = () => {
         if (coursesData) {
             getCourse()
         }
-    }, [activeCode, coursesData])
+    }, [activeCode, coursesData, getCourse()])
 
     const handleActiveCode = (code) => {
         setActiveCode(() => { return code })

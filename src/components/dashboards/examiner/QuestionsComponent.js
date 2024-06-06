@@ -3,15 +3,20 @@
 import { useState, useEffect } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { useAppContext } from "@/appContext/appState";
+import toast from "react-hot-toast";
 
-const QuestionsComponent = () => {
+const QuestionsComponent = ({userInfo}) => {
 
-  const {coursesData, setCoursesData, userData} = useAppContext()
+  const {coursesData, setCoursesData } = useAppContext()
+
+  // const [userInfo, setUserInfo] = useState(typeof window !== 'undefined' ? localStorage.getItem("userData") & JSON.parse(localStorage.getItem('userData')) : {})
 
   const [questions, setQuestions] = useState([
     { question: "", answer: "", options: ["", "", "", ""] },
   ]);
 
+
+  //NOTE: the course property here refers only to the course code
   const [examPara, setExamPara] = useState(
     { course: '', testHourDuration: '', testMinDuration: '', schoolSession: '', dateAndTime: '' }
   )
@@ -23,19 +28,17 @@ const QuestionsComponent = () => {
     const savedObject = localStorage.getItem("examObject")
       ? JSON.parse(localStorage.getItem("examObject"))
       : {};
-    console.log("save Object after reload: ", savedObject)
+    console.log("saved Object after reload: ", savedObject)
     if(savedObject?.questions && savedObject.questions.length > 0){setQuestions(()=>{return savedObject.questions})}
     if(savedObject?.examPara){setExamPara(()=>{return savedObject.examPara})}
-    console.log("exam questions: ", questions)
-    console.log("exam para: ", examPara)
-  }, [questions, examPara]);
+  },[]); //vercel expect me to include questions and examPara as dependencies here but i think they make my app re-render endlessly
 
   const addQuestion = () => {
     setQuestions((prev)=>{return [
       ...prev,
       { question: "", answer: "", options: ["", "", "", ""] },
     ]});
-    localStorage.setItem("examObject", JSON.stringify({questions: [...updatedQuestions], examPara: {...examPara}}))
+    localStorage.setItem("examObject", JSON.stringify({questions: [...questions], examPara: {...examPara}}))
   };
 
   const handleQuestionChange = (index, event) => {
@@ -54,13 +57,14 @@ const QuestionsComponent = () => {
   };
 
   const handleQuestionDelete = (questionIndex) => {
-    questions.splice(questionIndex, 1);
-    setQuestions(() => { return [...questions] });
+    const updatedQuestions = [...questions]
+    updatedQuestions.splice(questionIndex, 1);
+    setQuestions(() => { return [...updatedQuestions] });
     localStorage.setItem("examObject", JSON.stringify({ questions: [...updatedQuestions], examPara: { ...examPara } }))
   }
 
   const handleSetAnswer = (questionIndex, option) => {
-    const updatedQuestions = questions
+    const updatedQuestions = [...questions]
     updatedQuestions[questionIndex].answer = option;
     setQuestions(() => { return [...updatedQuestions] })
     localStorage.setItem("examObject", JSON.stringify({ questions: [...updatedQuestions], examPara: { ...examPara } }))
@@ -73,41 +77,53 @@ const QuestionsComponent = () => {
     localStorage.setItem("examObject", JSON.stringify({ questions: [...questions], examPara: { ...examPara } }))
   }
 
-  const handleCheck = (questionIndex, option)=>{
-    console.log("compare answer and option: ", questions[questionIndex].answer, " vs", option )
-    if(questions[questionIndex].answer == option){
-      return true
-    }
-    return false
-  }
-
   // call api to save the questions into the subject db
   const handleQuestionSaving =async()=>{
-    if(!examPara.course || !examPara.testHourDuration || !examPara.testMinDuration || !examPara.schoolSession || !examPara.dateAndTime){
+    setLoading(true)
+    if(!examPara.course){
+      window.alert("course input empty")
+      toast.error("course input empty")
+      setLoading(false)
+    }
+    else if( !examPara.testHourDuration || !examPara.testMinDuration || !examPara.schoolSession || !examPara.dateAndTime){
       console.log("fill all exam parameters")
+      window.alert("fill all forms")
+      toast.error("fill all the form inputs")
+      setLoading(false)
       return
     }
-    setLoading(true)
+
+    console.log("courses data", coursesData, "exam code: ", examPara.course)
+
+    const selectedCourse = coursesData.find(course=>course.code == examPara.course);
+    console.log("selectedCourse: ", selectedCourse)
+    const {_id} = selectedCourse;
+    console.log("code selected: ", examPara.course)
+    console.log("question _id to update: ", _id)
+
     const res = await fetch("/api/course/updateACourse", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({questions: questions, params: examPara})
+      body: JSON.stringify({_id, question:{questions: questions, params: examPara}})
     })
     if(!res.ok){
-      console.log("server failure")
+      console.log("api failure")
+      toast.error("failed to make api call")
       setLoading(false)
       return
     }
     const _res = await res.json()
     if(!_res.success){
       console.log(data.error)
+      toast.error(_res.error)
     }
     else {
       console.log(_res.message)
       const newData = _res.data
       setCoursesData({...coursesData, newData})
+      toast.success(_res.message)
     }
     setLoading(false)
   }
@@ -117,14 +133,15 @@ const QuestionsComponent = () => {
       <div className="flex gap-2 items-center ">
         {/* Course choose input */}
         <div className="mr-3"> 
-          <p className="font-bold mb-2">{userData?.courses?.length > 0 ? `Choose Course` : `No Course Registered`}</p>
+          <p className="font-bold mb-2">{userInfo?.courses?.length > 0 ? `Choose Course` : `No Course Registered`}</p>
           <select
             className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md"
             value={examPara?.course}
             onChange={(e) => {handleSetExamPara(e, 'course')}}
             required
           >
-            {userData?.courses?.length > 0 ? userData?.courses?.map((code, i)=>(
+            <option value='' className="bg-inherit text-slate-800" >Select Course</option>
+            {userInfo?.courses?.length > 0 ? userInfo?.courses?.map((code, i)=>(
               <option key={i} value={code} className="bg-inherit text-slate-800">{code}</option>
             )): 'No Course Registered'}
             
@@ -136,12 +153,12 @@ const QuestionsComponent = () => {
           <div className="flex gap-1">
             {/* Hour set input */}
             <div className="flex flex-col w-3/12 relative">
-              <input type="number" placeholder="0" disabled={userData?.courses?.length < 1} className="text-rose-800 px-2 bg-inherit border-b border-rose-800 " value={examPara?.testHourDuration} onChange={(e) => { handleSetExamPara(e, 'testHourDuration') }} />
+              <input type="number" placeholder="0" disabled={userInfo?.courses?.length < 1} className="text-rose-800 px-2 bg-inherit border-b border-rose-800 " value={parseInt(examPara?.testHourDuration)} onChange={(e) => { handleSetExamPara(e, 'testHourDuration') }} />
               <label className="absolute right-[30px] text-slate-400 ">Hour</label>
             </div>
             {/* Minute set input */}
             <div className="flex flex-col w-3/12 relative ">
-              <input type="number" placeholder="00" disabled={userData?.courses?.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={examPara?.testMinDuration} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />
+              <input type="number" placeholder="00" disabled={userInfo?.courses?.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={parseInt(examPara?.testMinDuration)} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />
               <label className="absolute right-[30px] text-slate-400 ">Min</label>
             </div>
           </div>
@@ -151,13 +168,13 @@ const QuestionsComponent = () => {
         {/* Session set input */}
         <div>
           <p>Exam Session</p>
-          <input type="text" placeholder="2021/2022" disabled={userData?.courses?.length < 1} className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1" value={examPara?.schoolSession} onChange={(e) => { handleSetExamPara(e, 'schoolSession') }} />
+          <input type="text" placeholder="2021/2022" disabled={userInfo?.courses?.length < 1} className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1" value={examPara?.schoolSession} onChange={(e) => { handleSetExamPara(e, 'schoolSession') }} />
         </div>
 
         {/* Exam date */}
         <div className="flex flex-col gap-1 ">
           <label>Exam Date and Time</label>
-          <input value={examPara?.dateAndTime} disabled={userData?.courses?.length < 1} onChange={(e) => { handleSetExamPara(e, 'dateAndTime')  }} type="datetime-local" className="bg-rose-800 rounded-md p-1" />
+          <input value={examPara?.dateAndTime} disabled={userInfo?.courses?.length < 1} onChange={(e) => { handleSetExamPara(e, 'dateAndTime')  }} type="datetime-local" className="bg-rose-800 rounded-md p-1" />
           <p>{examPara?.dateAndTime}</p>
         </div>
 
@@ -173,7 +190,7 @@ const QuestionsComponent = () => {
           <textarea
             placeholder="Enter question"
             value={q.question}
-            disabled={userData?.courses?.length < 1}
+            disabled={userInfo?.courses?.length < 1}
             onChange={(e) => handleQuestionChange(questionIndex, e)}
             className="p-2 bg-inherit ring-2 ring-white rounded-md"
           />
@@ -196,7 +213,7 @@ const QuestionsComponent = () => {
                 id={`opt-${questionIndex}-${optionIndex}`}
                 name={`opt-${questionIndex}`}
                 value={option}
-                checked = {handleCheck(questionIndex, option)}
+                checked = {questions[questionIndex].answer == option}
                 disabled={!option}
                 onChange={() => { handleSetAnswer(questionIndex, option) }}
               />
@@ -209,13 +226,13 @@ const QuestionsComponent = () => {
         <button
           className="bg-slate-800 p-2 rounded-md mr-3"
           onClick={addQuestion}
-          disabled={userData?.courses?.length < 1}
+          disabled={userInfo?.courses?.length < 1 || loading}
         >
           Add Question
         </button>
         <button
           className="ring-2 ring-white p-2 rounded-md"
-          disabled={userData?.courses?.length < 1 || loading }
+          disabled={userInfo?.courses?.length < 1 || loading }
           onClick={handleQuestionSaving}
         >
           {loading ? `Saving...`: `Save Questions`}

@@ -14,33 +14,40 @@ const CourseSchema = new mongoose.Schema(
       ref: "Staff"
     },
     students: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "Student"
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Student"
     },
     dept: {
       type: String,
     },
     level: {
-        typeof: String
+      type: String
     },
     question: {
-        type: Object
+      type: Object
     },
     results: {
-      type: [{questions: [{question: String, answer: String}], studentId: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: Student
-      }, score: String}]
+      type: [
+        {
+          questions: [
+            { question: String, answer: String }
+          ],
+          studentId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: Student
+          },
+          score: Number
+        }]
     },
     published: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
     },
     live: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
     }
-},
+  },
   { timestamps: true }
 );
 

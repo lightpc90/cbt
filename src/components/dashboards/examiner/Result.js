@@ -1,18 +1,19 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useAppContext } from '@/appContext/appState'
 
-const Result = () => {
-    const { coursesData, userData } = useAppContext()
+const Result = ({userInfo, data}) => {
+    // const { coursesData, } = useAppContext()
+
+    const coursesData = data.courses.data
 
     const [activeCode, setActiveCode] = useState({})
     const [selectedCourse, setSelectedCourse] = useState({})
 
 
-
-
     useEffect(() => {
+        console.log("userInfo in admin results: ", userInfo)
+
         if (coursesData) {
             const getCourse = () => {
                 const _courseSelected = coursesData.find((course) => (course.code == activeCode))
@@ -33,7 +34,7 @@ const Result = () => {
                 {/* List of Courses, */}
                 <div className='h-[800px] overflow-auto bg-slate-300 rounded-md w-8/12'>
                     <div className='bg-rose-800 h-[50px] overflow-auto flex items-center p-2 gap-2'>
-                        {userData.admin ?
+                        {userInfo?.admin ?
                             // the user is an admin
                             coursesData?.length > 0 ?
                                 // the user is an admin and courses are registered
@@ -44,9 +45,9 @@ const Result = () => {
                                 // The user is an admin but no course is registered
                                 `No Registered course` :
                             // if the user is not an admin
-                            userData?.courses?.length > 0 ?
+                            userInfo?.courses?.length > 0 ?
                                 // the user is not an admin and he has course(s) registered under him
-                                userData?.courses?.map((code, i) => (
+                                userInfo?.courses?.map((code, i) => (
                                     <button onClick={() => handleActiveCode(code)} key={i}
                                         className={`ring-2 ring-white p-1 rounded-md text-sm shadow-md hover:ring-yellow-500 ${code === activeCode ? `bg-slate-800` : ``} `}>{code}</button>
                                 )) :

@@ -3,8 +3,9 @@
 import React from 'react'
 import { useAppContext } from '@/appContext/appState'
 
-const ManageExam = () => {
-  const { coursesData, staffsData } = useAppContext()
+const ManageExam = ({data}) => {
+  const staffsData = data.staffs.data
+  const coursesData = data.courses.data
   const published = coursesData.filter((course) => (course.published === true))
 
   const getStaffs = (courseCode) => {

@@ -7,12 +7,17 @@ import QueOptsLayout from "@/components/pageLayouts/QueOptsLayout";
 import { Subjects } from "@/data/Subjects";
 
 
-const Test = () => {
-  const { answers } = useAppContext();
+const Test = ({data}) => {
+  const { answers  } = useAppContext();
+  const coursesData = data.courses.data
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
   const [currentSubject, setCurrentSubject] = useState(shuffledGeneral_Knowledge); // Current Test Subject
 
   console.log(answers);
+
+  const setQuestions = coursesData.filter(obj => obj.question && obj.question.trim() !== '');
+
+
   // function to handle next button
   const handleNext = () => {
     if (1 + currentQueNumber < currentSubject.length) {

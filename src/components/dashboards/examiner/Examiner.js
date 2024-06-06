@@ -5,28 +5,25 @@ import QuestionsComponent from "./QuestionsComponent";
 import CourseManagement from "./CourseManagement";
 import Result from "./Result";
 import { useAppContext } from "@/appContext/appState";
-import { useRouter } from "next/navigation";
 
-const Examiner = () => {
-  const { getAccessToken, staffsData, currentUserId, setUserData, userData, } = useAppContext()
+const Examiner = ({data}) => {
+  const {  currentUserId, signOut } = useAppContext()
 
   const [menu, setMenu] = useState({ 'questionSet': false, 'courseManagement': false, 'result': false })
-
-  // check if user is logged in
-  const router = useRouter()
+  const [user, setUser] = useState({})
 
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const verify = getAccessToken()
-    if (!verify) { router.push('/') }
-    console.log("staffs data: ", staffsData)
-  })
+    const userInfo = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem('userData')) : ''
+    console.log("userInfo: ", userInfo)
+
+    setUser(userInfo)
+  }, [currentUserId])
 
 
-  
+
   const handleMenuChange = (menubutton) => {
-
     menu[menubutton] = true
     for (const key in menu) {
       if (key != menubutton) {
@@ -35,6 +32,8 @@ const Examiner = () => {
     }
     setMenu({ ...menu })
   }
+
+  
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}
@@ -43,9 +42,9 @@ const Examiner = () => {
           {/* profile section */}
           <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
-            <p>{`${userData?.title} ${userData?.firstname} ${userData?.lastname}`}</p>
-            <p>{`Dept: ${userData?.dept}`}</p>
-            <p>{`${userData?.staffID}`}</p>
+            <p>{`${user?.title} ${user?.firstname} ${user?.lastname}`}</p>
+            <p>{`Dept: ${user?.dept}`}</p>
+            <p>{`${user?.staffID}`}</p>
           </div>
           <hr />
           {/* Navigation section */}
@@ -63,7 +62,7 @@ const Examiner = () => {
           </div>
         </div>
         {/* logout button */}
-        <button className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white">
+        <button onClick={signOut} className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white">
           Logout
         </button>
       </div>
@@ -72,15 +71,15 @@ const Examiner = () => {
         {/* Set Questions Component */}
         {menu.questionSet && <div className="">
           <p className="text-4xl font-bold my-5">Set Test Questions</p>
-          <QuestionsComponent />
+          <QuestionsComponent userInfo={user} data={data}/>
         </div>}
         {/* Course management subpage */}
         {menu.courseManagement && <div>
-          <CourseManagement />
+          <CourseManagement userInfo={user} data={data} />
         </div>}
         {/* Result subpage */}
         {menu.result && <div>
-          <Result />
+          <Result userInfo={user} data={data} />
         </div>}
         {/* At initial page load when no menu has been selected */}
         {!menu?.courseManagement && !menu?.questionSet && !menu?.result && <div>

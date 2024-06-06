@@ -3,30 +3,30 @@
 import { useState, useEffect } from "react";
 import ManageExam from "./ManageExam";
 import RegisterCourseAndLecturer from "./RegisterCourseAndLecturer";
-import Result from "./ViewResult";
+import ViewResult from "./ViewResult";
 import { useSearchParams } from "next/navigation";
 import { useAppContext } from "@/appContext/appState";
 import { useRouter } from "next/navigation";
 
-const Admin = () => {
+const Admin = ({data}) => {
+  console.log("data staffs data: ", data.staffs.data)
+  console.log("data courses data: ", data.courses.data )
   const [menu, setMenu] = useState({ 'registerCourseAndLecturer': false, 'manageExam': false, 'result': false })
-  const router = useRouter()
   // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
-  const {getAccessToken, staffsData, currentUserId, setUserData, userData,} = useAppContext()
+  const { accessToken, currentUserId, signOut} = useAppContext()
+
+  const [user, setUser] = useState({})
 
   useEffect(() => {
-    const verify = getAccessToken()
-    console.log("userData: ", userData)
+    const userInfo = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : ''
+    console.log('user?: ', userInfo)
+    console.log('accessToken: ', accessToken)
+    
+    setUser(userInfo)
+  },[currentUserId])
 
-    if (!verify || userData?.admin !== true) { 
-      console.log("inside verify: ", verify, "user isAdmin: ", userData?.admin)
-      router.push('/') }
-    else {console.log("staffs data: ", staffsData)} 
-    console.log("outside verify: ", verify, "user isAdmin: ", userData?.admin)
-  })
 
   const handleMenuChange = (menubutton) => {
-
     menu[menubutton] = true
     for (const key in menu) {
       if (key != menubutton) {
@@ -35,6 +35,8 @@ const Admin = () => {
     }
     setMenu({ ...menu })
   }
+
+
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}
@@ -43,9 +45,9 @@ const Admin = () => {
           {/* profile section */}
           <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
-            <p>{`${userData?.title} ${userData?.firstname} ${userData?.lastname}`}</p>
-            <p>{`${userData?.dept}`}</p>
-            <p>{userData?.staffID}</p>
+            <p>{`${user?.title} ${user?.firstname} ${user?.lastname}`}</p>
+            <p>{`${user?.dept}`}</p>
+            <p>{user?.staffID}</p>
           </div>
           <hr />
           {/* Navigation section */}
@@ -62,7 +64,7 @@ const Admin = () => {
           </div>
         </div>
         {/* logout button */}
-        <button className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white">
+        <button onClick={signOut} className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white">
           Logout
         </button>
       </div>
@@ -70,15 +72,15 @@ const Admin = () => {
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
         {menu.registerCourseAndLecturer && <div className="">
-          <RegisterCourseAndLecturer />
+          <RegisterCourseAndLecturer data={data} />
         </div>}
         {/* Manage Exam */}
         {menu.manageExam && <div>
-          <ManageExam/>
+          <ManageExam data={data}/>
           </div>}
         {/* Result subpage */}
         {menu.result && <div>
-          <Result />
+          <ViewResult userInfo={user} data={data}/>
         </div>}
       {/* At initial page load when no menu has been selected */}
       { !menu?.registerCourseAndLecturer && !menu?.result && !menu.manageExam && <div>

@@ -8,6 +8,8 @@ export async function POST(req) {
   try {
     const { email, pwd, admin } = await req.json();
 
+    console.log("email: ", email, "pwd: ", pwd, "admin? ", admin)
+
     // check if email and password is entered
     if (!(email && pwd)) {
       return NextResponse.json(
@@ -56,7 +58,7 @@ export async function POST(req) {
 
     // create a token for the user
     const _staff = { ...staff, hashedPwd: "" };
-    console.log("staff object: ", _staff)
+    console.log("staff object 1: ", _staff)
     const staffData = _staff._doc
     const _staffData = {...staffData, hashedPwd: ""}
     console.log("staff data passed to accesstoken: ", _staffData)
@@ -70,16 +72,27 @@ export async function POST(req) {
     console.log("access token: ", accessToken)
 
     // if user found and passwords matched
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         message: "Successfully logged in",
-        accessToken,
         data: _staffData,
       },
       { status: 201 }
     );
+
+    response.cookies.set('token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', //use secure cookies in production
+      maxAge: 60 * 60 * 24, // 1 day
+      path: '/', 
+    })
+    return response;
+
   } catch (e) {
     console.error(e);
+    return NextResponse.json({
+      success: false, error: "Internal Server Error"
+    }, {status: 500})
   }
 }

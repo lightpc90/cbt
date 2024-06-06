@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useAppContext } from '@/appContext/appState'
 import CourseLayout from './CourseLayout'
 import StaffLayout from './StaffLayout'
+import toast from 'react-hot-toast'
 
 const Titles = [
   {value: '', name: 'Choose Title'},
@@ -15,15 +15,20 @@ const Titles = [
   {value: 'Prof.', name: 'Prof.'},
 ]
 
-const RegisterCourseAndLecturer = () => {
+const RegisterCourseAndLecturer = ({data}) => {
+  const courses = data.courses.data
+  const staffs = data.staffs.data
 
-  const { coursesData, setCoursesData, staffsData, setStaffsData } = useAppContext()
+  const [staffsData, setStaffsData] = useState(staffs)
+  const [coursesData, setCoursesData] = useState(courses)
 
+  // form data initialization
   const initialCourseData = { title: '', code: '', dept: '', level: '' }
   const initialStaffData = { firstname: '', middlename: '', lastname: '', email: '', dept: '', staffID: '', tempPwd: '', courses: [], title: '' }
-
+// loading states
   const [loadingCourse, setLoadingCourse] = useState(false)
   const [loadingStaff, setLoadingStaff] = useState(false)
+// form data
   const [courseData, setCourseData] = useState(initialCourseData)
   const [staffData, setStaffData] = useState(initialStaffData)
 
@@ -42,20 +47,26 @@ const RegisterCourseAndLecturer = () => {
       },
       body: JSON.stringify(courseData)
     })
+    if(!res.ok) {
+      console.log("failed to make api call")
+      toast.error("failed to make api call")
+      setLoadingCourse(false)
+      return
+    }
     const _res = await res.json()
+   
     if (_res?.error) {
       console.log("error: ", _res.error)
+      toast.error(_res.error)
     }
     else if (_res?.success) {
       console.log("message: ", _res.message)
       // add the new course to the list of courses in app state
       setCoursesData([...coursesData, _res.data])
+      toast.success(_res.message)
     }
-    else {
-      console.log("failes to make api call")
-    }
-    setLoadingCourse(false)
     setCourseData(initialCourseData)
+    setLoadingCourse(false)
   }
 
   let tempPwd;
@@ -104,21 +115,25 @@ const RegisterCourseAndLecturer = () => {
       },
       body: JSON.stringify({...staffData, tempPwd: tempPwd})
     })
+    if(!res.ok){
+      toast.error("failed to make api call")
+      setLoadingStaff(false)
+      return
+    }
     const _res = await res.json()
     if (_res?.error) {
       console.log("error: ", _res.error)
+      toast.error(_res.error)
     }
     else if (_res?.success && _res?.message) {
       console.log("message: ", _res.message)
       // add the new staff to the list of staffs in app state
       // setStaffsData([...staffsData, _res.data])
       setStaffsData((prevData)=>{return [...prevData, _res.data]})
+      toast.success(_res.message)
     }
-    else {
-      console.log("failes to make api call")
-    }
-    setLoadingStaff(false)
     setStaffData(initialStaffData)
+    setLoadingStaff(false)
   }
 
   const bindCoursesToStaff=(course)=>{
@@ -135,7 +150,11 @@ const RegisterCourseAndLecturer = () => {
       // setStaffData({...staffData, courses: [...existingCourses, course.code]})
       setStaffData(prevData=>{return{...prevData, courses: [...existingCourses, course.code] }})
     }
-    console.log("updated staff courses: ", staffData)
+    console.log("updated staff courses: ", staffData) 
+  }
+
+  // UPDATE EXAMNINERS
+  const handleExaminerUpdate=()=>{
     
   }
 
@@ -167,13 +186,20 @@ const RegisterCourseAndLecturer = () => {
             <input value={staffData.middlename} onChange={e => setStaffData({ ...staffData, middlename: e.target.value })} type='text' name='middlename' placeholder='Middle Name' className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             <input value={staffData.lastname} onChange={e => setStaffData({ ...staffData, lastname: e.target.value })} type='text' name='lastname' placeholder='Last Name' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             <input value={staffData.email} onChange={e => setStaffData({ ...staffData, email: e.target.value })} type='email' name='email' placeholder='Email' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
-            <input value={staffData.dept} onChange={e => setStaffData({ ...staffData, dept: e.target.value })} type='text' name='dept' placeholder='Dept' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
+            {/* dept select input */}
+            <select value={staffData.dept} onChange={e=>setStaffData({...staffData, dept: e.target.value})} required className='bg-inherit border rounded-md p-2'>
+              <option value='' >Choose Dept</option>
+              {coursesData?.map((course, i)=>(
+                <option key={i} value={course.dept}>{course.dept}</option>
+              ))}
+            </select>
+            <p>If a dept is missing, register it by registering a course under the dept</p>
             <input value={staffData.staffID} onChange={e => setStaffData({ ...staffData, staffID: e.target.value })} type='text' name='staffID' placeholder='School Staff ID' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
             {/* courses button container */}
             <p className='text-sm'>Bind Lecturer to his course(s) by choosing from the list of registered Courses below</p>
             <div className='flex flex-wrap gap-2 my-4'>
               {/* map department here */}
-              {coursesData.map((course, i) => (
+              {coursesData?.map((course, i) => (
                 <button onClick={()=>bindCoursesToStaff(course)} className={`ring-2 ring-blue-800 ${staffData.courses.includes(course.code) ? `bg-green-900 text-white`: ``} p-1 text-sm rounded-md hover:bg-rose-800 hover:text-white`} key={i}>{course.code}</button>
               ))}
             </div>
@@ -203,7 +229,7 @@ const RegisterCourseAndLecturer = () => {
         <div className=' bg-white h-[65%] overflow-auto text-black p-2 gap-3'>
           {/* list of lecturers */}
         {staffsData.map((staff, i)=>(
-          <StaffLayout key={i} staff={staff}/>
+          <StaffLayout key={i} staff={staff} coursesData={coursesData}/>
         ))}
         </div>
       </div>

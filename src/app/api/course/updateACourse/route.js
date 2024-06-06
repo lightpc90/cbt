@@ -3,17 +3,18 @@ import { NextResponse } from "next/server";
 import Course from "@/models/Course";
 
 export async function POST(req) {
-    const data = await req.json()
+    const {_id, question} = await req.json()
   try {
     await connectDB();
 
-    const rowToSearch = data.params.course
-    console.log("row to search and update", rowToSearch)
+    const params = question.params
+    const questions = question.questions
+    console.log("params: ", params, "(Questions: ", questions)
 
-    const find= await Course.findOne({code: rowToSearch})
+    const find= await Course.findOne({_id})
     console.log("find: ", find)
     //   FIND THE USER INFO USING THE USER ID
-    const modifiedDoc = await Course.findOneAndUpdate({code: rowToSearch}, {question: data}, {new: true})
+    const modifiedDoc = await Course.findOneAndUpdate({_id}, {question: question}, {new: true})
 
     console.log("modified doc: ", modifiedDoc)
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import Result from '../examiner/Result'
 
-const ViewResult = () => {
+const ViewResult = ({userInfo, data}) => {
   return (
     <div>
-      <Result/>
+      <Result userInfo={userInfo} data={data}/>
     </div>
   )
 }

@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { useAppContext } from "@/appContext/appState";
+import toast from "react-hot-toast";
 
 const LoginForm = ({admin=false}) => {
   const router = useRouter()
-  const {signIn, setUserData} = useAppContext()
+  const {signIn} = useAppContext()
   const initialFormData = { email: "", pwd: "",  };
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false)
@@ -31,6 +32,7 @@ const LoginForm = ({admin=false}) => {
     })
     if(!res.ok){
       console.log("server failure: ", res)
+      toast.error("failed to make api call")
       setLoading(false)
       return
     }
@@ -38,17 +40,19 @@ const LoginForm = ({admin=false}) => {
     // if login not successful
     if(!_res.success){
       console.log( _res.error)
+      toast.error(_res.error)
       setLoading(false)
       return
     }
     if(_res.success){
       console.log(_res.message)
-      console.log("user data login: ", _res.data)
-      signIn(_res.accessToken, _res.data._id, _res.data)
+      console.log("user login data: ", _res.data)
+      signIn(_res.data._id, _res.data)
+      toast.success(_res.message)
       if(_res.data.admin){
-        router.push('/admin')
+        router.push(`/admin/${_res.data.firstname}_${_res.data.lastname}/${_res.data._id}`)
       }
-      else{router.push('/examiner')}
+      else{router.push(`/examiner/${_res.data.firstname}_${_res.data.lastname}/${_res.data._id}`)}
     }
   };
   return (

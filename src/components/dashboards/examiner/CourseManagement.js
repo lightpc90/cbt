@@ -17,7 +17,7 @@ const CourseManagement = ({userInfo, data}) => {
   }
 
   const getDraftQuestions=()=>{
-    const _drafts = coursesData.filter((course)=>(userInfo.courses.includes(course.code) && course.question?.questions.length > 0 && course.published === false))
+    const _drafts = coursesData?.filter((course)=>(userInfo.courses.includes(course.code) && course.question?.questions.length > 0 && course.published === false))
     if(_drafts.length > 0){
       console.log("_drafts: ", _drafts)
       setDrafts(_drafts) 
@@ -25,26 +25,17 @@ const CourseManagement = ({userInfo, data}) => {
   }
 
   const getPublishedQuestions=()=>{
-    const _published = coursesData.filter((course)=>(userInfo.courses.includes(course.code) && course.question?.questions.length > 0 && course.published === true))
+    const _published = coursesData?.filter((course)=>(userInfo.courses.includes(course.code) && course.question?.questions.length > 0 && course.published === true))
     if(_published.length > 0){
       setPublished(_published)
     }
   }
 
   useEffect(()=>{
-    if(coursesData){
-      getCourse()
-    }
-
-    if(drafts.length < 1){
-      getDraftQuestions()
-    }
-
-    if(published.length < 1){
-      getPublishedQuestions()
-    }
-
-  }, [coursesData])
+    getCourse()
+    getDraftQuestions()
+    getPublishedQuestions()
+  })
   
 
   return (

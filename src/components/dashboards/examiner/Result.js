@@ -10,10 +10,8 @@ const Result = ({userInfo, data}) => {
     const [activeCode, setActiveCode] = useState({})
     const [selectedCourse, setSelectedCourse] = useState({})
 
-
+// NOTE: I WANT TO SIMPLIFY THIS CODE AND REMOVE THE EFFECT HERE!
     useEffect(() => {
-        console.log("userInfo in admin results: ", userInfo)
-
         if (coursesData) {
             const getCourse = () => {
                 const _courseSelected = coursesData.find((course) => (course.code == activeCode))
@@ -26,6 +24,8 @@ const Result = ({userInfo, data}) => {
     const handleActiveCode = (code) => {
         setActiveCode(() => { return code })
     }
+
+
     return (
 
         <div>

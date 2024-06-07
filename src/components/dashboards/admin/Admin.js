@@ -6,21 +6,17 @@ import RegisterCourseAndLecturer from "./RegisterCourseAndLecturer";
 import ViewResult from "./ViewResult";
 import { useSearchParams } from "next/navigation";
 import { useAppContext } from "@/appContext/appState";
-import { useRouter } from "next/navigation";
 
 const Admin = ({data}) => {
-  console.log("data staffs data: ", data.staffs.data)
-  console.log("data courses data: ", data.courses.data )
   const [menu, setMenu] = useState({ 'registerCourseAndLecturer': false, 'manageExam': false, 'result': false })
   // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
-  const { accessToken, currentUserId, signOut} = useAppContext()
+  const { currentUserId, signOut} = useAppContext()
 
   const [user, setUser] = useState({})
 
   useEffect(() => {
     const userInfo = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : ''
     console.log('user?: ', userInfo)
-    console.log('accessToken: ', accessToken)
     
     setUser(userInfo)
   },[currentUserId])

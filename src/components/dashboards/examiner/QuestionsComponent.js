@@ -5,9 +5,12 @@ import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 
-const QuestionsComponent = ({userInfo}) => {
+const QuestionsComponent = ({userInfo, data}) => {
 
-  const {coursesData, setCoursesData } = useAppContext()
+  const courses = data.courses.data
+  const staffs = data.staffs.data
+
+  const [coursesData, setCoursesData] = useState(courses)
 
   // const [userInfo, setUserInfo] = useState(typeof window !== 'undefined' ? localStorage.getItem("userData") & JSON.parse(localStorage.getItem('userData')) : {})
 

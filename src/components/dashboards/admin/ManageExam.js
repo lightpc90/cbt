@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { useAppContext } from '@/appContext/appState'
 
 const ManageExam = ({data}) => {
   const staffsData = data.staffs.data

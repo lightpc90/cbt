@@ -10,8 +10,7 @@ export const useAppContext = () => useContext(AppContext);
 export const AppProvider = ({ children }) => {
     // State for the app context.
     const [loading, setLoading] = useState(true);
-    const [answers, setAnswers] = useState(typeof window !== 'undefined' ? localStorage.getItem('answers') & JSON.parse(localStorage.getItem('answers')) : {})
-
+   
     const router = useRouter()
 
     // const [users, setUsers] = useState(null);
@@ -113,5 +112,5 @@ export const AppProvider = ({ children }) => {
 
 
 
-    return <AppContext.Provider value={{ answers, setAnswers, signIn, signOut, userData, setUserData, currentUserId }}>{children}</AppContext.Provider>
+    return <AppContext.Provider value={{ signIn, signOut, userData, setUserData, currentUserId }}>{children}</AppContext.Provider>
 }

@@ -27,17 +27,18 @@ const CourseSchema = new mongoose.Schema(
       type: Object
     },
     results: {
-      type: [
-        {
-          questions: [
-            { question: String, answer: String }
-          ],
-          studentId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: Student
-          },
-          score: Number
-        }]
+      type: Object
+      // [
+      //   {
+      //     questions: [
+      //       { question: String, answer: String }
+      //     ],
+      //     studentId: {
+      //       type: mongoose.Schema.Types.ObjectId,
+      //       ref: Student
+      //     },
+      //     score: Number
+      //   }]
     },
     published: {
       type: Boolean,

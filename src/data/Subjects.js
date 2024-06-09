@@ -8,7 +8,7 @@ export const Subjects = [
   `Biology`,
 ];
 
-const passSunjectToShuffleOptions = (subject) => {
+export const passSubjectToShuffleOptions = (subject) => {
   const suffledSubject = subject.map(
     ({ question, incorrectAnswers, correctAnswer }) => ({
       question,
@@ -24,9 +24,9 @@ const passSunjectToShuffleOptions = (subject) => {
 
 
 
-export const shuffledGeneral_Knowledge = passSunjectToShuffleOptions(General_Knowledge);
-export const shuffledPhysics = passSunjectToShuffleOptions(Physics);  
-export const shuffledChemistry = passSunjectToShuffleOptions(Chemistry)
-export const shuffledBiology = passSunjectToShuffleOptions(Biology)
+export const shuffledGeneral_Knowledge = passSubjectToShuffleOptions(General_Knowledge);
+export const shuffledPhysics = passSubjectToShuffleOptions(Physics);  
+export const shuffledChemistry = passSubjectToShuffleOptions(Chemistry)
+export const shuffledBiology = passSubjectToShuffleOptions(Biology)
 
 

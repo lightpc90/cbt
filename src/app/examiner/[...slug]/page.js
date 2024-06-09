@@ -1,5 +1,9 @@
+export const dynamic = "force-dynamic"
+
 import React from "react";
 import Examiner from "@/components/dashboards/examiner/Examiner";
+
+
 
 async function getAllStaffs() {
   const res = await fetch('http://localhost:3000/api/staff/fetchAllStaffs')

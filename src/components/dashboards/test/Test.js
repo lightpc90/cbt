@@ -6,32 +6,90 @@ import CountdownTimer from "./TestCountDownTimer";
 import Image from "next/image";
 
 
-const Test = ({data}) => {
+const Test = ({ data }) => {
   const examData = data?._examData
   const studentData = data?.studentData
 
   const examQuestions = examData?.question.questions
 
+  const [submitLoading, setSubmitLoading] = useState(false)
+
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
-  const [answers, setAnswers] = useState(typeof window !== 'undefined' ? localStorage.getItem("answers") && JSON.parse(localStorage.getItem("answers")) : {} )
+  const [answers, setAnswers] = useState(typeof window !== 'undefined' ? localStorage.getItem("answers") && JSON.parse(localStorage.getItem("answers")) : {})
+
+  function answeredAllQuestion() {
+    const noOfOpenedQuestions = Object.keys(answers).length
+
+    let noOfUnansweredQuestions = 0
+
+    for (const question in answers) {
+      if (answers[question] === undefined || answers[question] === null || answers[question] === '') {
+        noOfUnansweredQuestions += 1
+      }
+    }
+
+    if (noOfOpenedQuestions < examData.question.questions || noOfUnansweredQuestions > 0) {
+      // 
+      return false
+    }
+    return true
+  }
+
+  function markExam(examQuestions, answers) {
+    let score = 0
+    Object.entries(examQuestions).forEach(([key, value]) => {
+      const match = answers.some(data => data.question === key && data.answer === value);
+      if (match) {
+        console.log(`Match found: Key "${key}" with value "${value}"`);
+        score += 1
+      } else {
+        console.log(`No match found for key "${key}" with value "${value}"`);
+      }
+    });
+
+    return score
+  }
+
+  async function answerConfirmation() {
+    setSubmitLoading(true)
+    // run a function to check if any of the questions was not answered
+    if (answeredAllQuestion() === false) {
+      // display a confirmation message to ask if student insist on submitting
+    }
+    else {
+      // submit student answers
+      await handleAnswersSubmit()
+    }
+    setSubmitLoading(false)
+  }
 
   // funtion to handle answer submit
-  const handleAnswersSubmit=async()=>{
+  const handleAnswersSubmit = async () => {
     console.log("answers about to be submitted: ", answers)
-
-    // run a function to check if any of the questions was not answered
-
     // run a funtion to calculate the student score
-
-    
+    const examScore = markExam(examQuestions, answers);
+    const result = { [studentData._id]: { answers, score: examScore } }
 
     const res = await fetch('/api/course/updateACourse', {
       method: POST,
-      headers:{
+      headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify()
+      body: JSON.stringify(result)
     })
+
+    if (!res.ok) {
+      console.log('Internal Server Error')
+    }
+
+    const _res = await res.json()
+    if (_res.success === false) {
+      console.log("Failed to submit: ", _res.error)
+    }
+    else if (_res.success === true) {
+      console.log("Submission Successful!")
+      // a success message component is displayed, when closed, it automatically logs out the student
+    }
   }
 
 
@@ -133,11 +191,9 @@ const Test = ({data}) => {
                       setCurrentQueNumber(i);
                     }}
                     key={i}
-                    className={`h-[40px] w-[40px] rounded-full flex justify-center items-center font-bold text-xl hover:ring-2 hover:ring-[#facc15] bg-gray-500 ${
-                      currentQueNumber === i && "ring-2 ring-white" 
-                    } ${
-                      answers[question] && "bg-gray-800" 
-                    }`}
+                    className={`h-[40px] w-[40px] rounded-full flex justify-center items-center font-bold text-xl hover:ring-2 hover:ring-[#facc15] bg-gray-500 ${currentQueNumber === i && "ring-2 ring-white"
+                      } ${answers[question] && "bg-gray-800"
+                      }`}
                   >
                     {1 + i}
                   </button>

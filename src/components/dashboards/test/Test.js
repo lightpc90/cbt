@@ -4,7 +4,6 @@ import { useState } from "react";
 import QueOptsLayout from "@/components/pageLayouts/QueOptsLayout";
 import CountdownTimer from "./TestCountDownTimer";
 import Image from "next/image";
-import { POST } from "@/app/api/auth/logout/route";
 
 
 const Test = ({data}) => {

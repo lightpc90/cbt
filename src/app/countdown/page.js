@@ -1,11 +1,11 @@
 import React from 'react'
-import CountdownTimer from '@/components/dashboards/test/TestCountDownTimer'
+import CountdownTime from '@/components/dashboards/test/CountdownTimer'
 
 const page = () => {
   return (
     <div>
     <p>Countdown Timer</p>
-    <CountdownTimer/>
+    <CountdownTime/>
     </div>
   )
 }

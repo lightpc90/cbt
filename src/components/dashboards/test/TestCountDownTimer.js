@@ -36,9 +36,9 @@ const CountdownTimer = ({ initialMinutes = 10, initialSeconds = 0 }) => {
                 setSeconds(0);
             }
         }
-
         // Register when the local storage is checked
         setStorageChecked(true);
+        console.log("storage checked... step1: storedTime is: ", storedTime)
     }, []); // Run only once when the component mounts
 
     // Update local storage whenever minutes or seconds change
@@ -51,11 +51,15 @@ const CountdownTimer = ({ initialMinutes = 10, initialSeconds = 0 }) => {
             storedSeconds: seconds,
             storedTimestamp: Date.now()
         }));
+        console.log("saved to local... step 2")
     }, [minutes, seconds]);
 
     // Run this piece of code every second of the countdown
     useEffect(() => {
+
+
         if (storageChecked) {
+            console.log("interval is set... step 3")
             const timer = setInterval(() => {
                 if (secondsRef.current > 0) {
                     setSeconds((prevSeconds) => prevSeconds - 1);
@@ -69,7 +73,12 @@ const CountdownTimer = ({ initialMinutes = 10, initialSeconds = 0 }) => {
                 }
             }, 1000);
 
+           
+
             return () => clearInterval(timer);
+        }
+        else{
+            console.log("interval not set... step 3b")
         }
     }, [storageChecked]); // Run only when storageChecked changes
 

@@ -5,10 +5,14 @@ import QueOptsLayout from "@/components/pageLayouts/QueOptsLayout";
 import CountdownTimer from "./TestCountDownTimer";
 import Image from "next/image";
 
+import { useAppContext } from "@/appContext/appState";
+
 
 const Test = ({ data }) => {
   const examData = data?._examData
   const studentData = data?.studentData
+
+  const {signOut} = useAppContext()
 
   const examQuestions = examData?.question.questions
 
@@ -17,6 +21,7 @@ const Test = ({ data }) => {
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
   const [answers, setAnswers] = useState(typeof window !== 'undefined' ? localStorage.getItem("answers") && JSON.parse(localStorage.getItem("answers")) : {})
 
+  // function to check if all questions were answered
   function answeredAllQuestion() {
     const noOfOpenedQuestions = Object.keys(answers).length
 
@@ -35,6 +40,7 @@ const Test = ({ data }) => {
     return true
   }
 
+  // function to mark student answers and return score
   function markExam(examQuestions, answers) {
     let score = 0
     Object.entries(examQuestions).forEach(([key, value]) => {
@@ -50,6 +56,7 @@ const Test = ({ data }) => {
     return score
   }
 
+  // function to either call confirmation component or handleAnswersSubmit
   async function answerConfirmation() {
     setSubmitLoading(true)
     // run a function to check if any of the questions was not answered
@@ -118,7 +125,7 @@ const Test = ({ data }) => {
           <p>{`Session: ${examData.question.params.schoolSession}`}</p>
           <p>{`Exam Duration: ${examData.question.params.testHourDuration}hr ${examData.question.params.testMinDuration}min`}</p>
         </div>
-        <button className="bt-10 bg-slate-800 p-1 rounded-md shadow-md font-semibold hover:bg-rose-800">
+        <button onClick={signOut} className="bt-10 bg-slate-800 p-1 rounded-md shadow-md font-semibold hover:bg-rose-800">
           Logout
         </button>
       </div>

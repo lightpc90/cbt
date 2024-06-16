@@ -7,7 +7,7 @@ const student = {'firstname': "Gideon", lastname: "Abbey", dept: "Robotics and M
 
 // get exam question
 async function getExamData(code) {
-  const res = await fetch(`http://localhost:3000/api/course/getExamData?code=${code}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/course/getExamData?code=${code}`)
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

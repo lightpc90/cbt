@@ -20,7 +20,7 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
   }
 
   const setObjectKey=(savedAnswers)=>{
-    if (!savedAnswers[eachQuestion]) {
+    if (savedAnswers[eachQuestion]  === null || savedAnswers[eachQuestion] === undefined) {
       // If the user has not answered this question yet, initialize it to null.
       setAnswers((prevAnswers) => ({ ...prevAnswers, [eachQuestion]: '' }));
     } else {

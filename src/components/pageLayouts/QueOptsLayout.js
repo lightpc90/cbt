@@ -8,6 +8,7 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
 
   const [keyIsSet, setKeyIsSet] = useState(false)
 
+  // 
   const eachQuestion = currentQuestion.question
 
   // runs the function everytime a student picks an answer; to save the student answers in local storage
@@ -20,13 +21,16 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
   }
 
   const setObjectKey=(savedAnswers)=>{
-    if (savedAnswers[eachQuestion]  === null || savedAnswers[eachQuestion] === undefined) {
+    if (savedAnswers[eachQuestion]  == null || savedAnswers[eachQuestion] == undefined) {
       // If the user has not answered this question yet, initialize it to null.
       setAnswers((prevAnswers) => ({ ...prevAnswers, [eachQuestion]: '' }));
+      console.log("key set to empty string...")
     } else {
       setAnswers(savedAnswers);
+      console.log("the key has a defined value, nothing to set")
     }
     setKeyIsSet(true)
+    console.log("setKeyIsSet is set to true..." )
   }
 
 
@@ -35,9 +39,11 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
     const savedAnswers = localStorage.getItem("answers")
       ? JSON.parse(localStorage.getItem("answers"))
       : {};
-  console.log("value of the current key in savedObjct: ", savedAnswers[eachQuestion])
+      if(savedAnswers[eachQuestion]){
+        console.log("value of the current key in savedObject: ", eachQuestion, '=', savedAnswers[eachQuestion])
+      }
+      else{console.log('value to this key is initially null: ', eachQuestion, "::::setting the value...")}
    setObjectKey(savedAnswers) 
-
   }, [eachQuestion, ]);
 
 

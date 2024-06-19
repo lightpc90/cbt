@@ -19,7 +19,7 @@ const Test = ({ data }) => {
   const [submitLoading, setSubmitLoading] = useState(false)
 
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
-  const [answers, setAnswers] = useState(typeof window !== 'undefined' ? localStorage.getItem("answers") && JSON.parse(localStorage.getItem("answers")) : {})
+  const [answers, setAnswers] = useState({})
 
   // function to check if all questions were answered
   function answeredAllQuestion() {
@@ -199,7 +199,7 @@ const Test = ({ data }) => {
                     }}
                     key={i}
                     className={`h-[40px] w-[40px] rounded-full flex justify-center items-center font-bold text-xl hover:ring-2 hover:ring-[#facc15] bg-gray-500 ${currentQueNumber === i && "ring-2 ring-white"
-                      } ${answers[question] && "bg-gray-800"
+                      } ${!!answers[question] && "bg-gray-800"
                       }`}
                   >
                     {1 + i}

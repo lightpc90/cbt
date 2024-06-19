@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 
 const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers }) => {
-  console.log("answer after  setting", answers)
-
   const [keyIsSet, setKeyIsSet] = useState(false)
 
   // 

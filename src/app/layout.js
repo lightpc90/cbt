@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/appContext/appState";
 import ToasterContext from "@/appContext/toasterContext";
-import { VscSearchStop } from "react-icons/vsc";
+import { MdOutlinePhonelinkErase } from "react-icons/md";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         </div>
         {/* What to show on smaller screens */}
         <div className="lg:hidden h-screen flex flex-col items-center justify-center p-2">
-          <VscSearchStop size={40} className="text-rose-800"/>
+          <MdOutlinePhonelinkErase size={40} className="text-rose-800"/>
           <p className="text-2xl text-rose-800">No Access!</p>
           <p>
             Please use a device with bigger screen to access the software. For example, a laptop

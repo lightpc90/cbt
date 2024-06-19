@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic"
 import React from "react";
 import Test from "@/components/dashboards/test/Test";
 
-const student = {'firstname': "Gideon", lastname: "Abbey", dept: "Robotics and Mechatronics", studentID: "2017/RTM/0923"}
+const student = {_id: '13245', firstname: "Gideon", lastname: "Abbey", dept: "Robotics and Mechatronics", studentID: "2017/RTM/0923"}
 
 // get exam question
 async function getExamData(code) {

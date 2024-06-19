@@ -83,12 +83,16 @@ const Test = ({ data }) => {
     const examScore = markExam();
     const result = { [studentData._id]: { answers, score: examScore } }
 
-    const res = await fetch('/api/course/updateACourse', {
+    console.log('exam course code: ', examData.code)
+
+    console.log("result object to be submitted...: ", result)
+
+    const res = await fetch('/api/course/submitExam', {
       method: POST,
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(result)
+      body: JSON.stringify({code: examData.code, result})
     })
 
     if (!res.ok) {
@@ -230,8 +234,8 @@ const Test = ({ data }) => {
                   </button>
                 ))}
               </div>
-              <button onClick={answerConfirmation} className="bg-slate-900 shadow-md font-semibold hover:bg-rose-800 py-1 rounded-md">
-                Submit Your Answers
+              <button disabled={submitLoading} onClick={answerConfirmation} className="bg-slate-900 shadow-md font-semibold hover:bg-rose-800 py-1 rounded-md">
+                {submitLoading ? 'Submitting Exam...' : `Submit Your Answers`}
               </button>
             </div>
           </div>

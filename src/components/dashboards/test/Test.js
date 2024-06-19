@@ -6,6 +6,8 @@ import CountdownTimer from "./TestCountDownTimer";
 import Image from "next/image";
 
 import { useAppContext } from "@/appContext/appState";
+import toast from "react-hot-toast";
+import Confirmation from "./Confirmation";
 
 
 const Test = ({ data }) => {
@@ -21,30 +23,34 @@ const Test = ({ data }) => {
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
   const [answers, setAnswers] = useState({})
 
+  const[noOfUnansweredQuestions, setNoOfUnsweredQuestions ] = useState(0)
+  const [confirmationIsOpen, setConfirmationIsOpen] = useState(false)
+
   // function to check if all questions were answered
   function answeredAllQuestion() {
     const noOfOpenedQuestions = Object.keys(answers).length
 
-    let noOfUnansweredQuestions = 0
+    let _noOfUnansweredQuestions = 0
 
     for (const question in answers) {
       if (answers[question] === undefined || answers[question] === null || answers[question] === '') {
-        noOfUnansweredQuestions += 1
+        _noOfUnansweredQuestions += 1
       }
     }
 
-    if (noOfOpenedQuestions < examData.question.questions || noOfUnansweredQuestions > 0) {
+    if (noOfOpenedQuestions < examData.question.questions || _noOfUnansweredQuestions > 0) {
       // 
+      setNoOfUnsweredQuestions(_noOfUnansweredQuestions)
       return false
     }
     return true
   }
 
   // function to mark student answers and return score
-  function markExam(examQuestions, answers) {
+  function markExam() {
     let score = 0
-    Object.entries(examQuestions).forEach(([key, value]) => {
-      const match = answers.some(data => data.question === key && data.answer === value);
+    Object.entries(answers).forEach(([key, value]) => {
+      const match = examQuestions.some(data => data.question === key && data.answer === value);
       if (match) {
         console.log(`Match found: Key "${key}" with value "${value}"`);
         score += 1
@@ -61,12 +67,12 @@ const Test = ({ data }) => {
     setSubmitLoading(true)
     // run a function to check if any of the questions was not answered
     if (answeredAllQuestion() === false) {
-      // display a confirmation message to ask if student insist on submitting
+    // make confirmation component visible
+    setConfirmationIsOpen(true)
+    return
     }
-    else {
-      // submit student answers
-      await handleAnswersSubmit()
-    }
+     // submit student answers
+     await handleAnswersSubmit()
     setSubmitLoading(false)
   }
 
@@ -74,7 +80,7 @@ const Test = ({ data }) => {
   const handleAnswersSubmit = async () => {
     console.log("answers about to be submitted: ", answers)
     // run a funtion to calculate the student score
-    const examScore = markExam(examQuestions, answers);
+    const examScore = markExam();
     const result = { [studentData._id]: { answers, score: examScore } }
 
     const res = await fetch('/api/course/updateACourse', {
@@ -87,14 +93,17 @@ const Test = ({ data }) => {
 
     if (!res.ok) {
       console.log('Internal Server Error')
+      toast.error("Internal Server Error")
     }
 
     const _res = await res.json()
     if (_res.success === false) {
       console.log("Failed to submit: ", _res.error)
+      toast.success("Failed to Submit")
     }
     else if (_res.success === true) {
       console.log("Submission Successful!")
+      toast.success("Submitted Successfully")
       // a success message component is displayed, when closed, it automatically logs out the student
     }
   }
@@ -115,6 +124,18 @@ const Test = ({ data }) => {
   };
   return (
     <div className="bg-gray-900 text-white h-screen flex">
+      {/* this confirmation component will only be visible when a student tries to submit unfinished exam */}
+      {confirmationIsOpen && 
+      <div className='absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-900 opacity-95'>
+      <Confirmation 
+      setConfirmationIsOpen={setConfirmationIsOpen} 
+      noOfUnansweredQuestions={noOfUnansweredQuestions}
+      setSubmitLoading={setSubmitLoading}
+      handleAnswersSubmit={handleAnswersSubmit}
+      />
+      </div>}
+      
+      
       {/* left pane menu */}
       <div className="flex flex-col justify-between w-2/12 h-full border-r border-gray-500 p-2 overflow-auto">
         {/* Exam Info */}
@@ -160,7 +181,7 @@ const Test = ({ data }) => {
           <div className="flex justify-between mb-10 font-bold px-4">
             <p className="text-2xl px-5">Course: {examData.code}</p>
             <div className="flex flex-col justify-center items-center gap-2">
-              <CountdownTimer />
+              <CountdownTimer handleSubmitAnswers={handleAnswersSubmit} />
             </div>
           </div>
           {/* Questions and options */}
@@ -173,7 +194,7 @@ const Test = ({ data }) => {
                 setAnswers={setAnswers}
               />
               {/* Previous and Next Button */}
-              <div className="flex gap-3 mt-5">
+              <div className="flex gap-3 mt-5 ml-5">
                 <button
                   onClick={handlePrevious}
                   className="bg-gray-500 py-2 px-4 rounded-md shadow-md hover:bg-white hover:text-gray-950"
@@ -187,6 +208,9 @@ const Test = ({ data }) => {
                   Next
                 </button>
               </div>
+
+              {/* toggle to test confirmaton component */}
+              <button onClick={()=>setConfirmationIsOpen(true)} className='bg-rose-800 text-white py-1 px-2'>Show Confirmation</button>
             </div>
             {/* Questions selection section */}
             <div className="flex flex-col justify-between p-2 bg-gray-700 w-3/12 h-[500px] overflow-auto rounded-md shadow-md ">
@@ -206,7 +230,7 @@ const Test = ({ data }) => {
                   </button>
                 ))}
               </div>
-              <button className="bg-slate-900 shadow-md font-semibold hover:bg-rose-800 py-1 rounded-md">
+              <button onClick={answerConfirmation} className="bg-slate-900 shadow-md font-semibold hover:bg-rose-800 py-1 rounded-md">
                 Submit Your Answers
               </button>
             </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-const CountdownTimer = ({ initialMinutes = 10, initialSeconds = 0 }) => {
+const CountdownTimer = ({ initialMinutes = 10, initialSeconds = 0, handleSubmitAnswers }) => {
     const [minutes, setMinutes] = useState(parseInt(initialMinutes));
     const [seconds, setSeconds] = useState(initialSeconds);
 
@@ -63,10 +63,14 @@ const CountdownTimer = ({ initialMinutes = 10, initialSeconds = 0 }) => {
             const timer = setInterval(() => {
                 if (secondsRef.current > 0) {
                     setSeconds((prevSeconds) => prevSeconds - 1);
-                } else {
-                    if (minutesRef.current === 0) {
+                } 
+                else {
+                    if (minutesRef.current <= 0) {
                         clearInterval(timer);
-                    } else {
+                        // automatically submit student answers
+                        handleSubmitAnswers()
+                    } 
+                    else {
                         setMinutes((prevMinutes) => prevMinutes - 1);
                         setSeconds(59);
                     }

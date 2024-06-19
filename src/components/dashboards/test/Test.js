@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 import Confirmation from "./Confirmation";
+import SuccessMessage from "./SuccessMessage";
 
 
 const Test = ({ data }) => {
@@ -25,6 +26,7 @@ const Test = ({ data }) => {
 
   const[noOfUnansweredQuestions, setNoOfUnsweredQuestions ] = useState(0)
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false)
+  const [successIsOpen, setSuccessIsOpen] = useState(false)
 
   // function to check if all questions were answered
   function answeredAllQuestion() {
@@ -68,12 +70,12 @@ const Test = ({ data }) => {
     // run a function to check if any of the questions was not answered
     if (answeredAllQuestion() === false) {
     // make confirmation component visible
+    setSubmitLoading(false)
     setConfirmationIsOpen(true)
     return
     }
      // submit student answers
      await handleAnswersSubmit()
-    setSubmitLoading(false)
   }
 
   // funtion to handle answer submit
@@ -86,9 +88,9 @@ const Test = ({ data }) => {
     console.log('exam course code: ', examData.code)
 
     console.log("result object to be submitted...: ", result)
-
+  // make api call
     const res = await fetch('/api/course/submitExam', {
-      method: POST,
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -102,16 +104,21 @@ const Test = ({ data }) => {
 
     const _res = await res.json()
     if (_res.success === false) {
-      console.log("Failed to submit: ", _res.error)
-      toast.success("Failed to Submit")
+      console.log("Error: ", _res.error)
+      toast.success(_res.error)
     }
     else if (_res.success === true) {
-      console.log("Submission Successful!")
-      toast.success("Submitted Successfully")
-      // a success message component is displayed, when closed, it automatically logs out the student
+      console.log("Message", _res.message)
+      toast.success(_res.message)
+      setSubmitLoading(false)
+      // close Confirmation component if opened
+      if(confirmationIsOpen){
+        setConfirmationIsOpen(false)
+      }
+      // display success message
+      setSuccessIsOpen(true)
     }
   }
-
 
   // function to handle next button
   const handleNext = () => {
@@ -135,10 +142,16 @@ const Test = ({ data }) => {
       setConfirmationIsOpen={setConfirmationIsOpen} 
       noOfUnansweredQuestions={noOfUnansweredQuestions}
       setSubmitLoading={setSubmitLoading}
+      submitLoading={submitLoading}
       handleAnswersSubmit={handleAnswersSubmit}
       />
       </div>}
-      
+
+       {/* this SuccessMessage component will be displayed when exam is submitted successfully */}
+       {successIsOpen && 
+       <div className='absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-900 opacity-95'>
+        <SuccessMessage setSuccessIsOpen={setSuccessIsOpen} />
+        </div>}
       
       {/* left pane menu */}
       <div className="flex flex-col justify-between w-2/12 h-full border-r border-gray-500 p-2 overflow-auto">
@@ -214,7 +227,8 @@ const Test = ({ data }) => {
               </div>
 
               {/* toggle to test confirmaton component */}
-              <button onClick={()=>setConfirmationIsOpen(true)} className='bg-rose-800 text-white py-1 px-2'>Show Confirmation</button>
+              <button onClick={()=>setConfirmationIsOpen(true)} className='bg-rose-800 text-white py-1 px-2 m-5 '>Show Confirmation</button>
+              <button onClick={()=>setSuccessIsOpen(true)} className='bg-rose-800 text-white py-1 px-2'>Show Success Message</button>
             </div>
             {/* Questions selection section */}
             <div className="flex flex-col justify-between p-2 bg-gray-700 w-3/12 h-[500px] overflow-auto rounded-md shadow-md ">

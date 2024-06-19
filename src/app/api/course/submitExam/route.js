@@ -8,10 +8,12 @@ export async function POST(req) {
     await connectDB();
     console.log("result to be submitted", result)
 
-    const {_id, existingResultsObject}= await Course.findOne({code}, 'result')
+    const obj = await Course.findOne({code}, 'results')
+    const {_id, existingResultsObject} = obj
+    console.log('results and _id returned: ', obj)
     console.log("find: ", existingResultsObject)
     //   FIND THE USER INFO USING THE USER ID
-    const modifiedDoc = await Course.findOneAndUpdate({_id}, {result: {...existingResultsObject, ...result}}, {new: true})
+    const modifiedDoc = await Course.findOneAndUpdate({_id}, {results: {...existingResultsObject, ...result}}, {new: true})
 
     console.log("modified doc: ", modifiedDoc)
 

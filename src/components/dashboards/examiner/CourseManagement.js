@@ -2,9 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 
 const CourseManagement = ({userInfo, data}) => {
-  const coursesData = data.courses.data
+  const _coursesData = data.courses.data
+
+  const [coursesData, setcoursesData] = useState(_coursesData)
 
 
   const [drafts, setDrafts] = useState([])
@@ -31,11 +34,38 @@ const CourseManagement = ({userInfo, data}) => {
     }
   }
 
+  const publishOrPulldownQuestion=async(option, id)=>{
+    const res = await fetch('/api/courses/publishOrPulldownQuestion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({_id: id, published: option})
+    })
+    if(!res.okay){
+      console.log("API failed")
+      toast.error("API Failed")
+      return
+    }
+    const _res = await res.json()
+    if(_res.success === false){
+      console.log("error: ", _res.error)
+      toast.success("error: ", _es.error)
+    }
+    else if(_res.success === true){
+      console.log("message: ", _res.message)
+      toast.success("message: ", _res.message)
+      const newDoc = _res.data
+      console.log("newDoc: " ,newDoc)
+      setcoursesData(prev=>{return {...prev, ...newDoc}})
+    }
+  }
+
   useEffect(()=>{
     getCourse()
     getDraftQuestions()
     getPublishedQuestions()
-  })
+  }, [coursesData])
   
 
   return (
@@ -60,12 +90,12 @@ const CourseManagement = ({userInfo, data}) => {
              <p>{`${draft.code} Question`}</p>
              <p className='text-rose-400 text-sm'>{draft.title}</p>
              <p className='text-sm'>{`${draft.question?.questions?.length} questions`}</p>
-             <p className='text-sm'>{`Duration: ${draft.question?.params?.testHourDuration} : ${draft.question?.params?.testMinDuration}`}</p>
+             <p className='text-sm'>{`Duration: ${draft.question?.params?.testMinDuration}Mins`}</p>
              <p className='text-rose-400 text-sm'>{`Exam Date and Time: ${draft.question?.params?.dateAndTime}`}</p>
              <hr className='my-2'/>
              <div className='space-x-2'>
               <Link className='border border-rose-400 p-1 hover:bg-rose-500' href={`/`}>View</Link>
-              <button className='bg-rose-800 p-1 hover:bg-rose-500'>Publish</button>
+              <button onClick={()=>publishOrPulldownQuestion(true, draft._id)} className='bg-rose-800 p-1 hover:bg-rose-500'>Publish</button>
              </div>
             </div>)) : `No Draft Questions`}
             </div>
@@ -78,12 +108,12 @@ const CourseManagement = ({userInfo, data}) => {
              <p>{`${published.code} Question`}</p>
              <p>{published.title}</p>
              <p className='text-sm'>{`${published.question?.questions?.length} questions`}</p>
-             <p className='text-sm'>{`Duration: ${published.question?.params?.testHourDuration} : ${published.question?.params?.testMinDuration}`}</p>
+             <p className='text-sm'>{`Duration: ${published.question?.params?.testMinDuration}Mins`}</p>
              <p className='text-rose-400 text-sm'>{`Exam Date and Time: ${published.question?.params?.dateAndTime}`}</p>
              <hr className='my-2'/>
              <div className='space-x-2'>
               <Link className='border border-rose-400 p-1 hover:bg-rose-500' href={`/`}>View</Link>
-              <button className='bg-rose-800 p-1 hover:bg-rose-500'>Pulldown</button>
+              <button onClick={()=>publishOrPulldownQuestion(false, published._id)} className='bg-rose-800 p-1 hover:bg-rose-500'>Pulldown</button>
              </div>
             </div>)) : `No Published Questions`}
             </div>

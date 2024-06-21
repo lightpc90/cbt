@@ -2,10 +2,15 @@ import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Staff from "@/models/Staff";
 
-export async function POST(req) {
+export async function GET(req) {
+
+  const url = new URL(req.url)
+  const searchParams = new URLSearchParams(url.searchParams)
+  const id = searchParams.get('id')
+  console.log('id is: ', id)
+
   try {
     await connectDB();
-    const { id } = await req.json();
 
     //   WHEN NO STAFF ID IS SENT FROM THE CLIENT SIDE
     if (!id) {

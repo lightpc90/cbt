@@ -1,42 +1,41 @@
 import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
-import Course from "@/models/Course";
+import Student from "@/models/Student";
 
 export async function GET(req) {
     const url = new URL(req.url)
     const searchParams = new URLSearchParams(url.searchParams)
-    const code = searchParams.get('code')
-    console.log('code is: ', code)
+    const id = searchParams.get('id')
+    console.log('id is: ', id)
 
     
     // if code missing in request query
-    if (!code) {
+    if (!id) {
         return NextResponse.json({
             success: false,
-            error: "code mising in query",
+            error: "id mising in query",
         })
     }
 
     try {
         await connectDB();
 
-        //   FIND THE COURSE INFO USING live and code filter
-        const course = await Course.findOne({ code: code, });
+        const student = await Student.findById(id);
 
-        //   WHEN NO Course INFO IS RETURN FROM THE DATABASE
-        if (!course) {
-            console.log("No live exam for this student");
+        //   WHEN NO Student INFO IS RETURN FROM THE DATABASE
+        if (!student) {
+            console.log("No Student Found");
             return NextResponse.json({
                 success: false,
-                error: "No live exam for this student",
+                error: "No student Found",
             });
         }
-        //   WHEN A Course INFO IS RETURNED FROM THE DATABASE
-        console.log("exam course returned: ", course);
+        //   WHEN A Student INFO IS RETURNED FROM THE DATABASE
+        console.log("student info returned: ", student);
         return NextResponse.json({
             success: true,
-            message: "live exam returned",
-            data: course,
+            message: "student info returned",
+            data: student,
         });
     } catch (err) {
         console.log(err);

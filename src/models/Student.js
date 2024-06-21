@@ -14,7 +14,7 @@ const StudentSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
-    studentID: {
+    matricNo: {
         type: String,
     },
     email: {
@@ -25,6 +25,9 @@ const StudentSchema = new mongoose.Schema(
     },
     results: {
       type: [Object],
+    },
+    courses: {
+      type: [String],
     },
     username: {
       type: String,

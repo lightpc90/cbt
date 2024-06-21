@@ -161,7 +161,7 @@ const Test = ({ data }) => {
           <p>{`Course: ${examData.code}`}</p>
           <p>{`Course Title: ${examData.title}`}</p>
           <p>{`Session: ${examData.question.params.schoolSession}`}</p>
-          <p>{`Exam Duration: ${examData.question.params.testHourDuration}hr ${examData.question.params.testMinDuration}min`}</p>
+          <p>{`Exam Duration: ${examData.question.params.testMinDuration}min`}</p>
         </div>
         <button onClick={signOut} className="bt-10 bg-slate-800 p-1 rounded-md shadow-md font-semibold hover:bg-rose-800">
           Logout

@@ -1,15 +1,25 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import ResultLayout from './ResultLayout'
 
 const Result = ({userInfo, data}) => {
-    // const { coursesData, } = useAppContext()
 
     const coursesData = data.courses.data
+    const studentsData = data?.students?.data
 
-    const [activeCode, setActiveCode] = useState({})
+    const [activeCode, setActiveCode] = useState('')
     const [selectedCourse, setSelectedCourse] = useState({})
+    // const [courseStudents, setCourseStudents] = useState([])
 
+    // get the list of students offering a particular course
+    // const getCourseStudents=()=>{
+    //     const _courseStudents = studentsData?.filter((studentInfo)=>(selectedCourse?.students.includes(studentInfo._id)))
+    //     if(_courseStudents){
+    //         setCourseStudents(_courseStudents)
+    //     }
+    // }
+    
 // NOTE: I WANT TO SIMPLIFY THIS CODE AND REMOVE THE EFFECT HERE!
     useEffect(() => {
         if (coursesData) {
@@ -57,130 +67,34 @@ const Result = ({userInfo, data}) => {
                     {/*  Students and their Results */}
                     <div className='p-2 text-sm h-[750px] overflow-auto gap-2 flex flex-col'>
                         {/* Dynamic result shows here */}
-                        {selectedCourse?.results?.length > 0 ? selectedCourse.results.map((result, i) => (
-                            <div key={i} className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
-                                <p>{result?.studentId}</p>
-                                <div className='flex gap-3'>
-                                    <p>{result?.score}</p>
-                                    <p>{`100Dummy`}</p>
-                                </div>
-                            </div>)
-                        ) : <p className='text-slate-900 font-semibold'>No Results Yet</p>}
+                        { selectedCourse?.results ? Object.entries(selectedCourse?.results).map(([id, result], i)=>(
+                            <ResultLayout key={i}  id={id} result={result} studentsData={studentsData}/>
+                        )) : <p className='text-slate-800 font-bold text-center'>No Result For the Selected Course</p>}
 
                         {/* dummy data to model result view */}
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
+                        <div className='flex justify-evenly bg-slate-900 p-1 rounded-md shadow-md'>
+                            <p>Name: Gideon Folahan Abbey</p>
+                            <p>MatricNo: 2017/RTM/6473</p>
+                            <div className=''>
+                                <p>Score: 70/70</p>
                             </div>
                         </div>
                         {/* duplicate */}
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
+                        <div className='flex justify-evenly bg-slate-900 p-1 rounded-md shadow-md'>
+                            <p>Name: Gideon Folahan Abbey</p>
+                            <p>MatricNo: 2017/RTM/6473</p>
+                            <div className=''>
+                                <p>Score: 70/70</p>
                             </div>
                         </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
+                        <div className='flex justify-evenly bg-slate-900 p-1 rounded-md shadow-md'>
+                            <p>Name: Gideon Folahan Abbey</p>
+                            <p>MatricNo: 2017/RTM/6473</p>
+                            <div className=''>
+                                <p>Score: 70/70</p>
                             </div>
                         </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-between bg-slate-900 p-1 rounded-md shadow-md '>
-                            <p>Gideon Folahan</p>
-                            <div className='flex gap-3'>
-                                <p>70/70</p>
-                                <p>100%</p>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 {/* Info of the selected course */}
@@ -190,8 +104,8 @@ const Result = ({userInfo, data}) => {
                         <p>Course Title: {selectedCourse?.title}</p>
                         <p>Course Code: {selectedCourse?.code}</p>
                         <hr className='my-2 border-1 border-slate-500' />
-                        <p>No of Lecturer: {selectedCourse?.staff?.length}</p>
-                        <p>No of Students: {selectedCourse?.student?.length}</p>
+                        <p>No of Lecturer: {selectedCourse?.staffs?.length > 0 ? selectedCourse?.staffs?.length : "" }</p>
+                        <p>No of Students: {selectedCourse?.students?.length > 0 ? selectedCourse?.students?.length : "None Registered yet"}</p>
                     </div>
                 </div>
             </div>

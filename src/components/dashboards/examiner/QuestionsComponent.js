@@ -21,7 +21,7 @@ const QuestionsComponent = ({userInfo, data}) => {
 
   //NOTE: the course property here refers only to the course code
   const [examPara, setExamPara] = useState(
-    { course: '', testHourDuration: '', testMinDuration: '', schoolSession: '', dateAndTime: '' }
+    { course: '', testMinDuration: '', schoolSession: '', dateAndTime: '' }
   )
 
   const [loading, setLoading] = useState(false)
@@ -88,7 +88,7 @@ const QuestionsComponent = ({userInfo, data}) => {
       toast.error("course input empty")
       setLoading(false)
     }
-    else if( !examPara.testHourDuration || !examPara.testMinDuration || !examPara.schoolSession || !examPara.dateAndTime){
+    else if( !examPara.testMinDuration || !examPara.schoolSession || !examPara.dateAndTime){
       console.log("fill all exam parameters")
       window.alert("fill all forms")
       toast.error("fill all the form inputs")
@@ -154,11 +154,7 @@ const QuestionsComponent = ({userInfo, data}) => {
         <div className="flex flex-col gap-1 ">
           <p>Duration:</p>
           <div className="flex gap-1">
-            {/* Hour set input */}
-            <div className="flex flex-col w-3/12 relative">
-              <input type="number" placeholder="0" disabled={userInfo?.courses?.length < 1} className="text-rose-800 px-2 bg-inherit border-b border-rose-800 " value={parseInt(examPara?.testHourDuration)} onChange={(e) => { handleSetExamPara(e, 'testHourDuration') }} />
-              <label className="absolute right-[30px] text-slate-400 ">Hour</label>
-            </div>
+
             {/* Minute set input */}
             <div className="flex flex-col w-3/12 relative ">
               <input type="number" placeholder="00" disabled={userInfo?.courses?.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={parseInt(examPara?.testMinDuration)} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />

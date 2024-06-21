@@ -10,12 +10,12 @@ async function getAllStaffs() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
+    console.log('Failed to fetch data')
   }
 
   const staffs = await res.json()
-  if (staffs.error) {
-    throw new Error(staffs.error)
+  if (staffs.success === false) {
+    console.log(staffs.error)
   }
 
   return staffs
@@ -26,24 +26,40 @@ async function getAllCourses() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
+    console.log('Failed to fetch data')
   }
 
   const courses = await res.json()
-  if (courses.error) {
-    throw new Error(courses.error)
+  if (courses.success === false) {
+    console.log(courses.error)
   }
 
   return courses
+}
+
+async function getAllStudents() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/student/fetchAllStudents`)
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    console.log('Failed to fetch data')
+  }
+
+  const students = await res.json()
+  if (students.success === false) {
+    console.log(students.error)
+  }
+
+  return students
 }
 
 
 const Page = async() => {
   let data;
   try {
-    const [staffs, courses] = await Promise.all([getAllStaffs(), getAllCourses()]);
-    console.log("staffs: ", staffs, "& courses: ", courses)
-    data = { staffs, courses }
+    const [staffs, courses, students] = await Promise.all([getAllStaffs(), getAllCourses(), getAllStudents()]);
+    console.log("staffs: ", staffs, ">> courses: ", courses, "& students: ", students )
+    data = { staffs, courses, students }
   } catch (error) {
     console.error(error);
   }

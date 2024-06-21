@@ -6,6 +6,7 @@ import CourseManagement from "./CourseManagement";
 import Result from "./Result";
 import { useAppContext } from "@/appContext/appState";
 
+// data arg comes from examiner page, server fetching 
 const Examiner = ({data}) => {
   const {  currentUserId, signOut } = useAppContext()
 

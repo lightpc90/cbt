@@ -16,7 +16,7 @@ const ManageExam = ({data}) => {
     <div className=''>
       <p>Manage Examination</p>
       <div className='flex gap-2'>
-        {/* All Questions container */}
+        {/* Published Questions container */}
         <div className='bg-slate-700 h-[600px] w-[70%] rounded-md overflow-auto'>
           <p className='bg-rose-500 p-1'>Questions</p>
           <div className='h-[80%] overflow-auto flex flex-wrap p-2'>
@@ -34,9 +34,9 @@ const ManageExam = ({data}) => {
           </div>
         </div>
 
-        {/* published question container */}
+        {/* live question container */}
         <div className='bg-slate-700 h-[600px] w-[30%] rounded-md overflow-auto'>
-          <p className='bg-green-500 p-1'>Uploaded Exams</p>
+          <p className='bg-green-500 p-1'>Uploaded/Live Exams</p>
           {/* list of Questions */}
           <div className='h-[80%] overflow-auto flex flex-wrap p-2'>
             {/* get published questions */}

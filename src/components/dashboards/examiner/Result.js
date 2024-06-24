@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import ResultLayout from './ResultLayout'
 
-const Result = ({userInfo, data}) => {
+const Result = ({ userInfo, data }) => {
 
     const coursesData = data.courses.data
     const studentsData = data?.students?.data
@@ -19,8 +19,8 @@ const Result = ({userInfo, data}) => {
     //         setCourseStudents(_courseStudents)
     //     }
     // }
-    
-// NOTE: I WANT TO SIMPLIFY THIS CODE AND REMOVE THE EFFECT HERE!
+
+    // NOTE: I WANT TO SIMPLIFY THIS CODE AND REMOVE THE EFFECT HERE!
     useEffect(() => {
         if (coursesData) {
             const getCourse = () => {
@@ -67,8 +67,8 @@ const Result = ({userInfo, data}) => {
                     {/*  Students and their Results */}
                     <div className='p-2 text-sm h-[750px] overflow-auto gap-2 flex flex-col'>
                         {/* Dynamic result shows here */}
-                        { selectedCourse?.results ? Object.entries(selectedCourse?.results).map(([id, result], i)=>(
-                            <ResultLayout key={i}  id={id} result={result} studentsData={studentsData}/>
+                        {selectedCourse?.results ? Object.entries(selectedCourse?.results).map(([id, result], i) => (
+                            <ResultLayout key={i} id={id} result={result} studentsData={studentsData} selectedCourse={selectedCourse} />
                         )) : <p className='text-slate-800 font-bold text-center'>No Result For the Selected Course</p>}
 
                         {/* dummy data to model result view */}
@@ -94,7 +94,7 @@ const Result = ({userInfo, data}) => {
                                 <p>Score: 70/70</p>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 {/* Info of the selected course */}
@@ -104,7 +104,7 @@ const Result = ({userInfo, data}) => {
                         <p>Course Title: {selectedCourse?.title}</p>
                         <p>Course Code: {selectedCourse?.code}</p>
                         <hr className='my-2 border-1 border-slate-500' />
-                        <p>No of Lecturer: {selectedCourse?.staffs?.length > 0 ? selectedCourse?.staffs?.length : "" }</p>
+                        <p>No of Lecturer: {selectedCourse?.staffs?.length > 0 ? selectedCourse?.staffs?.length : ""}</p>
                         <p>No of Students: {selectedCourse?.students?.length > 0 ? selectedCourse?.students?.length : "None Registered yet"}</p>
                     </div>
                 </div>

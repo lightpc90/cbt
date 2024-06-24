@@ -10,9 +10,9 @@ const ResultLayout = ({ id, result, studentsData, selectedCourse }) => {
 
     return (
         <div className='flex justify-evenly bg-slate-900 text-white p-1 rounded-md shadow-md overflow-auto'>
-            <p>{`Name: ${studentInfo.firstname} ${studentInfo.middlename} ${studentInfo.lastname}`}</p>
-            <p>MatricNo: {studentInfo.matricNo}</p>
-            <p>Score: {`${result.score}/${noOfQuestions}`}</p>
+            <p>{`Name: ${studentInfo?.firstname} ${studentInfo?.middlename} ${studentInfo?.lastname}`}</p>
+            <p>MatricNo: {studentInfo?.matricNo}</p>
+            <p>Score: {`${result?.score}/${noOfQuestions}`}</p>
         </div>
     )
 }

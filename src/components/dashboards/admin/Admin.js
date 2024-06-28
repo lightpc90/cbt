@@ -46,6 +46,7 @@ const Admin = ({ data }) => {
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5 overflow-auto flex justify-center items-center ">
               <Image src={`/image/studentDP.jpg`} alt="studentDP" width={200} height={200} />
             </div>
+            <p>Administrator</p>
             <p>{`${user?.title} ${user?.firstname} ${user?.lastname}`}</p>
             <p>{`${user?.dept}`}</p>
             <p>{user?.staffID}</p>

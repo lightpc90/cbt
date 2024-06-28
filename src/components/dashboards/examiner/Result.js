@@ -104,6 +104,7 @@ const Result = ({ userInfo, data }) => {
                         <p>Course Title: {selectedCourse?.title}</p>
                         <p>Course Code: {selectedCourse?.code}</p>
                         <hr className='my-2 border-1 border-slate-500' />
+                        {/*  */}
                         <p>No of Lecturer: {selectedCourse?.staffs?.length > 0 ? selectedCourse?.staffs?.length : ""}</p>
                         <p>No of Students: {selectedCourse?.students?.length > 0 ? selectedCourse?.students?.length : "None Registered yet"}</p>
                     </div>

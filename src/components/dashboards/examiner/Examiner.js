@@ -43,6 +43,7 @@ const Examiner = ({data}) => {
           {/* profile section */}
           <div className="p-2 flex flex-col  mb-10">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
+            <p>Staff/Lecturer</p>
             <p>{`${user?.title} ${user?.firstname} ${user?.lastname}`}</p>
             <p>{`Dept: ${user?.dept}`}</p>
             <p>{`${user?.staffID}`}</p>

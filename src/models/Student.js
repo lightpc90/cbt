@@ -35,7 +35,7 @@ const StudentSchema = new mongoose.Schema(
     birthdayMonth: {
       type: String,
     },
-    image: {
+    imageUrl: {
       type: String,
     },
     birthDay: {
@@ -43,6 +43,10 @@ const StudentSchema = new mongoose.Schema(
     },
     dept: {
       type: String,
+    },
+    active: {
+      type: Boolean,
+      default: true,
     },
     gender: {
       type: String,

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "formidable": "^3.5.1",
     "jose": "^5.4.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.6.1",

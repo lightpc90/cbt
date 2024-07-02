@@ -14,6 +14,7 @@ const ManageStudent = ({ data }) => {
     const studentsData = data?.students.data
 
     const [students, setStudents] = useState(studentsData?.length > 0 ? studentsData : [])
+    const [isEditing, setIsEditing] = useState(false)
 
     return (
         <div className=''>
@@ -21,7 +22,7 @@ const ManageStudent = ({ data }) => {
             <div className='flex gap-2'>
                 <div className='bg-slate-700 h-[600px] w-[30%] rounded-md overflow-auto'>
                     <p className='bg-rose-900 p-1 text-lg font-bold text-center'>Add Student</p>
-                    <StudentForm setStudents={setStudents}/>
+                    <StudentForm setStudents={setStudents} isEditing={isEditing} setIsEditing={setIsEditing}/>
                 </div>
                 {/* All Published Questions container */}
                 <div className='bg-slate-700 h-[800px] w-[70%] rounded-md overflow-auto'>
@@ -37,7 +38,7 @@ const ManageStudent = ({ data }) => {
                     <div className='h-[85%] overflow-auto flex flex-col p-2 gap-2'>
                         {/* list of Students */}
                         {students?.map((student, i) => (
-                            <StudentLayout key={i} student={student} coursesData={coursesData} setStudents={setStudents} />
+                            <StudentLayout key={i} student={student} coursesData={coursesData} setStudents={setStudents} isEditing={isEditing} setIsEditing={setIsEditing} />
                         ))}
                     </div>
                 </div>

@@ -6,11 +6,10 @@ import { HiChevronRight, HiChevronDown } from "react-icons/hi";
 import { FaEdit } from "react-icons/fa";
 import StudentEdit from './StudentEdit';
 
-const StudentLayout = ({student, coursesData, setStudents}) => {
+const StudentLayout = ({student, coursesData, setStudents, isEditing, setIsEditing}) => {
 
     const [opened, setOpened] = useState(false)
     const [checkedCourses, setCheckedCourses] = useState({})
-    const [isEditing, setIsEditing] = useState(false)
 
     const [studentData, setStudentData]= useState(student)
 
@@ -41,7 +40,7 @@ const StudentLayout = ({student, coursesData, setStudents}) => {
     <div onClick={close}  className='flex items-center justify-between bg-slate-900 hover:bg-slate-800 px-2 shadow-md py-1'>
         {isEditing && 
       <div className='absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-700 opacity-[99%]  z-40'>
-      <StudentEdit setStudents={setStudents} studentData={studentData} setStudentData={setStudentData} setIsEditing={setIsEditing} />
+      <StudentEdit setStudents={setStudents} studentData={studentData} setStudentData={setStudentData} setIsEditing={setIsEditing} isEditing={isEditing} />
       </div>}
     <div className='flex gap-2 items-center'>
         <div className='h-[40px] w-[40px] rounded-full overflow-hidden'>

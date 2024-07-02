@@ -3,12 +3,11 @@ import { NextResponse } from "next/server";
 import Student from "@/models/Student";
 
 export async function POST(req) {
-    const {_id, update} = await req.json()
+    const {_id} = await req.json()
     console.log('id is: ', _id)
-    console.log("student uodate doc: ", update)
 
     
-    // if _id is missing in request query
+    // if _id id missing in request
     if (!_id) {
         return NextResponse.json({
             success: false,
@@ -19,21 +18,21 @@ export async function POST(req) {
     try {
         await connectDB();
 
-        const student = await Student.findByIdAndUpdate(_id, update, {new: true})
+        const student = await Student.findByIdAndDelete(_id)
 
         //   WHEN NO Student INFO IS RETURN FROM THE DATABASE
         if (!student) {
-            console.log("Update Failed");
+            console.log("Failed to delete");
             return NextResponse.json({
                 success: false,
-                error: "Update Failed",
+                error: "Failed to delete",
             });
         }
         //   WHEN A Student INFO IS RETURNED FROM THE DATABASE
-        console.log("student info returned: ", student);
+        console.log("student info deleted: ", student);
         return NextResponse.json({
             success: true,
-            message: "Updated Successfull",
+            message: "Deleted Successfully",
             data: student,
         });
     } catch (err) {

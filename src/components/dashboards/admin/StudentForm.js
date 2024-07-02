@@ -9,18 +9,19 @@ import toast from 'react-hot-toast'
 const Depts = ["Computer Science", "Mathematics Education", "Biology Education", "Physics", "English"]
 const Genders = ["Male", "Female"]
 
-const StudentForm = ({ updating = false, setStudents, studentData={}, setStudentData={}, setIsEditing }) => {
+const StudentForm = ({ setStudents, studentData={}, setStudentData, isEditing, setIsEditing }) => {
 
     const router = useRouter()
 
-    console.log("student data: ", studentData)
+    console.log('is editing? ', isEditing)
+
     const [loading, setIsLoading] = useState(false)
 
     const initialFormData = { firstname: '', middlename: '', lastname: '', matricNo: '', dept: '', gender: '', imageUrl: '' }
 
     const updatingInitialData = {firstname: studentData.firstname, middlename: studentData.middlename, lastname: studentData.lastname, matricNo: studentData.matricNo, dept: studentData.dept, gender: studentData.gender, imageUrl: studentData.imageUrl}
 
-    const [formData, setFormData] = useState(updating === false ? initialFormData : updatingInitialData)
+    const [formData, setFormData] = useState(isEditing === false ? initialFormData : updatingInitialData)
     const [file, setFile] = useState(null)
     const [uploadingImage, setUploadingImage] = useState(false)
     const [error, setError] = useState('')
@@ -74,7 +75,7 @@ const StudentForm = ({ updating = false, setStudents, studentData={}, setStudent
         }
     }, [file])
 
-    const handleRegisterOrUpdate = async (updating = false) => {
+    const handleRegisterOrUpdate = async () => {
         if (!formData.firstname || !formData.middlename || !formData.lastname || !formData.matricNo || !formData.dept || !formData.gender || !formData.imageUrl ) {
             console.log("fill the form completely")
             return
@@ -82,7 +83,8 @@ const StudentForm = ({ updating = false, setStudents, studentData={}, setStudent
         setIsLoading(true)
 
         // call update api if form loaded in update component
-        if(updating){
+        if(isEditing === true){
+            console.log("updatig student")
             const update = await fetch("/api/student/updateAStudent", {
                 method: "POST",
                 headers: {
@@ -110,6 +112,7 @@ const StudentForm = ({ updating = false, setStudents, studentData={}, setStudent
         }
 
         // call the api to register a new student
+        console.log("registering a student")
         const res = await fetch("/api/auth/register/student/", {
             method: "POST",
             headers: {
@@ -200,16 +203,16 @@ const StudentForm = ({ updating = false, setStudents, studentData={}, setStudent
                 error && <div className='h-[120px] w-[120px] flex flex-wrap justify-center items-center p-2 bg-slate-900 '>
                     {error}
                 </div> }
-                {setIsEditing ? <button disabled={loading} className='bg-slate-800 py-1 px-2 rounded-md hover:bg-slate-700'
-                    onClick={()=>handleRegisterOrUpdate(true)}
-                >{loading ? 'loading...' : 'Update'}</button> : 
-                // Button to display when adding a new student
                 <button disabled={loading} className='bg-slate-800 py-1 px-2 rounded-md hover:bg-slate-700'
                     onClick={handleRegisterOrUpdate}
-                >{loading ? 'loading...' : 'Register New Student'}</button>
-                }
-                
-                {updating && <button className='bg-rose-900 hover:bg-rose-800 py-1 px-2 rounded-md ml-3' onClick={()=>setIsEditing(false)}>Cancel</button>}
+                >
+                    {isEditing && !loading ? `Update Student Info `:
+                    
+                    isEditing && loading ? `Updating...` :
+                     !isEditing && !loading ? `Register A New Student` : 
+                     `Registering...`} 
+                </button>                
+                {isEditing && <button className='bg-rose-900 hover:bg-rose-800 py-1 px-2 rounded-md ml-3' onClick={()=>setIsEditing(false)}>Cancel</button>}
             </div>
         </div>
     )

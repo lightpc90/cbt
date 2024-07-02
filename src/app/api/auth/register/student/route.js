@@ -3,7 +3,7 @@ import Student from "@/models/Student";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  console.log("entering the api function...");
+  console.log("entering the student registration api function...");
 
   try {
     await connectDB();
@@ -23,7 +23,7 @@ export async function POST(req) {
     console.log("checking to see if student is already existing...");
 
     // check to see if the student already existed in the database
-    const matricNo = studentData.matricNo.toLowerCase(); 
+    const matricNo = studentData.matricNo.toUpperCase() 
     const existingStudent = await Student.findOne({ matricNo });
     if (existingStudent) {
     return NextResponse.json(
@@ -36,6 +36,8 @@ export async function POST(req) {
     }
     console.log("registering a student into the database...");
 
+    // make the student matric number upper case
+    studentData.matricNo = studentData.matricNo.toUpperCase()
     // Insert the new staff into the database ---
     const newStudent = await Student.create(studentData);
     if (!newStudent) {

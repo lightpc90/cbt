@@ -76,6 +76,15 @@ const StudentForm = ({ studentData={}, setStudentData, isEditing, setIsEditing }
         }
     }, [file])
 
+    const getUpdatedList=(prevList, updatedStudent)=>{
+        console.log("prevList: ", prevList, "and new studn: ", updatedStudent)
+        const newList = prevList.map((eachStudent)=>(
+            eachStudent._id == updatedStudent._id ? updatedStudent : eachStudent
+        ))
+        console.log("new list: ", newList)
+        return newList
+    }
+
     const handleRegisterOrUpdate = async () => {
         if (!formData.firstname || !formData.middlename || !formData.lastname || !formData.matricNo || !formData.dept || !formData.gender || !formData.imageUrl ) {
             console.log("fill the form completely")
@@ -104,7 +113,7 @@ const StudentForm = ({ studentData={}, setStudentData, isEditing, setIsEditing }
                 toast.error(isUpdate.error)
             }
             else{
-                setStudents((prev)=>(prev.map(student=>(student._id == isUpdate.data._id ? isUpdate.data : student))))
+                setStudents((prev)=>(getUpdatedList(prev, isUpdate.data)))
                 toast.success(isUpdate.message)
             }
             setIsLoading(false)

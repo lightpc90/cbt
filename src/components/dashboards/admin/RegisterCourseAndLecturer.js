@@ -16,8 +16,8 @@ const Titles = [
 ]
 
 const RegisterCourseAndLecturer = ({data}) => {
-  const courses = data.courses.data
-  const staffs = data.staffs.data
+  const courses = data.courses
+  const staffs = data.staffs
 
   const [staffsData, setStaffsData] = useState(staffs)
   const [coursesData, setCoursesData] = useState(courses)

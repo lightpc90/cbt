@@ -5,13 +5,14 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { useAppContext } from '@/appContext/appState'
 
 const Depts = ["Computer Science", "Mathematics Education", "Biology Education", "Physics", "English"]
 const Genders = ["Male", "Female"]
 
-const StudentForm = ({ setStudents, studentData={}, setStudentData, isEditing, setIsEditing }) => {
+const StudentForm = ({ studentData={}, setStudentData, isEditing, setIsEditing }) => {
 
-    const router = useRouter()
+    const {setStudents} = useAppContext()
 
     console.log('is editing? ', isEditing)
 
@@ -103,7 +104,7 @@ const StudentForm = ({ setStudents, studentData={}, setStudentData, isEditing, s
                 toast.error(isUpdate.error)
             }
             else{
-                setStudents((prev)=>(prev.map(student=>student._id == isUpdate.data._id ? isUpdate.data : student)))
+                setStudents((prev)=>(prev.map(student=>(student._id == isUpdate.data._id ? isUpdate.data : student))))
                 toast.success(isUpdate.message)
             }
             setIsLoading(false)

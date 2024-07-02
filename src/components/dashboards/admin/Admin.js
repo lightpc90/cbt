@@ -12,11 +12,18 @@ import ManageStudent from "./ManageStudent";
 const Admin = ({ data }) => {
   const [menu, setMenu] = useState({ registerCourseAndLecturer: false, manageExam: false, manageStudent: false, result: false })
   // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
-  const { currentUserId, signOut } = useAppContext()
+  const { currentUserId, signOut, setStudents, setStaffs, setCourses } = useAppContext()
+
+ 
 
   const [user, setUser] = useState({})
 
   useEffect(() => {
+    console.log("passing data to the states...")
+    setStudents(data.students)
+    setStaffs(data.staffs)
+    setCourses(data.courses)
+    console.log("done passing data to the states...")
     const userInfo = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : ''
     console.log('user?: ', userInfo)
 

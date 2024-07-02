@@ -5,8 +5,11 @@ import Image from 'next/image';
 import { HiChevronRight, HiChevronDown } from "react-icons/hi";
 import { FaEdit } from "react-icons/fa";
 import StudentEdit from './StudentEdit';
+import { useAppContext } from '@/appContext/appState';
 
-const StudentLayout = ({student, coursesData, setStudents, isEditing, setIsEditing}) => {
+const StudentLayout = ({student, isEditing, setIsEditing}) => {
+
+    const {courses, setStudents} = useAppContext()
 
     const [opened, setOpened] = useState(false)
     const [checkedCourses, setCheckedCourses] = useState({})
@@ -22,12 +25,12 @@ const StudentLayout = ({student, coursesData, setStudents, isEditing, setIsEditi
 
     useEffect(()=>{
           // get initial checked courses
-          const initialCheckedCourses = coursesData.reduce((acc, course) => {
+          const initialCheckedCourses = courses.reduce((acc, course) => {
             acc[course.code] = course.students.includes(studentData._id);
             return acc
         }, {})
         setCheckedCourses(initialCheckedCourses)
-    }, [studentData, coursesData])
+    }, [studentData, courses])
 
     const close=()=>{
         if(opened){
@@ -61,7 +64,7 @@ const StudentLayout = ({student, coursesData, setStudents, isEditing, setIsEditi
                 <p className='flex gap-1 items-center'>Assign Course {opened ? <HiChevronDown size={25} /> : <HiChevronRight size={25} />}  </p>
             </button>
             {opened && <div className='flex flex-col gap-2 text-lg font-semibold bg-rose-500 absolute right-0 w-full z-20 '>
-                {coursesData.length > 0 ? coursesData.map((course, i) => (
+                {courses.length > 0 ? courses.map((course, i) => (
                     <div key={i} className=''>
                         <label className='hover:bg-green-500 p-1 space-x-2 '>
                             {course.code}
@@ -72,7 +75,7 @@ const StudentLayout = ({student, coursesData, setStudents, isEditing, setIsEditi
                         
                     </div>
                 )) : 'No registered course!'}
-                {coursesData.length > 0 && <button className='bg-white px-2 py-1 text-rose-800 hover:shadow-md hover:bg-slate-200'>Update</button>}
+                {courses.length > 0 && <button className='bg-white px-2 py-1 text-rose-800 hover:shadow-md hover:bg-slate-200'>Update</button>}
                 
             </div>}
         </div>

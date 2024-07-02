@@ -1,10 +1,12 @@
 'use client'
 
 import React from 'react'
+import { useAppContext } from '@/appContext/appState'
 
 const ManageExam = ({data}) => {
-  const staffsData = data.staffs.data
-  const coursesData = data.courses.data
+  const {staffs, courses} = useAppContext()
+  const staffsData = data.staffs
+  const coursesData = data.courses
   const published = coursesData.filter((course) => (course.published === true))
 
   const getStaffs = (courseCode) => {

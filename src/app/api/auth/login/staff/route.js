@@ -49,6 +49,7 @@ export async function POST(req) {
     // check if he is an admin if admin passed in the login form
     if(admin){
       if(staff.admin === false){
+        console.log("You are not an admin")
         return NextResponse.json({
           success: false,
           errror: 'You are not an admin'

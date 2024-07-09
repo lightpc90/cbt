@@ -30,7 +30,7 @@ const StudentLayout = ({ student, isEditing, setIsEditing }) => {
 
     const handleUpdateCourses = async () => {
         const updatedCourses = Object.keys(checkedCourses).filter((course)=>(
-            checkedCourses[course] === true
+            checkedCourses[course]
         ))
         setLoading(true)
         const res = await fetch('/api/student/updateStudentCourse', {
@@ -52,11 +52,11 @@ const StudentLayout = ({ student, isEditing, setIsEditing }) => {
         }
         console.log(update.success)
         toast.success(update.message)
-        let updatedCheck = {}
-        update.data.courses.map((course)=>(
-            updatedCheck[course] = true
-        ))
-        setCheckedCourses(updatedCheck)
+        // let updatedCheck = {}
+        // update.data.courses.map((course)=>(
+        //     updatedCheck[course] = true
+        // ))
+        // setCheckedCourses(updatedCheck)
         setLoading(false)
         setOpened(false)
     }
@@ -92,7 +92,7 @@ const StudentLayout = ({ student, isEditing, setIsEditing }) => {
                 <p>{`${studentData.dept}`}</p>
             </div>
 
-            {/* course assignment and edit section */}
+            {/* course assignment and  edit section */}
             <div className='flex gap-2 items-center'>
                 {/* assign course to student */}
                 <div className='relative'>

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { RiDeleteBinFill } from "react-icons/ri";
 
 const StudentEdit = ({ setStudents, studentData, setStudentData, setIsEditing, isEditing }) => {
-  const router = useRouter()
+  
   const [openDeletBox, setOpenDeleteBox] = useState(false)
 
   const [deleteInfo, setDeleteInfo] = useState('')

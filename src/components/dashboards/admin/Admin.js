@@ -5,16 +5,25 @@ import ManageExam from "./ManageExam";
 import RegisterCourseAndLecturer from "./RegisterCourseAndLecturer";
 import ViewResult from "./ViewResult";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useAppContext } from "@/appContext/appState";
 import Image from "next/image";
 import ManageStudent from "./ManageStudent";
 
+const menuVariants = [
+  {menu: `course_and_staff`, name: `Course and Staff`}, 
+  {menu: `exam_management`, name: `Exam Management`}, 
+  {menu: `student_management`, name: `Student Management`}, 
+  {menu: `result`, name: `Result`}]
+
 const Admin = ({ data }) => {
+  const searchParams = useSearchParams()
+  const selectedMenu = searchParams.get('menu')
   const [menu, setMenu] = useState({ registerCourseAndLecturer: false, manageExam: false, manageStudent: false, result: false })
   // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
   const { currentUserId, signOut, setStudents, setStaffs, setCourses } = useAppContext()
 
- 
+
 
   const [user, setUser] = useState({})
 
@@ -61,18 +70,13 @@ const Admin = ({ data }) => {
           <hr />
           {/* Navigation section */}
           <div className="flex flex-col mt-10 gap-3">
-            <button onClick={() => handleMenuChange("registerCourseAndLecturer")} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.registerCourseAndLecturer ? `ring-2 ring-rose-800` : ``} `}>
-              Course & Lecturer
-            </button>
-            <button onClick={() => handleMenuChange("manageExam")} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.manageExam ? `ring-2 ring-rose-800` : ``} `}>
-              Manage Exam
-            </button>
-            <button onClick={() => handleMenuChange("manageStudent")} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.manageStudent ? `ring-2 ring-rose-800` : ``} `}>
-              Manage Students
-            </button>
-            <button onClick={() => handleMenuChange("result")} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-rose-800` : ``} `}>
-              Results
-            </button>
+            {menuVariants.map(({menu, name}, i) => (
+              <Link key={i} href={`?${new URLSearchParams({
+                menu
+              })}`} className={`text-center bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${selectedMenu == menu ? `ring-2 ring-rose-800` : ``} `}>
+                {name}
+              </Link>
+            ))}
           </div>
         </div>
         {/* logout button */}
@@ -83,23 +87,23 @@ const Admin = ({ data }) => {
       {/* Right Pane */}
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
-        {menu.registerCourseAndLecturer && <div className="">
+        {selectedMenu == `course_and_staff` && <div className="">
           <RegisterCourseAndLecturer data={data} />
         </div>}
         {/* Manage Exam */}
-        {menu.manageExam && <div>
+        {selectedMenu == `exam_management` && <div>
           <ManageExam data={data} />
         </div>}
         {/* manage Students */}
-        {menu.manageStudent && <div>
+        {selectedMenu == `student_management` && <div>
           <ManageStudent data={data} />
         </div>}
         {/* Result subpage */}
-        {menu.result && <div>
+        {selectedMenu == `result` && <div>
           <ViewResult userInfo={user} data={data} />
         </div>}
         {/* At initial page load when no menu has been selected */}
-        {!menu?.registerCourseAndLecturer && !menu?.result && !menu.manageExam && !menu.manageStudent && <div>
+        {!selectedMenu && <div>
           <p>Start by choosing any of your menu button</p>
         </div>}
       </div>

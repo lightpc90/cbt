@@ -153,15 +153,12 @@ const QuestionsComponent = ({userInfo, data}) => {
         {/* Exam Duration Set inputs */}
         <div className="flex flex-col gap-1 ">
           <p>Duration:</p>
-          <div className="flex gap-1">
 
             {/* Minute set input */}
-            <div className="flex flex-col w-3/12 relative ">
+            <div className="flex flex-col w-5/12 relative ">
               <input type="number" placeholder="00" disabled={userInfo?.courses?.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={parseInt(examPara?.testMinDuration)} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />
-              <label className="absolute right-[30px] text-slate-400 ">Min</label>
+              <label className="absolute right-[0px] text-slate-400 ">Min</label>
             </div>
-          </div>
-
         </div>
 
         {/* Session set input */}

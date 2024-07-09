@@ -16,6 +16,9 @@ const StudentLayout = ({student, isEditing, setIsEditing}) => {
 
     const [studentData, setStudentData]= useState(student)
 
+    const studentDPUrl = student?.imageUrl ? `/uploads/students/${student.imageUrl}` : 
+        `/image/default_dp.png`
+
     const handleCheckboxChange = (event) => {
         const { name, checked } = event.target;
         setCheckedCourses((prevState) => ({
@@ -47,7 +50,7 @@ const StudentLayout = ({student, isEditing, setIsEditing}) => {
       </div>}
     <div className='flex gap-2 items-center'>
         <div className='h-[40px] w-[40px] rounded-full overflow-hidden'>
-            <Image src={`/uploads/students/${studentData.imageUrl}`} width={500} height={500} alt='student_dp' />
+            <Image src={studentDPUrl} width={500} height={500} alt='student_dp' />
         </div>
         <p>{`${studentData.firstname} ${studentData.middlename.slice(0, 1)}. ${studentData.lastname}`}</p>
         <p>-</p>

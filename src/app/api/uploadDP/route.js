@@ -19,7 +19,7 @@ export async function POST(req){
   console.log("image name: ", filename)
   try{
      await writeFile(
-      path.join(process.cwd(), "public/uploads/students/" + filename),
+      path.join(process.cwd(), "tmp/uploads/students/" + filename),
       buffer
     )
     console.log("image successfully added...")

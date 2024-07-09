@@ -40,6 +40,10 @@ const CourseSchema = new mongoose.Schema(
       //     score: Number
       //   }]
     },
+    active: {
+      type: Boolean,
+      default: true
+    },
     published: {
       type: Boolean,
       default: false

@@ -9,13 +9,13 @@ const StudentSchema = new mongoose.Schema(
       type: String,
     },
     lastname: {
-        type: String,
-      },
+      type: String,
+    },
     phone: {
       type: String,
     },
     matricNo: {
-        type: String,
+      type: String,
     },
     email: {
       type: String,
@@ -28,7 +28,7 @@ const StudentSchema = new mongoose.Schema(
     },
     courses: {
       type: [String],
-    },
+      },
     username: {
       type: String,
     },

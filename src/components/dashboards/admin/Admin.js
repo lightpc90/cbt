@@ -103,7 +103,7 @@ const Admin = ({ data }) => {
           <ViewResult userInfo={user} data={data} />
         </div>}
         {/* At initial page load when no menu has been selected */}
-        {!selectedMenu && <div>
+        {selectedMenu != `course_and_staff` && selectedMenu != `exam_management` && selectedMenu != `student_management` && selectedMenu != `result` &&  <div>
           <p>Start by choosing any of your menu button</p>
         </div>}
       </div>

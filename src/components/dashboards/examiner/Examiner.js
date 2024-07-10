@@ -5,13 +5,25 @@ import QuestionsComponent from "./QuestionsComponent";
 import CourseManagement from "./CourseManagement";
 import Result from "./Result";
 import { useAppContext } from "@/appContext/appState";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+
+const menuVariants = [
+  { menu: `set_test_questions`, name: `Set Test Questions` },
+  { menu: `manage_courses`, name: `Manage Courses` },
+  { menu: `results`, name: `Results` },
+]
 
 // data arg comes from examiner page, server fetching 
-const Examiner = ({data}) => {
-  const {  currentUserId, signOut } = useAppContext()
+const Examiner = ({ data }) => {
+  const searchParams = useSearchParams()
+  const { currentUserId, signOut } = useAppContext()
 
   const [menu, setMenu] = useState({ 'questionSet': false, 'courseManagement': false, 'result': false })
   const [user, setUser] = useState({})
+
+  const selectedMenu = searchParams.get('menu')
 
   const [loading, setLoading] = useState(true)
 
@@ -34,7 +46,7 @@ const Examiner = ({data}) => {
     setMenu({ ...menu })
   }
 
-  
+
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}
@@ -42,7 +54,13 @@ const Examiner = ({data}) => {
         <div>
           {/* profile section */}
           <div className="p-2 flex flex-col  mb-10">
-            <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5"></div>
+            <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5 overflow-hidden  ">
+              <Image src={`/image/staffDP.jpg`}
+                width={500}
+                height={500}
+                alt="staff dp"
+              />
+            </div>
             <p>Staff/Lecturer</p>
             <p>{`${user?.title} ${user?.firstname} ${user?.lastname}`}</p>
             <p>{`Dept: ${user?.dept}`}</p>
@@ -52,15 +70,13 @@ const Examiner = ({data}) => {
           {/* Navigation section */}
           <div className="flex flex-col mt-10 gap-3 ">
             <p className="text-center">Menu Navigation</p>
-            <button onClick={() => handleMenuChange('questionSet')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.questionSet ? `ring-2 ring-rose-800` : ``} `}>
-              Set Test Questions
-            </button>
-            <button onClick={() => handleMenuChange('courseManagement')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.courseManagement ? `ring-2 ring-rose-800` : ``} `}>
-              Manage Courses
-            </button>
-            <button onClick={() => handleMenuChange('result')} className={`bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${menu.result ? `ring-2 ring-rose-800` : ``} `}>
-              Results
-            </button>
+            {menuVariants.map(({menu, name}, i) => (
+              <Link key={i} href={`?${new URLSearchParams({
+                menu
+              })}`}  className={`text-center bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${selectedMenu === menu ? `ring-2 ring-rose-800` : ``} `}>
+                {name}
+              </Link>
+            ))}
           </div>
         </div>
         {/* logout button */}
@@ -71,20 +87,20 @@ const Examiner = ({data}) => {
       {/* Right Pane */}
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
-        {menu.questionSet && <div className="">
+        {selectedMenu === `set_test_questions` && <div className="">
           <p className="text-4xl font-bold my-5">Set Test Questions</p>
-          <QuestionsComponent userInfo={user} data={data}/>
+          <QuestionsComponent userInfo={user} data={data} />
         </div>}
         {/* Course management subpage */}
-        {menu.courseManagement && <div>
+        {selectedMenu === `manage_courses` && <div>
           <CourseManagement userInfo={user} data={data} />
         </div>}
         {/* Result subpage */}
-        {menu.result && <div>
+        {selectedMenu === `results` && <div>
           <Result userInfo={user} data={data} />
         </div>}
         {/* At initial page load when no menu has been selected */}
-        {!menu?.courseManagement && !menu?.questionSet && !menu?.result && <div>
+        {selectedMenu !== `set_test_questions` && selectedMenu !== `manage_courses` && selectedMenu !== `results` && <div>
           <p>Start by choosing any of your menu button</p>
         </div>}
       </div>

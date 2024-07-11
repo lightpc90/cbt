@@ -3,19 +3,12 @@
 import React, { useState } from 'react'
 import CourseLayout from './CourseLayout'
 import StaffLayout from './StaffLayout'
+import StaffForm from './StaffForm'
 import toast from 'react-hot-toast'
 
-const Titles = [
-  {value: '', name: 'Choose Title'},
-  {value: 'Mr.', name: 'Mr.'},
-  {value: 'Ms.', name: 'Ms.'},
-  {value: 'Mrs.', name: 'Mrs.'},
-  {value: 'Engr.', name: 'Engr.'},
-  {value: 'Dr.', name: 'Dr.'},
-  {value: 'Prof.', name: 'Prof.'},
-]
 
-const RegisterCourseAndLecturer = ({data}) => {
+
+const RegisterCourseAndLecturer = ({ data }) => {
   const courses = data.courses
   const staffs = data.staffs
 
@@ -25,10 +18,10 @@ const RegisterCourseAndLecturer = ({data}) => {
   // form data initialization
   const initialCourseData = { title: '', code: '', dept: '', level: '' }
   const initialStaffData = { firstname: '', middlename: '', lastname: '', email: '', dept: '', staffID: '', tempPwd: '', courses: [], title: '' }
-// loading states
+  // loading states
   const [loadingCourse, setLoadingCourse] = useState(false)
   const [loadingStaff, setLoadingStaff] = useState(false)
-// form data
+  // form data
   const [courseData, setCourseData] = useState(initialCourseData)
   const [staffData, setStaffData] = useState(initialStaffData)
 
@@ -47,14 +40,14 @@ const RegisterCourseAndLecturer = ({data}) => {
       },
       body: JSON.stringify(courseData)
     })
-    if(!res.ok) {
+    if (!res.ok) {
       console.log("failed to make api call")
       toast.error("failed to make api call")
       setLoadingCourse(false)
       return
     }
     const _res = await res.json()
-   
+
     if (_res?.error) {
       console.log("error: ", _res.error)
       toast.error(_res.error)
@@ -106,16 +99,16 @@ const RegisterCourseAndLecturer = ({data}) => {
 
     // function to generate temporary password
     genTempPassword(staffData)
-   
+
     // call course creation API
     const res = await fetch("/api/staff/createAStaff", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({...staffData, tempPwd: tempPwd})
+      body: JSON.stringify({ ...staffData, tempPwd: tempPwd })
     })
-    if(!res.ok){
+    if (!res.ok) {
       toast.error("failed to make api call")
       setLoadingStaff(false)
       return
@@ -129,33 +122,33 @@ const RegisterCourseAndLecturer = ({data}) => {
       console.log("message: ", _res.message)
       // add the new staff to the list of staffs in app state
       // setStaffsData([...staffsData, _res.data])
-      setStaffsData((prevData)=>{return [...prevData, _res.data]})
+      setStaffsData((prevData) => { return [...prevData, _res.data] })
       toast.success(_res.message)
     }
     setStaffData(initialStaffData)
     setLoadingStaff(false)
   }
 
-  const bindCoursesToStaff=(course)=>{
+  const bindCoursesToStaff = (course) => {
     // if code is included in the staff already, remove it
     const existingCourses = staffData.courses
     console.log("staff courses: ", existingCourses)
-    if(existingCourses.includes(course.code)){
+    if (existingCourses.includes(course.code)) {
       const indexToRemove = existingCourses.indexOf(course.code)
-      if(indexToRemove !== -1){existingCourses.splice(indexToRemove, 1)}
+      if (indexToRemove !== -1) { existingCourses.splice(indexToRemove, 1) }
       // setStaffData({...staffData, courses: [existingCourses]})
-      setStaffData(prevData=>{return{...prevData, courses: existingCourses }})
+      setStaffData(prevData => { return { ...prevData, courses: existingCourses } })
     }
-    else{
+    else {
       // setStaffData({...staffData, courses: [...existingCourses, course.code]})
-      setStaffData(prevData=>{return{...prevData, courses: [...existingCourses, course.code] }})
+      setStaffData(prevData => { return { ...prevData, courses: [...existingCourses, course.code] } })
     }
-    console.log("updated staff courses: ", staffData) 
+    console.log("updated staff courses: ", staffData)
   }
 
   // UPDATE EXAMNINERS
-  const handleExaminerUpdate=()=>{
-    
+  const handleExaminerUpdate = () => {
+
   }
 
   return (
@@ -177,34 +170,17 @@ const RegisterCourseAndLecturer = ({data}) => {
         <div className='my-5'>
           <p className='text-gray-500'>Register a Lecturer</p>
           <div className='flex flex-col gap-2'>
-            <select value={staffData.title} onChange={e=>setStaffData({...staffData, title: e.target.value})} required className='bg-inherit border rounded-md p-2'>
-              {Titles.map((Title, i)=>(
-                <option key={i} value={Title.value}>{Title.name}</option>
-              ))}
-            </select>
-            <input value={staffData.firstname} onChange={e => setStaffData({ ...staffData, firstname: e.target.value })} type='text' name='firstname' placeholder='First Name' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
-            <input value={staffData.middlename} onChange={e => setStaffData({ ...staffData, middlename: e.target.value })} type='text' name='middlename' placeholder='Middle Name' className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
-            <input value={staffData.lastname} onChange={e => setStaffData({ ...staffData, lastname: e.target.value })} type='text' name='lastname' placeholder='Last Name' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
-            <input value={staffData.email} onChange={e => setStaffData({ ...staffData, email: e.target.value })} type='email' name='email' placeholder='Email' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
-            {/* dept select input */}
-            <select value={staffData.dept} onChange={e=>setStaffData({...staffData, dept: e.target.value})} required className='bg-inherit border rounded-md p-2'>
-              <option value='' >Choose Dept</option>
-              {coursesData?.map((course, i)=>(
-                <option key={i} value={course.dept}>{course.dept}</option>
-              ))}
-            </select>
-            <p>If a dept is missing, register it by registering a course under the dept</p>
-            <input value={staffData.staffID} onChange={e => setStaffData({ ...staffData, staffID: e.target.value })} type='text' name='staffID' placeholder='School Staff ID' required className='p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit' />
+            <StaffForm staffData={staffData} setStaffData={setStaffData} coursesData={coursesData} />
             {/* courses button container */}
             <p className='text-sm'>Bind Lecturer to his course(s) by choosing from the list of registered Courses below</p>
             <div className='flex flex-wrap gap-2 my-4'>
               {/* map department here */}
               {coursesData?.map((course, i) => (
-                <button onClick={()=>bindCoursesToStaff(course)} className={`ring-2 ring-blue-800 ${staffData.courses.includes(course.code) ? `bg-green-900 text-white`: ``} p-1 text-sm rounded-md hover:bg-rose-800 hover:text-white`} key={i}>{course.code}</button>
+                <button onClick={() => bindCoursesToStaff(course)} className={`ring-2 ring-blue-800 ${staffData.courses.includes(course.code) ? `bg-green-900 text-white` : ``} p-1 text-sm rounded-md hover:bg-rose-800 hover:text-white`} key={i}>{course.code}</button>
               ))}
             </div>
 
-            <button onClick={handleStaffRegistration} className='bg-rose-700 text-white rounded-md hover:bg-slate-800 '>{loadingStaff ? `Loading...`:`Register Lecturer`}</button>
+            <button onClick={handleStaffRegistration} className='bg-rose-700 text-white rounded-md hover:bg-slate-800 '>{loadingStaff ? `Loading...` : `Register Lecturer`}</button>
           </div>
         </div>
 
@@ -220,17 +196,17 @@ const RegisterCourseAndLecturer = ({data}) => {
         <div className='bg-white h-[20%] overflow-auto text-black flex gap-2 p-1'>
 
           {/* list of courses */}
-         {coursesData.map((course, i)=>(
-          <CourseLayout key={i} course={course} />
-         ))}
+          {coursesData.map((course, i) => (
+            <CourseLayout key={i} course={course} />
+          ))}
         </div>
         {/* View Registered Lecturer Container */}
         <p className='bg-rose-800 p-1 text-sm mt-5'>Registered Lecturer</p>
         <div className=' bg-white h-[65%] overflow-auto text-black p-2 gap-3'>
           {/* list of lecturers */}
-        {staffsData.map((staff, i)=>(
-          <StaffLayout key={i} staff={staff} coursesData={coursesData}/>
-        ))}
+          {staffsData.map((staff, i) => (
+            <StaffLayout key={i} staff={staff} staffData={staffData} coursesData={coursesData} setStaffData={setStaffData} setStaffs={setStaffData} />
+          ))}
         </div>
       </div>
     </div>

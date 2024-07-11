@@ -19,6 +19,7 @@ const menuVariants = [
 const Admin = ({ data }) => {
   const searchParams = useSearchParams()
   const selectedMenu = searchParams.get('menu')
+  const selectedMode = searchParams.get('mode') === 'editing' ? 'editing' : 'normal'
   const [menu, setMenu] = useState({ registerCourseAndLecturer: false, manageExam: false, manageStudent: false, result: false })
   // const [searchParams, setSearchParams] = useSearchParams({registerCourseAndLecturer: 'false', manageExam: 'false', result: 'false'})
   const { currentUserId, signOut, setStudents, setStaffs, setCourses } = useAppContext()
@@ -40,15 +41,15 @@ const Admin = ({ data }) => {
   }, [currentUserId])
 
 
-  const handleMenuChange = (menubutton) => {
-    menu[menubutton] = true
-    for (const key in menu) {
-      if (key != menubutton) {
-        menu[key] = false
-      }
-    }
-    setMenu({ ...menu })
-  }
+  // const handleMenuChange = (menubutton) => {
+  //   menu[menubutton] = true
+  //   for (const key in menu) {
+  //     if (key != menubutton) {
+  //       menu[key] = false
+  //     }
+  //   }
+  //   setMenu({ ...menu })
+  // }
 
 
   return (
@@ -72,7 +73,8 @@ const Admin = ({ data }) => {
           <div className="flex flex-col mt-10 gap-3">
             {menuVariants.map(({menu, name}, i) => (
               <Link key={i} href={`?${new URLSearchParams({
-                menu
+                menu,
+                mode: selectedMode
               })}`} className={`text-center bg-slate-800 py-1 rounded-md hover:ring-2 hover:ring-white ${selectedMenu == menu ? `ring-2 ring-rose-800` : ``} `}>
                 {name}
               </Link>

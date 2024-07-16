@@ -1,22 +1,29 @@
 "use client";
 
-import {useState} from "react";
+import { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
 
-const CourseForm = () => {
-  const { setCourses } = useAppContext();
+const CourseForm = ({ course, setShow, show }) => {
+  const { setCourses, courses } = useAppContext();
 
   // form data initialization
   const initialCourseData = { title: "", code: "", dept: "", level: "" };
+  const updateInitialCourse = {
+    title: course?.title,
+    code: course?.code,
+    dept: course?.dept,
+    level: course?.level,
+  };
   // loading state
-  const [loadingCourse, setLoadingCourse] = useState(false);
+  const [registering, setRegistering] = useState(false);
+  const [updating, setUpdating] = useState(false);
   //   form data
-  const [courseData, setCourseData] = useState(initialCourseData);
+  const [courseData, setCourseData] = useState(show? updateInitialCourse : initialCourseData);
 
   // function to register course
   const handleCourseRegistration = async () => {
     console.log("couseData sent to api: ", courseData);
-    setLoadingCourse(true);
+    setRegistering(true);
     // call course creation API
     const res = await fetch("/api/course/createACourse", {
       method: "POST",
@@ -28,7 +35,7 @@ const CourseForm = () => {
     if (!res.ok) {
       console.log("failed to make api call");
       toast.error("failed to make api call");
-      setLoadingCourse(false);
+      setRegistering(false);
       return;
     }
     const _res = await res.json();
@@ -43,13 +50,15 @@ const CourseForm = () => {
       toast.success(_res.message);
     }
     setCourseData(initialCourseData);
-    setLoadingCourse(false);
+    setRegistering(false);
   };
+
+  const handleCourseUpdate=async()=>{}
 
   return (
     <div>
       <div className="my-6">
-        <p className="text-gray-500">Register a Course</p>
+        {!show && <p className="text-gray-500">Register a Course</p>}
         <div className="flex flex-col gap-2 ">
           <input
             value={courseData.title}
@@ -95,12 +104,31 @@ const CourseForm = () => {
             required
             className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
           />
-          <button
-            onClick={handleCourseRegistration}
-            className="bg-rose-800 text-white rounded-md hover:bg-slate-700"
-          >
-            {loadingCourse ? `Loading...` : `Register Course`}
-          </button>
+          {show ? (
+            //   button for course update
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={handleCourseUpdate}
+                className="bg-rose-800 text-white rounded-md hover:bg-slate-700 py-1 px-2"
+              >
+                {updating ? `Updating...` : `Update Course`}
+              </button>
+              <button
+                onClick={()=>setShow(false)}
+                className="bg-rose-800 text-white rounded-md hover:bg-slate-700 py-1 px-2"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            //   button for course registration
+            <button
+              onClick={handleCourseRegistration}
+              className="bg-rose-800 text-white rounded-md hover:bg-slate-700"
+            >
+              {registering ? `Registering...` : `Register Course`}
+            </button>
+          )}
         </div>
       </div>
     </div>

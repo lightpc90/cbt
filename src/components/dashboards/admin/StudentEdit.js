@@ -5,8 +5,13 @@ import StudentForm from './StudentForm'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { RiDeleteBinFill } from "react-icons/ri";
+import { useAppContext } from '@/appContext/appState'
 
-const StudentEdit = ({ setStudents, studentData, setStudentData, setIsEditing, isEditing }) => {
+const StudentEdit = ({  student, num, setIsEditing, isEditing }) => {
+
+  console.log("student in edit: ", student, 'key: ', num)
+
+  const {setStudents} = useAppContext()
   
   const [openDeletBox, setOpenDeleteBox] = useState(false)
 
@@ -14,15 +19,15 @@ const StudentEdit = ({ setStudents, studentData, setStudentData, setIsEditing, i
   const [isDeleting, setIsDeleting] = useState(false)
 
   const confirmDeleteInfo=()=>{
-    return studentData.matricNo === deleteInfo
+    return student.matricNo === deleteInfo
   }
 
   const handleStudentDelete = async ()=>{
-    console.log("check ", studentData.matricNo === deleteInfo)
+    console.log("check ", student.matricNo === deleteInfo)
     console.log("entering delete function")
     if (confirmDeleteInfo() === false){
       console.log('wron input')
-      console.log("delete info: ", deleteInfo, "and matric: ", studentData.matricNo)
+      console.log("delete info: ", deleteInfo, "and matric: ", student.matricNo)
       toast.error("incorrect input")
       return
     }
@@ -34,14 +39,14 @@ const StudentEdit = ({ setStudents, studentData, setStudentData, setIsEditing, i
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({_id: studentData._id})
+        body: JSON.stringify({_id: student._id})
       })
       const isDeleted = await res.json()
       if(isDeleted.success === false){
         toast.error(isDeleted.error)
       }
       else{
-        setStudents(prevStudents=>prevStudents.filter((student)=>(student._id !== studentData._id)))
+        setStudents(prevStudents=>prevStudents.filter((student)=>(student._id !== student._id)))
         toast.success(isDeleted.message)
       }
       setIsEditing(false)
@@ -59,12 +64,12 @@ const StudentEdit = ({ setStudents, studentData, setStudentData, setIsEditing, i
   return (
     <div className='max-w-[450px] max-h-[900px] bg-slate-900 py-12 px-5 overflow-auto'>
       <p className='text-center font-bold text-2xl mb-5'>Update Student Information</p>
-      <StudentForm isEditing={isEditing} setStudents={setStudents} studentData={studentData} setStudentData={setStudentData} setIsEditing={setIsEditing} />
+      <StudentForm key={num} num={num} isEditing={isEditing} student={student} setIsEditing={setIsEditing} />
       <div className='mt-10'>
         {!openDeletBox && <button className='flex items-center gap-2 text-rose-800 font-semibold' onClick={()=>setOpenDeleteBox(true)}>Delete Student Info <RiDeleteBinFill size={20}/></button>}
         {openDeletBox && <div>
           <label>
-            <p>NB: This action will delete the student entire data. To continue, type the student matric number, {studentData.matricNo} in the box below</p>
+            <p>NB: This action will delete the student entire data. To continue, type the student matric number, {student.matricNo} in the box below</p>
             <input name='deleteInfo' value={deleteInfo} onChange={(e)=>setDeleteInfo(e.target.value)}  type='text' className='text-slate-800 px-2 p-1 rounded-md' />
           </label>
           <div className='space-x-2 mt-3'>

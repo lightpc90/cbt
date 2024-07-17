@@ -13,8 +13,9 @@ import { create } from '@/actions/imageUpload'
 const Depts = ["Computer Science", "Mathematics Education", "Biology Education", "Physics", "English"]
 const Genders = ["Male", "Female"]
 
-const StudentForm = ({ studentData = {}, setStudentData, isEditing, setIsEditing }) => {
+const StudentForm = ({ student, num, isEditing, setIsEditing }) => {
 
+    console.log("student in form: ", student, 'key: ', num)
     const { setStudents } = useAppContext()
 
     console.log('is editing? ', isEditing)
@@ -23,9 +24,16 @@ const StudentForm = ({ studentData = {}, setStudentData, isEditing, setIsEditing
 
     const initialFormData = { firstname: '', middlename: '', lastname: '', matricNo: '', dept: '', gender: '', imageUrl: '' }
 
-    const updatingInitialData = { firstname: studentData.firstname, middlename: studentData.middlename, lastname: studentData.lastname, matricNo: studentData.matricNo, dept: studentData.dept, gender: studentData.gender, imageUrl: studentData.imageUrl }
+    const updatingInitialData = { 
+        firstname: student?.firstname, 
+        middlename: student?.middlename, 
+        lastname: student?.lastname, 
+        matricNo: student?.matricNo, 
+        dept: student?.dept, 
+        gender: student?.gender, 
+        imageUrl: student?.imageUrl }
 
-    const [formData, setFormData] = useState(isEditing === false ? initialFormData : updatingInitialData)
+    const [formData, setFormData] = useState(!isEditing || isEditing === false ? initialFormData : updatingInitialData)
     const [file, setFile] = useState(null)
     const [uploadingImage, setUploadingImage] = useState(false)
     const [error, setError] = useState('')
@@ -73,11 +81,11 @@ const StudentForm = ({ studentData = {}, setStudentData, isEditing, setIsEditing
         }
     }
 
-    useEffect(() => {
-        if (file !== null) {
-            handleImageSaving()
-        }
-    }, [file])
+    // useEffect(() => {
+    //     if (file !== null) {
+    //         handleImageSaving()
+    //     }
+    // }, [file])
 
 
     const getUpdatedList = (prevList, updatedStudent) => {
@@ -104,7 +112,7 @@ const StudentForm = ({ studentData = {}, setStudentData, isEditing, setIsEditing
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ _id: studentData._id, update: formData })
+                body: JSON.stringify({ _id: student._id, update: formData })
             })
             if (!update.ok) {
                 toast.error("Internal Error")
@@ -172,7 +180,7 @@ const StudentForm = ({ studentData = {}, setStudentData, isEditing, setIsEditing
                 <input type='text' name='lastName' id='lastName' required placeholder='Last Name'
                     className='py-1 px-2 w-[80%] rounded-md text-slate-900 hover:bg-rose-500'
                     value={formData.lastname}
-                    onChange={(e) => { setFormData({ ...formData, lastname: e.target.value }) }} lastname
+                    onChange={(e) => { setFormData({ ...formData, lastname: e.target.value }) }}
                 />
                 <input type='text' name='matricNo' id='matricNo' required placeholder='Matric No'
                     className='py-1 px-2 w-[80%] rounded-md text-slate-900 hover:bg-rose-500'
@@ -202,13 +210,13 @@ const StudentForm = ({ studentData = {}, setStudentData, isEditing, setIsEditing
                 <button disabled={loading} className='bg-slate-800  py-1 px-2 rounded-md hover:bg-slate-700'
                     onClick={handleRegisterOrUpdate}
                 >
-                    {isEditing && !loading ? `Update Student Info ` :
+                    {isEditing === true && !loading ? `Update Student Info ` :
 
-                        isEditing && loading ? `Updating...` :
+                        isEditing == true && loading ? `Updating...` :
                             !isEditing && !loading ? `Register A New Student` :
                                 `Registering...`}
                 </button>
-                {isEditing && <button className='bg-rose-900 hover:bg-rose-800 py-1 px-2 rounded-md ml-3' onClick={() => setIsEditing(false)}>Cancel</button>}
+                {isEditing === true && <button className='bg-rose-900 hover:bg-rose-800 py-1 px-2 rounded-md ml-3' onClick={() => setIsEditing(false)}>Cancel</button>}
             </div>
         </div>
     )

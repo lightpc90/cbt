@@ -8,15 +8,16 @@ import StudentEdit from './StudentEdit';
 import { useAppContext } from '@/appContext/appState';
 import toast from 'react-hot-toast';
 
-const StudentLayout = ({ student, isEditing, setIsEditing }) => {
+const StudentLayout = ({ student, num }) => {
+    console.log("student at layout: ", student, 'key: ', num)
 
-    const { courses, setStudents } = useAppContext()
+    const [isEditing, setIsEditing] = useState(false);
+
+    const { courses } = useAppContext()
     const [loading, setLoading] = useState(false)
 
     const [opened, setOpened] = useState(false)
     const [checkedCourses, setCheckedCourses] = useState({})
-
-    const [studentData, setStudentData] = useState(student)
 
     const studentDPUrl = student?.imageUrl ? `/uploads/students/${student.imageUrl}` :
         `/image/default_dp.png`
@@ -64,11 +65,11 @@ const StudentLayout = ({ student, isEditing, setIsEditing }) => {
     useEffect(() => {
         // get initial checked courses
         const initialCheckedCourses = courses.reduce((acc, course) => {
-            acc[course.code] = course.students.includes(studentData._id);
+            acc[course.code] = course.students.includes(student._id);
             return acc
         }, {})
         setCheckedCourses(initialCheckedCourses)
-    }, [studentData, courses])
+    }, [student, courses])
 
     const close = () => {
         setOpened(false)
@@ -79,17 +80,17 @@ const StudentLayout = ({ student, isEditing, setIsEditing }) => {
         <div className='flex items-center justify-between bg-slate-900 hover:bg-slate-800 px-2 shadow-md py-1'>
             {isEditing &&
                 <div className='absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-700 opacity-[99%]  z-40'>
-                    <StudentEdit setStudents={setStudents} studentData={studentData} setStudentData={setStudentData} setIsEditing={setIsEditing} isEditing={isEditing} />
+                    <StudentEdit student={student} key={num} num={num} setIsEditing={setIsEditing} isEditing={isEditing} />
                 </div>}
             <div className='flex gap-2 items-center'>
                 <div className='h-[40px] w-[40px] rounded-full overflow-hidden'>
                     <Image src={studentDPUrl} width={500} height={500} alt='student_dp' />
                 </div>
-                <p>{`${studentData.firstname} ${studentData.middlename.slice(0, 1)}. ${studentData.lastname}`}</p>
+                <p>{`${student.firstname} ${student.middlename.slice(0, 1)}. ${student.lastname}`}</p>
                 <p>-</p>
-                <p>{`${studentData.matricNo}`}</p>
+                <p>{`${student.matricNo}`}</p>
                 <p>-</p>
-                <p>{`${studentData.dept}`}</p>
+                <p>{`${student.dept}`}</p>
             </div>
 
             {/* course assignment and  edit section */}

@@ -61,7 +61,7 @@ const CourseForm = ({ course, setShow, show }) => {
   return (
     <div>
       <div className="my-6">
-        {!show && <p className="text-gray-500">Register a Course</p>}
+        {!show && <p className="text-2xl text-white mb-2">Register a Course</p>}
         <div className="flex flex-col gap-2 ">
           <input
             value={courseData.title}

@@ -23,12 +23,12 @@ const RegisterCourseAndLecturer = ({ data }) => {
   return (
     <div className='flex justify-around'>
       {/* Registration Container */}
-      <div className='w-4/12 h-[7npm 00px] px-5 overflow-auto text-rose-500 bg-slate-900'>
+      <div className='w-5/12 h-[850px] px-5 overflow-auto text-rose-500 bg-slate-900'>
         <CourseForm />
         <hr className='m-8' />
         {/* Lecturer Registration Container */}
         <div className='my-5'>
-          <p className='text-gray-500'>Register a Lecturer</p>
+          <p className='text-2xl text-white mb-2'>Register a Lecturer</p>
           <div className='flex flex-col gap-2'>
             <StaffForm />
             
@@ -40,7 +40,7 @@ const RegisterCourseAndLecturer = ({ data }) => {
 
 
       {/* Courses and lectures view container */}
-      <div className='w-6/12 bg-slate-500 h-[700px] py-2'>
+      <div className='w-6/12 bg-slate-500 h-[800px] py-2'>
 
         <p className='bg-rose-800 p-1 text-sm'>Registered Courses</p>
         {/* View Registered Courses container */}
@@ -53,7 +53,7 @@ const RegisterCourseAndLecturer = ({ data }) => {
         </div>
         {/* View Registered Lecturer Container */}
         <p className='bg-rose-800 p-1 text-sm mt-5'>Registered Lecturer</p>
-        <div className=' bg-white h-[65%] overflow-auto text-black p-2 gap-3'>
+        <div className=' bg-white h-[68%] overflow-auto text-black p-2 gap-3'>
           {/* list of lecturers */}
           {staffs.map((staff, i) => (
             <StaffLayout key={i} staff={staff} />

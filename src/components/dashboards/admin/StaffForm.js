@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
+import toast from "react-hot-toast";
 
 const Titles = [
   { value: "", name: "Choose Title" },
@@ -13,7 +14,13 @@ const Titles = [
   { value: "Prof.", name: "Prof." },
 ];
 
-const StaffForm = ({ staff, editing = false, isEditing, setIsEditing }) => {
+const Genders = [
+  { value: "", name: "Select Gender" },
+  { value: "Female", name: "Male" },
+  { value: "Female", name: "Female" },
+];
+
+const StaffForm = ({ staff, isEditing, setIsEditing }) => {
   const { courses, setStaffs } = useAppContext();
   const initialFormData = {
     title: "",
@@ -153,7 +160,8 @@ const StaffForm = ({ staff, editing = false, isEditing, setIsEditing }) => {
       !formData.dept ||
       !formData.gender
     ) {
-      console.log("fill the form completely");
+      console.log("formData: ", formData);
+      toast.error("fill the form completely");
       return;
     }
     setUpdating(true);
@@ -181,7 +189,7 @@ const StaffForm = ({ staff, editing = false, isEditing, setIsEditing }) => {
       toast.success(isUpdate.message);
     }
     setUpdating(false);
-    setIsEditing(false)
+    setIsEditing(false);
   };
 
   return (
@@ -243,6 +251,20 @@ const StaffForm = ({ staff, editing = false, isEditing, setIsEditing }) => {
         required
         className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
       />
+      {/* gender select input */}
+      <select
+        value={formData.gender}
+        name="gender"
+        onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+        required
+        className="bg-inherit border rounded-md p-2"
+      >
+        {Genders?.map((gender, i) => (
+          <option key={i} value={gender.value} className="text-slate-900">
+            {gender.name}
+          </option>
+        ))}
+      </select>
       {/* dept select input */}
       <select
         value={formData.dept}

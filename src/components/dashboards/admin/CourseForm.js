@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
 
+
 const CourseForm = ({ course, setShow, show }) => {
   const { setCourses, courses } = useAppContext();
 
@@ -53,6 +54,8 @@ const CourseForm = ({ course, setShow, show }) => {
     setRegistering(false);
   };
 
+  // FUNCTIONS USED IN EDITING MODE
+  // course update function
   const handleCourseUpdate=async()=>{}
 
   return (
@@ -114,7 +117,7 @@ const CourseForm = ({ course, setShow, show }) => {
                 {updating ? `Updating...` : `Update Course`}
               </button>
               <button
-                onClick={()=>setShow(false)}
+                onClick={() => setShow(false)}
                 className="bg-rose-800 text-white rounded-md hover:bg-slate-700 py-1 px-2"
               >
                 Cancel
@@ -131,6 +134,7 @@ const CourseForm = ({ course, setShow, show }) => {
           )}
         </div>
       </div>
+      
     </div>
   );
 };

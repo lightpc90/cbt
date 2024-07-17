@@ -46,7 +46,7 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
         toast.error(isDeleted.error);
       } else {
         setStaffs((prevStaffs) =>
-          prevStaffs.filter((staff) => staff._id !== staff._id)
+          prevStaffs.filter((existingStaff) => existingStaff._id !== staff._id)
         );
         toast.success(isDeleted.message);
       }

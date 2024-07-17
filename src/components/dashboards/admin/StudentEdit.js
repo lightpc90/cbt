@@ -46,7 +46,7 @@ const StudentEdit = ({  student, num, setIsEditing, isEditing }) => {
         toast.error(isDeleted.error)
       }
       else{
-        setStudents(prevStudents=>prevStudents.filter((student)=>(student._id !== student._id)))
+        setStudents(prevStudents=>prevStudents.filter((existingStudent)=>(existingStudent._id !== student._id)))
         toast.success(isDeleted.message)
       }
       setIsEditing(false)

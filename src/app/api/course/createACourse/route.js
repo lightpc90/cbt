@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import Course from "@/models/Course";
 import connectDB from "@/models/db/connectDB";
+import { revalidateTag } from "next/cache";
 
 
 export async function POST(req){
@@ -13,24 +14,23 @@ export async function POST(req){
         if(!(title || code || dept || level)){
             return NextResponse.json({
                 error: "Empty field(s)"
-            }, {status: 400})
+            }, )
         }
         const existingCourse = await Course.findOne({code: code})
         if(existingCourse){
             return NextResponse.json({
                 success: false,
                 error: "Course code already existing!"
-            }, 
-        {status: 400})
+            }, )
         }
         const newCourse = await Course.create({title: title, code: code, dept: dept, level: level})
         if(!newCourse){
             return NextResponse.json({
                 success: false,
                 error: "Something went wrong!"
-            }, 
-        {status: 400})
+            }, )
         }
+        revalidateTag("courses")
         return NextResponse.json({
             success: true,
             message: "New Course Registered",

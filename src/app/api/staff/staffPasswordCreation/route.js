@@ -15,7 +15,7 @@ export async function POST(req) {
       NextResponse.json({
         success: false,
         error: 'Passwords not matched!'
-      }, {status: 400})
+      },)
     }
 
     await connectDB();
@@ -27,15 +27,15 @@ export async function POST(req) {
       return NextResponse.json({
         success: false,
         error: "Email not found!"
-      }, {status: 404})
+      }, )
     }
 
     // check if password has been created
     if(staff.createdPwd){
       return NextResponse.json({
         success: false,
-        error: 'Temp Password has already been used'
-      }, {status: 400})
+        error: 'OTP is already used'
+      },)
     }
 
     // check if the tempPwd is correct
@@ -43,7 +43,7 @@ export async function POST(req) {
       return NextResponse.json({
       success: false,
       error: 'Incorrect Temp Password',
-    }, {status: 400})}
+    },)}
 
     // hash staff password before saving in db
     console.log('data passed to bcrypt: ', doc.pwd, ' : ', '10' )
@@ -58,7 +58,7 @@ export async function POST(req) {
       return NextResponse.json({
         success: false,
         error: "password creation failed!",
-      }, {status: 400});
+      }, );
     }
     //   WHEN A USER INFO IS RETURNED FROM THE DATABASE
     console.log("password created: ", modifiedDoc);

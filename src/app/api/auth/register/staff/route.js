@@ -17,7 +17,6 @@ export async function POST(req) {
           success: false,
           error: "fill the form",
         },
-        { status: 400 }
       );
     }
     console.log("checking to see if staff is already existing...");
@@ -31,7 +30,6 @@ export async function POST(req) {
         success: false,
         error: "Email already exists.",
         },
-        { status: 400 }
     );
     }
     console.log("registering a staff into the database...");
@@ -44,7 +42,6 @@ export async function POST(req) {
         success: false,
         error: `Something went wrong! Try again`,
         },
-        { status: 422 }
     );
     }
     console.log("successfully registered... ", newStaff);

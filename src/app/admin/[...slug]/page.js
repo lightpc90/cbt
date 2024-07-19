@@ -5,7 +5,7 @@ import Admin from "@/components/dashboards/admin/Admin";
 
 
 async function getAllStaffs() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/staff/fetchAllStaffs`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/staff/fetchAllStaffs`, { next: { tags: ['staffs'] }})
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -21,7 +21,7 @@ async function getAllStaffs() {
 }
 
 async function getAllCourses() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/course/fetchAllCourses`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/course/fetchAllCourses`, { next: { tags: ['courses'] }})
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -37,7 +37,7 @@ async function getAllCourses() {
 }
 
 async function getAllStudents() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/student/fetchAllStudents`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/student/fetchAllStudents`, { next: { tags: ['students'] }})
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

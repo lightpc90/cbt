@@ -1,6 +1,7 @@
 import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Staff from "@/models/Staff";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req) {
   const staffData = await req.json();
@@ -15,7 +16,7 @@ export async function POST(req) {
       return NextResponse.json({
         success: false,
         error: "email already existing!"
-      }, {status: 400})
+      }, )
     }
     //  CREATE A NEW STAFF ENTRY
     const newStaff = await Staff.create(staffData);
@@ -28,11 +29,12 @@ export async function POST(req) {
           success: false,
           error: "Registration failed!",
         },
-        { status: 400 }
       );
     }
     //   WHEN AN EVENT INFO IS RETURNED FROM THE DATABASE
     console.log("new staff added: ", newStaff);
+
+    revalidateTag("staffs")
     return NextResponse.json(
       {
         success: true,

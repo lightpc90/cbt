@@ -1,6 +1,7 @@
 import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Student from "@/models/Student";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req) {
     const {_id} = await req.json()
@@ -30,6 +31,8 @@ export async function POST(req) {
         }
         //   WHEN A Student INFO IS RETURNED FROM THE DATABASE
         console.log("student info deleted: ", student);
+
+        revalidateTag("students")
         return NextResponse.json({
             success: true,
             message: "Deleted Successfully",

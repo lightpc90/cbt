@@ -34,7 +34,7 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
     try {
       console.log("entering the delete api...");
       setIsDeleting(true);
-      const res = await fetch("/api/student/deleteAStaff", {
+      const res = await fetch("/api/staff/deleteAStaff", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

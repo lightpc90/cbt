@@ -13,7 +13,6 @@ export async function POST(req) {
     if (!matricNo || !lastname) {
       return NextResponse.json(
         { success: false, error: "Please enter matricNo and lastname" },
-        { status: 400 }
       );
     }
     console.log("credentials submitted passed...");
@@ -30,7 +29,6 @@ export async function POST(req) {
       console.log("no student found: ", student);
       return NextResponse.json(
         { success: false, error: "No student found" },
-        { status: 401 }
       );
     }
 
@@ -42,7 +40,6 @@ export async function POST(req) {
               success: false,
               error: "incorrect password/lastname",
             },
-            { status: 400 }
           );
     }
 

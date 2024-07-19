@@ -1,6 +1,7 @@
 import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
 import Course from "@/models/Course";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req) {
   const { _id } = await req.json();
@@ -18,6 +19,8 @@ export async function POST(req) {
         error: "Failed to delete course!",
       });
     }
+
+    revalidateTag("courses")
     //   WHEN A USER INFO IS RETURNED FROM THE DATABASE
     return NextResponse.json({
       success: true,

@@ -11,7 +11,7 @@ export async function POST(req) {
     console.log("email: ", email, "pwd: ", pwd, "admin? ", admin)
 
     // check if email and password is entered
-    if (!(email && pwd)) {
+    if (!email || !pwd) {
       return NextResponse.json(
         { success: false, error: "Please enter email and password" },
         { status: 400 }
@@ -31,19 +31,19 @@ export async function POST(req) {
       console.log("no user or no user hashedPwd: ", staff);
       return NextResponse.json(
         { success: false, error: "No staff found" },
-        { status: 401 }
       );
     }
 
     // check if password matches
     const passwordMatch = await bcrypt.compare(pwd, staff.hashedPwd);
+
     if (!passwordMatch) {
+      console.log("password not matched")
       return NextResponse.json(
         {
           success: false,
           error: "Incorrect Password",
         },
-        { status: 400 }
       );
     }
     // check if he is an admin if admin passed in the login form
@@ -53,7 +53,7 @@ export async function POST(req) {
         return NextResponse.json({
           success: false,
           errror: 'You are not an admin'
-        }, {status: 401})
+        })
       }
     }
 

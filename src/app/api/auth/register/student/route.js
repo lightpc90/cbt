@@ -17,7 +17,6 @@ export async function POST(req) {
           success: false,
           error: "fill the form",
         },
-        { status: 400 }
       );
     }
     console.log("checking to see if student is already existing...");
@@ -31,7 +30,6 @@ export async function POST(req) {
         success: false,
         error: "Matric Number already exists.",
         },
-        { status: 400 }
     );
     }
     console.log("registering a student into the database...");
@@ -46,7 +44,6 @@ export async function POST(req) {
         success: false,
         error: `Something went wrong! Try again`,
         },
-        { status: 422 }
     );
     }
     console.log("successfully registered... ", newStudent);

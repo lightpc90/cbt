@@ -1,6 +1,8 @@
 import connectDB from "@/models/db/connectDB";
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import Staff from "@/models/Staff";
+
 
 export async function POST(req) {
     const {_id, doc} = await req.json()
@@ -16,10 +18,12 @@ export async function POST(req) {
       return NextResponse.json({
         success: false,
         error: "modification failed!",
-      }, {status: 400});
+      }, );
     }
     //   WHEN A USER INFO IS RETURNED FROM THE DATABASE
     console.log("modified doc: ", modifiedDoc);
+
+    revalidateTag("staffs")
     return NextResponse.json({
       success: true,
       message: "Successfully Updated",

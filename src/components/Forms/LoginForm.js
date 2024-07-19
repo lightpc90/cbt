@@ -25,12 +25,10 @@ const LoginForm = ({admin=false}) => {
     
     const res = await fetch('/api/auth/login/staff', {
       method: 'POST',
-      headers: {
-        'Content-Type': "application/json"
-      },
       body: JSON.stringify({...formData, admin: admin})
     })
-    if(!res.ok){
+    console.log("response:: ", res)
+    if(res.ok === false){
       console.log("server failure: ", res)
       toast.error("failed to make api call")
       setLoading(false)

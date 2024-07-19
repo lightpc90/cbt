@@ -15,7 +15,6 @@ export async function POST(req) {
     if (pwd !== confirmPwd) {
       return NextResponse.json(
         { error: "passwords do not match" },
-        { status: 400 }
       );
     }
 
@@ -25,7 +24,6 @@ export async function POST(req) {
           success: false,
           error: "form cannot be empty",
         },
-        { status: 400 }
       );
     }
     console.log("checking to see if staff is already existing...");
@@ -39,7 +37,6 @@ export async function POST(req) {
         success: false,
         error: "Staff does not exist.",
         },
-        { status: 400 }
     );
     }
     console.log("Staff creating password...");
@@ -54,7 +51,6 @@ export async function POST(req) {
         success: false,
         error: `Something went wrong! Try again`,
         },
-        { status: 422 }
     );
     }
     console.log("Password created successfully!... ", modifiedDoc);

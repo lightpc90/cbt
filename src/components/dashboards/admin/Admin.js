@@ -40,16 +40,6 @@ const Admin = ({ data }) => {
     setUser(userInfo);
   }, [currentUserId]);
 
-  // const handleMenuChange = (menubutton) => {
-  //   menu[menubutton] = true
-  //   for (const key in menu) {
-  //     if (key != menubutton) {
-  //       menu[key] = false
-  //     }
-  //   }
-  //   setMenu({ ...menu })
-  // }
-
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}

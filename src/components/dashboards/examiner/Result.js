@@ -62,30 +62,6 @@ const Result = ({ userInfo, data }) => {
                             <ResultLayout key={i} id={id} result={result} selectedCourse={selectedCourse} />
                         )) : <p className='text-slate-800 font-bold text-center'>No Result For the Selected Course</p>}
 
-                        {/* dummy data to model result view */}
-                        <div className='flex justify-evenly bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Name: Gideon Folahan Abbey</p>
-                            <p>MatricNo: 2017/RTM/6473</p>
-                            <div className=''>
-                                <p>Score: 70/70</p>
-                            </div>
-                        </div>
-                        {/* duplicate */}
-                        <div className='flex justify-evenly bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Name: Gideon Folahan Abbey</p>
-                            <p>MatricNo: 2017/RTM/6473</p>
-                            <div className=''>
-                                <p>Score: 70/70</p>
-                            </div>
-                        </div>
-                        <div className='flex justify-evenly bg-slate-900 p-1 rounded-md shadow-md'>
-                            <p>Name: Gideon Folahan Abbey</p>
-                            <p>MatricNo: 2017/RTM/6473</p>
-                            <div className=''>
-                                <p>Score: 70/70</p>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
                 {/* Info of the selected course */}

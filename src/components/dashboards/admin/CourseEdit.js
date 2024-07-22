@@ -20,7 +20,7 @@ const CourseEdit = ({course, show, setShow}) => {
     console.log("entering delete function");
     if (confirmDeleteInfo() === false) {
       console.log("wrong input");
-      console.log("delete info: ", deleteInfo, "and matric: ", staff.staffID);
+      console.log("delete info: ", deleteInfo, "and course code: ", course.code);
       toast.error("incorrect input");
       return;
     }
@@ -32,7 +32,7 @@ const CourseEdit = ({course, show, setShow}) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ _id: staff._id }),
+        body: JSON.stringify({ _id: course._id }),
       });
       const isDeleted = await res.json();
       if (isDeleted.success === false) {
@@ -44,7 +44,7 @@ const CourseEdit = ({course, show, setShow}) => {
         toast.success(isDeleted.message);
       }
     } catch (err) {
-      console.group("Internal Server Error in student delete route: ", err);
+      console.log("Internal Server Error: ", err);
       toast.error("Internal Server Error: try again!");
     } finally {
       setIsDeleting(false);

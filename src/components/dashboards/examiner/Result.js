@@ -1,35 +1,26 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useAppContext } from '@/appContext/appState'
 import ResultLayout from './ResultLayout'
 
 const Result = ({ userInfo, data }) => {
+    const {courses} = useAppContext()
 
-    const coursesData = data.courses.data
-    const studentsData = data?.students?.data
 
     const [activeCode, setActiveCode] = useState('')
     const [selectedCourse, setSelectedCourse] = useState({})
-    // const [courseStudents, setCourseStudents] = useState([])
-
-    // get the list of students offering a particular course
-    // const getCourseStudents=()=>{
-    //     const _courseStudents = studentsData?.filter((studentInfo)=>(selectedCourse?.students.includes(studentInfo._id)))
-    //     if(_courseStudents){
-    //         setCourseStudents(_courseStudents)
-    //     }
-    // }
 
     // NOTE: I WANT TO SIMPLIFY THIS CODE AND REMOVE THE EFFECT HERE!
     useEffect(() => {
-        if (coursesData) {
+        if (courses) {
             const getCourse = () => {
-                const _courseSelected = coursesData.find((course) => (course.code == activeCode))
+                const _courseSelected = courses.find((course) => (course.code == activeCode))
                 setSelectedCourse(_courseSelected)
             }
             getCourse()
         }
-    }, [activeCode, coursesData])
+    }, [activeCode, courses])
 
     const handleActiveCode = (code) => {
         setActiveCode(() => { return code })
@@ -46,9 +37,9 @@ const Result = ({ userInfo, data }) => {
                     <div className='bg-rose-800 h-[50px] overflow-auto flex items-center p-2 gap-2'>
                         {userInfo?.admin ?
                             // the user is an admin
-                            coursesData?.length > 0 ?
+                            courses?.length > 0 ?
                                 // the user is an admin and courses are registered
-                                coursesData.map((course, i) => (
+                                courses.map((course, i) => (
                                     <button key={i} onClick={() => handleActiveCode(course.code)}
                                         className={`ring-2 ring-white p-1 rounded-md text-sm shadow-md hover:ring-yellow-500 ${course.code === activeCode ? `bg-slate-800` : ``} `}>{course.code}</button>
                                 )) :
@@ -68,7 +59,7 @@ const Result = ({ userInfo, data }) => {
                     <div className='p-2 text-sm h-[750px] overflow-auto gap-2 flex flex-col'>
                         {/* Dynamic result shows here */}
                         {selectedCourse?.results ? Object.entries(selectedCourse?.results).map(([id, result], i) => (
-                            <ResultLayout key={i} id={id} result={result} studentsData={studentsData} selectedCourse={selectedCourse} />
+                            <ResultLayout key={i} id={id} result={result} selectedCourse={selectedCourse} />
                         )) : <p className='text-slate-800 font-bold text-center'>No Result For the Selected Course</p>}
 
                         {/* dummy data to model result view */}

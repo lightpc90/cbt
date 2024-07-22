@@ -4,20 +4,18 @@ import Course from "@/models/Course";
 import { revalidateTag } from "next/cache";
 
 export async function POST(req) {
-    const {_id, question} = await req.json()
+  const { _id, update } = await req.json();
   try {
     await connectDB();
 
-    const params = question.params
-    const questions = question.questions
-    console.log("params: ", params, "(Questions: ", questions)
-
-    const find= await Course.findOne({_id})
-    console.log("find: ", find)
     //   FIND THE USER INFO USING THE USER ID
-    const modifiedDoc = await Course.findOneAndUpdate({_id}, {question: question}, {new: true})
+    const modifiedDoc = await Course.findOneAndUpdate(
+      { _id },
+      update,
+      { new: true }
+    );
 
-    console.log("modified doc: ", modifiedDoc)
+    console.log("modified doc: ", modifiedDoc);
 
     //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
     if (!modifiedDoc) {
@@ -25,23 +23,29 @@ export async function POST(req) {
       return NextResponse.json({
         success: false,
         error: "modification failed/data not found",
-      }, );
+      });
     }
     //   WHEN A USER INFO IS RETURNED FROM THE DATABASE
     console.log("modified doc: ", modifiedDoc);
 
-    revalidateTag("courses")
-    return NextResponse.json({
-      success: true,
-      message: "Successfully Updated",
-      data: modifiedDoc,
-    }, {status: 201});
+    revalidateTag("courses");
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Successfully Updated",
+        data: modifiedDoc,
+      },
+      { status: 201 }
+    );
   } catch (err) {
     console.log(err);
 
-    return NextResponse.json({
-      success: false,
-      error: err.message || "Something went wrong",
-    }, {status: 500});
+    return NextResponse.json(
+      {
+        success: false,
+        error: err.message || "Something went wrong",
+      },
+      { status: 500 }
+    );
   }
 }

@@ -13,11 +13,6 @@ import toast from "react-hot-toast";
 const StaffLayout = ({ staff }) => {
   const { courses } = useAppContext();
 
-  //
-  const searchParams = useSearchParams();
-  const selectedMenu = searchParams.get("menu");
-  const selectedMode = searchParams.get("mode");
-
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -61,23 +56,25 @@ const StaffLayout = ({ staff }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ _id: staff._id, doc: { courses: trueKeys } }),
+      body: JSON.stringify({ _id: staff._id, update: { courses: trueKeys } }),
     });
     if (res.ok === false) {
       console.log("failed to make api call");
+      setLoading(false);
       toast.error("failed api call");
       return;
     }
     // handle return data
     const _res = await res.json();
-    if (!_res.success) {
+    if (_res.success === false) {
       console.log("error: ", _res.error);
       toast.error(_res.error);
-    } else if (_res.success) {
+    } else if (_res.success === true) {
       console.log("message: ", _res.message);
       toast.success(_res.message);
     }
     setLoading(false);
+    setOpen(false);
   };
 
   return (
@@ -85,7 +82,11 @@ const StaffLayout = ({ staff }) => {
       {/* Editing component: it displays only when enabled */}
       {isEditing && (
         <div className="absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-700 opacity-[99%]  z-40">
-          <StaffEdit staff={staff} isEditing={isEditing} setIsEditing={setIsEditing} />
+          <StaffEdit
+            staff={staff}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+          />
         </div>
       )}
 
@@ -127,18 +128,20 @@ const StaffLayout = ({ staff }) => {
                   <hr />
                 </div>
               ))}
-              <button
-                onClick={handleUpdateCourse}
-                className="bg-slate-800 p-1 mt-5"
-              >
-                {loading ? `loading..` : `Update!`}
-              </button>
+              {allCodes.length > 0 && (
+                <button
+                  onClick={handleUpdateCourse}
+                  className="bg-slate-800 p-1 mt-5"
+                >
+                  {loading ? `loading..` : `Update!`}
+                </button>
+              )}
             </div>
           )}
         </div>
         {/* edit button */}
         <button
-          onClick={()=>setIsEditing(true)}
+          onClick={() => setIsEditing(true)}
           className="flex items-center gap-2 border px-2 py-1 rounded-md  hover:bg-slate-300  hover:text-slate-900"
         >
           Edit <FaEdit size={20} />

@@ -5,12 +5,12 @@ import Staff from "@/models/Staff";
 
 
 export async function POST(req) {
-    const {_id, doc} = await req.json()
+    const {_id, update} = await req.json()
   try {
     await connectDB();
 
     //   FIND THE USER INFO USING THE USER ID
-    const modifiedDoc = await Staff.findOneAndUpdate({_id}, doc, {new: true})
+    const modifiedDoc = await Staff.findByIdAndUpdate(_id, update, {new: true})
 
     //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
     if (!modifiedDoc) {

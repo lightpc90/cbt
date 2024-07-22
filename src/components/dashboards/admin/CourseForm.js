@@ -56,7 +56,35 @@ const CourseForm = ({ course, setShow, show }) => {
 
   // FUNCTIONS USED IN EDITING MODE
   // course update function
-  const handleCourseUpdate=async()=>{}
+  const handleCourseUpdate=async()=>{
+    // call course creation API
+    setUpdating(true)
+    const res = await fetch("/api/course/updateACourse", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({_id: course._id, update: courseData}),
+    });
+    if (!res.ok) {
+      console.log("failed to make api call");
+      toast.error("failed to make api call");
+      setUpdating(false);
+      return;
+    }
+    const _res = await res.json();
+
+    if (_res?.success === false) {
+      console.log("error: ", _res.error);
+      toast.error(_res.error);
+    } else if (_res?.success === true) {
+      console.log("message: ", _res.message);
+      // add the new course to the list of courses in app state
+      setCourses([...courses, _res.data]);
+      toast.success(_res.message);
+    }
+    setUpdating(false)
+  }
 
   return (
     <div>

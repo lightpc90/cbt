@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useAppContext } from '@/appContext/appState'
+import toast from 'react-hot-toast'
 
 const ManageExam = ({data}) => {
   const {staffs, courses} = useAppContext()
@@ -14,53 +15,105 @@ const ManageExam = ({data}) => {
     return courseStaffs
   }
 
+  const uploadQuestionToExamPortal=async(_id)=>{
+    const res = await fetch('/api/course/updateACourse', {
+      method: 'POST',
+      body: JSON.stringify({_id, update:{live: true}})
+    })
+
+    if(!res.ok){
+      toast.error("Failed! Try again")
+      return
+    }
+    const uploaded = await res.json()
+    if(uploaded.success === false){
+      toast.error(uploaded.error)
+    }
+    else if(uploaded.success === true ){
+      toast.success(uploaded.message)
+
+    }
+
+  }
+
   return (
-    <div className=''>
+    <div className="">
       <p>Manage Examination</p>
-      <div className='flex gap-2'>
+      <div className="flex gap-2">
         {/* Published Questions container */}
-        <div className='bg-slate-700 h-[600px] w-[70%] rounded-md overflow-auto'>
-          <p className='bg-rose-500 p-1'>Questions</p>
-          <div className='h-[80%] overflow-auto flex flex-wrap p-2'>
-          {published?.length > 0 ? published?.map((courseData, i) => (
-            <div key={i} className='h-[80%] overflow-auto flex flex-wrap p-2'>
-              <div className='bg-slate-800 p-1 ring-2 ring-rose-500'>
-                <p>{courseData.code}</p>
-                <div>{getStaffs(courseData?.code) ? getStaffs(courseData?.code)?.map((staff, i) => (
-                  <p key={i}>{`${staff?.title} ${staff.firstname} ${staff?.lastname}`}</p>
-                )): `No Staffs Found`}</div>
-                <hr className='my-2' />
-                <button className='bg-rose-500 hover:bg-slate-500 px-1'>Upload to Exam Portal</button>
-              </div>
-            </div>)) : `No Published Questions`}
+        <div className="bg-slate-700 h-[600px] w-[70%] rounded-md overflow-auto">
+          <p className="bg-rose-500 p-1">Questions</p>
+          <div className="h-[80%] overflow-auto flex flex-wrap p-2">
+            {published?.length > 0
+              ? published?.map((courseData, i) => (
+                  <div
+                    key={i}
+                    className="h-[80%] overflow-auto flex flex-wrap p-2"
+                  >
+                    <div className="bg-slate-800 p-1 ring-2 ring-rose-500">
+                      <p>{courseData.code}</p>
+                      <div>
+                        {getStaffs(courseData?.code)
+                          ? getStaffs(courseData?.code)?.map((staff, i) => (
+                              <p
+                                key={i}
+                              >{`${staff?.title} ${staff.firstname} ${staff?.lastname}`}</p>
+                            ))
+                          : `No Staffs Found`}
+                      </div>
+                      <hr className="my-2" />
+                      <button
+                        onClick={()=>uploadQuestionToExamPortal(courseData._id)}
+                        className="bg-rose-500 hover:bg-slate-500 px-1"
+                      >
+                        Upload to Exam Portal
+                      </button>
+                    </div>
+                  </div>
+                ))
+              : `No Published Questions`}
           </div>
         </div>
 
         {/* live question container */}
-        <div className='bg-slate-700 h-[600px] w-[30%] rounded-md overflow-auto'>
-          <p className='bg-green-500 p-1'>Uploaded/Live Exams</p>
+        <div className="bg-slate-700 h-[600px] w-[30%] rounded-md overflow-auto">
+          <p className="bg-green-500 p-1">Uploaded/Live Exams</p>
           {/* list of Questions */}
-          <div className='h-[80%] overflow-auto flex flex-wrap p-2'>
+          <div className="h-[80%] overflow-auto flex flex-wrap p-2">
             {/* get published questions */}
-          {published?.length > 0 ? published?.map((courseData, i) => (
-            <div key={i} className='h-[80%] overflow-auto flex flex-wrap p-2'>
-              {/* get published questions that are live at portal */}
-              {courseData.live && <div className='bg-slate-800 p-1 ring-2 ring-rose-500'>
-                <p>{courseData.code}</p>
-                <div>{getStaffs(courseData?.code) ? getStaffs(courseData?.code)?.map((staff, i) => (
-                  <p key={i}>{`${staff?.title} ${staff.firstname} ${staff?.lastname}`}</p>
-                )): `No Staffs Found`}</div>
-                <hr className='my-2' />
-                <button className='bg-rose-500 hover:bg-slate-500 px-1'>Pull Down</button>
-              </div>}
-              
-            </div>)) : `No Ongoing Exams`}
+            {published?.length > 0
+              ? published?.map((courseData, i) => (
+                  <div
+                    key={i}
+                    className="h-[80%] overflow-auto flex flex-wrap p-2"
+                  >
+                    {/* get published questions that are live at portal */}
+                    {courseData.live && (
+                      <div className="bg-slate-800 p-1 ring-2 ring-rose-500">
+                        <p>{courseData.code}</p>
+                        <div>
+                          {getStaffs(courseData?.code)
+                            ? getStaffs(courseData?.code)?.map((staff, i) => (
+                                <p
+                                  key={i}
+                                >{`${staff?.title} ${staff.firstname} ${staff?.lastname}`}</p>
+                              ))
+                            : `No Staffs Found`}
+                        </div>
+                        <hr className="my-2" />
+                        <button className="bg-rose-500 hover:bg-slate-500 px-1">
+                          Pull Down
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              : `No Ongoing Exams`}
           </div>
         </div>
       </div>
-
     </div>
-  )
+  );
 }
 
 export default ManageExam

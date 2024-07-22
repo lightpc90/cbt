@@ -5,12 +5,8 @@ import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 
-const QuestionsComponent = ({userInfo, data}) => {
-
-  const courses = data.courses.data
-  const staffs = data.staffs.data
-
-  const [coursesData, setCoursesData] = useState(courses)
+const QuestionsComponent = ({ userInfo, data }) => {
+  const { courses, setCourses } = useAppContext();
 
   // const [userInfo, setUserInfo] = useState(typeof window !== 'undefined' ? localStorage.getItem("userData") & JSON.parse(localStorage.getItem('userData')) : {})
 
@@ -18,168 +14,268 @@ const QuestionsComponent = ({userInfo, data}) => {
     { question: "", answer: "", options: ["", "", "", ""] },
   ]);
 
-
   //NOTE: the course property here refers only to the course code
-  const [examPara, setExamPara] = useState(
-    { course: '', testMinDuration: '', schoolSession: '', dateAndTime: '' }
-  )
+  const [examPara, setExamPara] = useState({
+    course: "",
+    testMinDuration: "",
+    schoolSession: "",
+    dateAndTime: "",
+  });
 
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const savedObject = localStorage.getItem("examObject")
       ? JSON.parse(localStorage.getItem("examObject"))
       : {};
-    console.log("saved Object after reload: ", savedObject)
-    if(savedObject?.questions && savedObject.questions.length > 0){setQuestions(()=>{return savedObject.questions})}
-    if(savedObject?.examPara){setExamPara(()=>{return savedObject.examPara})}
-  },[]); //vercel expect me to include questions and examPara as dependencies here but i think they make my app re-render endlessly
+    console.log("saved Object after reload: ", savedObject);
+    if (savedObject?.questions && savedObject.questions.length > 0) {
+      setQuestions(() => {
+        return savedObject.questions;
+      });
+    }
+    if (savedObject?.examPara) {
+      setExamPara(() => {
+        return savedObject.examPara;
+      });
+    }
+  }, []); //vercel expect me to include questions and examPara as dependencies here but i think they make my app re-render endlessly
 
   const addQuestion = () => {
-    setQuestions((prev)=>{return [
-      ...prev,
-      { question: "", answer: "", options: ["", "", "", ""] },
-    ]});
-    localStorage.setItem("examObject", JSON.stringify({questions: [...questions], examPara: {...examPara}}))
+    setQuestions((prev) => {
+      return [...prev, { question: "", answer: "", options: ["", "", "", ""] }];
+    });
+    localStorage.setItem(
+      "examObject",
+      JSON.stringify({ questions: [...questions], examPara: { ...examPara } })
+    );
   };
 
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index].question = event.target.value;
-    setQuestions(() => { return updatedQuestions });
+    setQuestions(() => {
+      return updatedQuestions;
+    });
     // store changes in browser
-    localStorage.setItem("examObject", JSON.stringify({ questions: [...updatedQuestions], examPara: { ...examPara } }))
+    localStorage.setItem(
+      "examObject",
+      JSON.stringify({
+        questions: [...updatedQuestions],
+        examPara: { ...examPara },
+      })
+    );
   };
 
   const handleOptionChange = (questionIndex, optionIndex, event) => {
     const updatedQuestions = [...questions];
     updatedQuestions[questionIndex].options[optionIndex] = event.target.value;
-    setQuestions(() => { return updatedQuestions });
-    localStorage.setItem("examObject", JSON.stringify({ questions: [...updatedQuestions], examPara: { ...examPara } }))
+    setQuestions(() => {
+      return updatedQuestions;
+    });
+    localStorage.setItem(
+      "examObject",
+      JSON.stringify({
+        questions: [...updatedQuestions],
+        examPara: { ...examPara },
+      })
+    );
   };
 
   const handleQuestionDelete = (questionIndex) => {
-    const updatedQuestions = [...questions]
+    const updatedQuestions = [...questions];
     updatedQuestions.splice(questionIndex, 1);
-    setQuestions(() => { return [...updatedQuestions] });
-    localStorage.setItem("examObject", JSON.stringify({ questions: [...updatedQuestions], examPara: { ...examPara } }))
-  }
+    setQuestions(() => {
+      return [...updatedQuestions];
+    });
+    localStorage.setItem(
+      "examObject",
+      JSON.stringify({
+        questions: [...updatedQuestions],
+        examPara: { ...examPara },
+      })
+    );
+  };
 
   const handleSetAnswer = (questionIndex, option) => {
-    const updatedQuestions = [...questions]
+    const updatedQuestions = [...questions];
     updatedQuestions[questionIndex].answer = option;
-    setQuestions(() => { return [...updatedQuestions] })
-    localStorage.setItem("examObject", JSON.stringify({ questions: [...updatedQuestions], examPara: { ...examPara } }))
-  }
+    setQuestions(() => {
+      return [...updatedQuestions];
+    });
+    localStorage.setItem(
+      "examObject",
+      JSON.stringify({
+        questions: [...updatedQuestions],
+        examPara: { ...examPara },
+      })
+    );
+  };
 
-  const handleSetExamPara = (e, key)=>{
-    console.log("function called with key: ", key)
-    setExamPara((prev)=>{return {...prev, [key]: e.target.value}})
+  const handleSetExamPara = (e, key) => {
+    console.log("function called with key: ", key);
+    setExamPara((prev) => {
+      return { ...prev, [key]: e.target.value };
+    });
     // save update in browser storage
-    localStorage.setItem("examObject", JSON.stringify({ questions: [...questions], examPara: { ...examPara } }))
-  }
+    localStorage.setItem(
+      "examObject",
+      JSON.stringify({ questions: [...questions], examPara: { ...examPara } })
+    );
+  };
 
   // call api to save the questions into the subject db
-  const handleQuestionSaving =async()=>{
-    setLoading(true)
-    if(!examPara.course){
-      window.alert("course input empty")
-      toast.error("course input empty")
-      setLoading(false)
+  const handleQuestionSaving = async () => {
+    setLoading(true);
+    if (!examPara.course) {
+      window.alert("course input empty");
+      toast.error("course input empty");
+      setLoading(false);
+    } else if (
+      !examPara.testMinDuration ||
+      !examPara.schoolSession ||
+      !examPara.dateAndTime
+    ) {
+      console.log("fill all exam parameters");
+      window.alert("fill all forms");
+      toast.error("fill all the form inputs");
+      setLoading(false);
+      return;
     }
-    else if( !examPara.testMinDuration || !examPara.schoolSession || !examPara.dateAndTime){
-      console.log("fill all exam parameters")
-      window.alert("fill all forms")
-      toast.error("fill all the form inputs")
-      setLoading(false)
-      return
-    }
 
-    console.log("courses data", coursesData, "exam code: ", examPara.course)
+    const selectedCourse = courses.find(
+      (course) => course.code == examPara.course
+    );
+    console.log("selectedCourse: ", selectedCourse);
+    const { _id } = selectedCourse;
+    console.log("code selected: ", examPara.course);
+    console.log("question _id to update: ", _id);
 
-    const selectedCourse = coursesData.find(course=>course.code == examPara.course);
-    console.log("selectedCourse: ", selectedCourse)
-    const {_id} = selectedCourse;
-    console.log("code selected: ", examPara.course)
-    console.log("question _id to update: ", _id)
-
-    const res = await fetch("/api/course/updateACourse", {
+    const res = await fetch("/api/course/addExamQuestion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({_id, question:{questions: questions, params: examPara}})
-    })
-    if(!res.ok){
-      console.log("api failure")
-      toast.error("failed to make api call")
-      setLoading(false)
-      return
+      body: JSON.stringify({
+        _id,
+        question: { questions: questions, params: examPara },
+      }),
+    });
+    if (!res.ok) {
+      console.log("api failure");
+      toast.error("failed to make api call");
+      setLoading(false);
+      return;
     }
-    const _res = await res.json()
-    if(!_res.success){
-      console.log(data.error)
-      toast.error(_res.error)
+    const _res = await res.json();
+    if (!_res.success) {
+      console.log(data.error);
+      toast.error(_res.error);
+    } else {
+      console.log(_res.message);
+      const newData = _res.data;
+      setCourses({ ...courses, newData });
+      toast.success(_res.message);
     }
-    else {
-      console.log(_res.message)
-      const newData = _res.data
-      setCoursesData({...coursesData, newData})
-      toast.success(_res.message)
-    }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <div className="flex flex-col gap-10 relative">
       <div className="flex gap-2 items-center ">
         {/* Course choose input */}
-        <div className="mr-3"> 
-          <p className="font-bold mb-2">{userInfo?.courses?.length > 0 ? `Choose Course` : `No Course Registered`}</p>
+        <div className="mr-3">
+          <p className="font-bold mb-2">
+            {userInfo?.courses?.length > 0
+              ? `Choose Course`
+              : `No Course Registered`}
+          </p>
           <select
             className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md"
             value={examPara?.course}
-            onChange={(e) => {handleSetExamPara(e, 'course')}}
+            onChange={(e) => {
+              handleSetExamPara(e, "course");
+            }}
             required
           >
-            <option value='' className="bg-inherit text-slate-800" >Select Course</option>
-            {userInfo?.courses?.length > 0 ? userInfo?.courses?.map((code, i)=>(
-              <option key={i} value={code} className="bg-inherit text-slate-800">{code}</option>
-            )): 'No Course Registered'}
-            
+            <option value="" className="bg-inherit text-slate-800">
+              Select Course
+            </option>
+            {userInfo?.courses?.length > 0
+              ? userInfo?.courses?.map((code, i) => (
+                  <option
+                    key={i}
+                    value={code}
+                    className="bg-inherit text-slate-800"
+                  >
+                    {code}
+                  </option>
+                ))
+              : "No Course Registered"}
           </select>
         </div>
         {/* Exam Duration Set inputs */}
         <div className="flex flex-col gap-1 ">
           <p>Duration:</p>
 
-            {/* Minute set input */}
-            <div className="flex flex-col w-5/12 relative ">
-              <input type="number" placeholder="00" disabled={userInfo?.courses?.length < 1} className=" text-rose-800 px-2 bg-inherit border-b border-green-800" value={parseInt(examPara?.testMinDuration)} onChange={(e) => {handleSetExamPara(e, 'testMinDuration') }} />
-              <label className="absolute right-[0px] text-slate-400 ">Min</label>
-            </div>
+          {/* Minute set input */}
+          <div className="flex flex-col w-5/12 relative ">
+            <input
+              type="number"
+              placeholder="00"
+              disabled={userInfo?.courses?.length < 1}
+              className=" text-rose-800 px-2 bg-inherit border-b border-green-800"
+              value={parseInt(examPara?.testMinDuration)}
+              onChange={(e) => {
+                handleSetExamPara(e, "testMinDuration");
+              }}
+            />
+            <label className="absolute right-[0px] text-slate-400 ">Min</label>
+          </div>
         </div>
 
         {/* Session set input */}
         <div>
           <p>Exam Session</p>
-          <input type="text" placeholder="2021/2022" disabled={userInfo?.courses?.length < 1} className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1" value={examPara?.schoolSession} onChange={(e) => { handleSetExamPara(e, 'schoolSession') }} />
+          <input
+            type="text"
+            placeholder="2021/2022"
+            disabled={userInfo?.courses?.length < 1}
+            className="px-3 bg-inherit border-b-2 border-rose-800 rounded-md py-1"
+            value={examPara?.schoolSession}
+            onChange={(e) => {
+              handleSetExamPara(e, "schoolSession");
+            }}
+          />
         </div>
 
         {/* Exam date */}
         <div className="flex flex-col gap-1 ">
           <label>Exam Date and Time</label>
-          <input value={examPara?.dateAndTime} disabled={userInfo?.courses?.length < 1} onChange={(e) => { handleSetExamPara(e, 'dateAndTime')  }} type="datetime-local" className="bg-rose-800 rounded-md p-1" />
+          <input
+            value={examPara?.dateAndTime}
+            disabled={userInfo?.courses?.length < 1}
+            onChange={(e) => {
+              handleSetExamPara(e, "dateAndTime");
+            }}
+            type="datetime-local"
+            className="bg-rose-800 rounded-md p-1"
+          />
           <p>{examPara?.dateAndTime}</p>
         </div>
-
       </div>
       {questions?.map((q, questionIndex) => (
         <div key={questionIndex} className="flex flex-col w-5/12 gap-2 ">
           <div className="flex gap-2 items-center">
             {/* delete button */}
-            <button className="h-[15px] w-[15px] ring-1 ring-white rounded-sm shadow-md bg-red-800 flex justify-center items-center" onClick={() => { handleQuestionDelete(questionIndex) }} >x</button>
+            <button
+              className="h-[15px] w-[15px] ring-1 ring-white rounded-sm shadow-md bg-red-800 flex justify-center items-center"
+              onClick={() => {
+                handleQuestionDelete(questionIndex);
+              }}
+            >
+              x
+            </button>
             <p>Question {1 + questionIndex}</p>
           </div>
 
@@ -209,9 +305,11 @@ const QuestionsComponent = ({userInfo, data}) => {
                 id={`opt-${questionIndex}-${optionIndex}`}
                 name={`opt-${questionIndex}`}
                 value={option}
-                checked = {questions[questionIndex].answer == option}
+                checked={questions[questionIndex].answer == option}
                 disabled={!option}
-                onChange={() => { handleSetAnswer(questionIndex, option) }}
+                onChange={() => {
+                  handleSetAnswer(questionIndex, option);
+                }}
               />
             </div>
           ))}
@@ -228,10 +326,10 @@ const QuestionsComponent = ({userInfo, data}) => {
         </button>
         <button
           className="ring-2 ring-white p-2 rounded-md"
-          disabled={userInfo?.courses?.length < 1 || loading }
+          disabled={userInfo?.courses?.length < 1 || loading}
           onClick={handleQuestionSaving}
         >
-          {loading ? `Saving...`: `Save Questions`}
+          {loading ? `Saving...` : `Save Questions`}
         </button>
       </div>
     </div>

@@ -18,7 +18,8 @@ const menuVariants = [
 // data arg comes from examiner page, server fetching 
 const Examiner = ({ data }) => {
   const searchParams = useSearchParams()
-  const { currentUserId, signOut } = useAppContext()
+  const { currentUserId, signOut, setCourses, setStaffs, setStudents } =
+    useAppContext();
 
   const [menu, setMenu] = useState({ 'questionSet': false, 'courseManagement': false, 'result': false })
   const [user, setUser] = useState({})
@@ -28,6 +29,9 @@ const Examiner = ({ data }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setCourses(data.courses)
+    setStaffs(data.staffs)
+    setStudents(data.students)
     const userInfo = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem('userData')) : ''
     console.log("userInfo: ", userInfo)
 
@@ -36,15 +40,15 @@ const Examiner = ({ data }) => {
 
 
 
-  const handleMenuChange = (menubutton) => {
-    menu[menubutton] = true
-    for (const key in menu) {
-      if (key != menubutton) {
-        menu[key] = false
-      }
-    }
-    setMenu({ ...menu })
-  }
+  // const handleMenuChange = (menubutton) => {
+  //   menu[menubutton] = true
+  //   for (const key in menu) {
+  //     if (key != menubutton) {
+  //       menu[key] = false
+  //     }
+  //   }
+  //   setMenu({ ...menu })
+  // }
 
 
   return (

@@ -6,10 +6,10 @@ export async function GET(req) {
   try {
     await connectDB();
 
-    //   FIND THE COURSE INFO USING THE USER ID
+    //   FIND THE COURSE INFO USING THE COURSE ID
     const courses = await Course.find({});
 
-    //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
+    //   WHEN NO COURSE INFO IS RETURN FROM THE DATABASE
     if (courses.length === 0) {
       console.log("No course Registered");
       return NextResponse.json({
@@ -17,7 +17,7 @@ export async function GET(req) {
         error: "No course Registered",
       });
     }
-    //   WHEN A USER INFO IS RETURNED FROM THE DATABASE
+    //   WHEN A COURSE INFO IS RETURNED FROM THE DATABASE
     console.log("all courses returned: ", courses);
     return NextResponse.json({
       success: true,

@@ -34,7 +34,7 @@ const Admin = ({ data }) => {
     console.log("done passing data to the states...");
     const userInfo = localStorage.getItem("userData")
       ? JSON.parse(localStorage.getItem("userData"))
-      : "";
+      : {};
     console.log("user?: ", userInfo);
 
     setUser(userInfo);

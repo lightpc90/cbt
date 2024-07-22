@@ -7,7 +7,7 @@ export async function GET(req) {
     await connectDB();
 
     //   FIND THE COURSE INFO USING live filter
-    const courses = await Course.find({});
+    const courses = await Course.find({live: true});
 
     //   WHEN NO Course INFO IS RETURN FROM THE DATABASE
     if (courses.length === 0) {

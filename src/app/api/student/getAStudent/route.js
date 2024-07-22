@@ -5,22 +5,31 @@ import Student from "@/models/Student";
 export async function GET(req) {
     const url = new URL(req.url)
     const searchParams = new URLSearchParams(url.searchParams)
-    const id = searchParams.get('id')
-    console.log('id is: ', id)
+    const matricNo = searchParams.get('matricNo')
+    const _id = searchParams.get('id')
+
+    let query
+
+    if(_id && ! matricNo){
+        query = {_id}
+    }
+    else if(matricNo && !_id){
+        query = {matricNo}
+    }
 
     
     // if code missing in request query
-    if (!id) {
+    if (!query) {
         return NextResponse.json({
             success: false,
-            error: "id mising in query",
+            error: "query missing",
         })
     }
 
     try {
         await connectDB();
 
-        const student = await Student.findById(id);
+        const student = await Student.findOne(query);
 
         //   WHEN NO Student INFO IS RETURN FROM THE DATABASE
         if (!student) {

@@ -36,9 +36,6 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
       setIsDeleting(true);
       const res = await fetch("/api/staff/deleteAStaff", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ _id: staff._id }),
       });
       const isDeleted = await res.json();
@@ -51,7 +48,7 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
         toast.success(isDeleted.message);
       }
     } catch (err) {
-      console.group("Internal Server Error in student delete route: ", err);
+      console.group("Internal Server Error: ", err);
       toast.error("Internal Server Error: try again!");
     } finally {
       setIsDeleting(false);

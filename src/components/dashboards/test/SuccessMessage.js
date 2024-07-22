@@ -12,7 +12,7 @@ const SuccessMessage = ({setSuccessIsOpen}) => {
         <p className='text-green-800 text-2xl font-bold'>Submmitted Successfully!</p>
         <p className='text-slate-800 font-bold'>You can now logout and leave the exam hall.</p>
         <button className='bg-rose-800 py-1 px-2 text-white hover:bg-rose-700 my-4' onClick={signOut}>Logout</button>
-        <button onClick={()=>setSuccessIsOpen(false)} >Close</button>
+        {/* <button onClick={()=>setSuccessIsOpen(false)} >Close</button> */}
     </div>
   )
 }

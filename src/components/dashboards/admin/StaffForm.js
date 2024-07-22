@@ -167,8 +167,8 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
     setUpdating(true);
 
     // call update api if form loaded in update component
-    console.log("updatig student");
-    const update = await fetch("/api/student/updateAStaff", {
+    console.log("updatig staff");
+    const update = await fetch("/api/staff/updateAStaff", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -8,11 +8,10 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    //   FIND THE USER INFO USING THE USER ID
-    const deletedDoc = await Course.deleteOne({ _id });
+    const deletedDoc = await Course.findByIdAndDelete({ _id });
 
-    //   WHEN NO USER INFO IS RETURN FROM THE DATABASE
-    if (deletedDoc.deletedCount !== 1) {
+    //   WHEN NO COURSE INFO IS RETURN FROM THE DATABASE
+    if (!deletedDoc) {
       console.log("Failed to delete course");
       return NextResponse.json({
         success: false,

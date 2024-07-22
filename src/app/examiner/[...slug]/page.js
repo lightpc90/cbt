@@ -18,7 +18,7 @@ async function getAllStaffs() {
     console.log(staffs.error)
   }
 
-  return staffs
+  return staffs.data
 }
 
 async function getAllCourses() {
@@ -34,7 +34,7 @@ async function getAllCourses() {
     console.log(courses.error)
   }
 
-  return courses
+  return courses.data
 }
 
 async function getAllStudents() {
@@ -50,7 +50,7 @@ async function getAllStudents() {
     console.log(students.error)
   }
 
-  return students
+  return students.data
 }
 
 

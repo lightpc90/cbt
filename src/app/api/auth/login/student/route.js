@@ -10,7 +10,7 @@ export async function POST(req) {
     console.log("matric No: ", matricNo, "surname: ", surname)
 
     // check if email and password is entered
-    if (!matricNo || !lastname) {
+    if (!matricNo || !surname) {
       return NextResponse.json(
         { success: false, error: "Please enter matricNo and lastname" },
       );
@@ -19,7 +19,7 @@ export async function POST(req) {
 
     // connect to database
     await connectDB();
-    const _matricNo = matricNo.toLowerCase();
+    const _matricNo = matricNo.toUpperCase();
     // LOGGIN IN WITH Matric No
     const student = await Student.findOne({ matricNo: _matricNo });
     console.log("retrieved student: ", student);
@@ -34,7 +34,7 @@ export async function POST(req) {
 
     // check if lastname matches
 
-    if(matricNo.lastname !== student.lastname){
+    if(surname !== student.lastname){
         return NextResponse.json(
             {
               success: false,
@@ -67,9 +67,9 @@ export async function POST(req) {
       {
         success: true,
         message: "Successfully logged in",
-        data: _staffData,
+        data: studentData,
       },
-      { status: 201 }
+      { status: 200 }
     );
 
     response.cookies.set('token', accessToken, {
@@ -78,6 +78,7 @@ export async function POST(req) {
       maxAge: 60 * 60 * 24, // 1 day
       path: '/', 
     })
+    console.log("returning res with token...")
     return response;
 
   } catch (e) {

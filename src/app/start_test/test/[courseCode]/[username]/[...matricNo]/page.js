@@ -3,7 +3,25 @@ export const dynamic = "force-dynamic"
 import React from "react";
 import Test from "@/components/dashboards/test/Test";
 
-const student = {_id: '13245', firstname: "Gideon", lastname: "Abbey", dept: "Robotics and Mechatronics", studentID: "2017/RTM/0923"}
+// get student info
+async function getAStudent(matricNo) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/student/getAStudent?matricNo=${matricNo}`,
+    { next: { tags: ["students"] } }
+  );
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    console.log("Failed to fetch data");
+  }
+
+  const students = await res.json();
+  if (students.success === false) {
+    console.log(students.error);
+  }
+
+  return students.data;
+}
 
 // get exam question
 async function getExamData(code) {
@@ -16,7 +34,7 @@ async function getExamData(code) {
 
   const examData = await res.json()
   if (examData.error) {
-    console.log("error fetching examData", examData.error)
+    console.log(examData.error)
   }
 
   return examData.data
@@ -26,13 +44,14 @@ const Page = async ({params}) => {
   console.log("first param: ", params.courseCode, "second param: ", params.username, "third param: ", params.matricNo)
   const code = params.courseCode
 
-   // get the student data
-   const studentData = student
   let data;
   try {
-    const _examData = await getExamData(code);
-    console.log("exam data: ", _examData)
-    data = { studentData, _examData }
+    const [examData, student] = await Promise.all([
+      getExamData(code),
+      getAStudent(params.matricNo),
+    ]);
+
+    data = { student, examData }
   } catch (error) {
     console.error(error);
   }

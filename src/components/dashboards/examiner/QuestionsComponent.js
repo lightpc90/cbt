@@ -128,7 +128,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
   const handleQuestionSaving = async () => {
     setLoading(true);
     if (!examPara.course) {
-      window.alert("course input empty");
+      // window.alert("course input empty");
       toast.error("course input empty");
       setLoading(false);
     } else if (
@@ -137,7 +137,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
       !examPara.dateAndTime
     ) {
       console.log("fill all exam parameters");
-      window.alert("fill all forms");
+      // window.alert("fill all forms");
       toast.error("fill all the form inputs");
       setLoading(false);
       return;
@@ -174,8 +174,14 @@ const QuestionsComponent = ({ userInfo, data }) => {
     } else {
       console.log(_res.message);
       const newData = _res.data;
-      setCourses({ ...courses, newData });
+      setCourses([...courses, newData]);
       toast.success(_res.message);
+
+      // empty the question form when questions saved sucessfully
+      localStorage.setItem(
+        "examObject",
+        JSON.stringify({ questions: [], examPara: {} })
+      );
     }
     setLoading(false);
   };

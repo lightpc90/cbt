@@ -15,12 +15,13 @@ async function getAStudent(matricNo) {
     console.log("Failed to fetch data");
   }
 
-  const students = await res.json();
-  if (students.success === false) {
-    console.log(students.error);
+  const student = await res.json();
+  if (student.success === false) {
+    console.log(student.error);
   }
 
-  return students.data;
+  console.log(student.message)
+  return student.data;
 }
 
 // get exam question

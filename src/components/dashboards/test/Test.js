@@ -13,6 +13,7 @@ import SuccessMessage from "./SuccessMessage";
 const Test = ({ data }) => {
   const examData = data?.examData;
   const studentData = data?.student;
+  console.log("student data in test: ", studentData)
 
   const { signOut } = useAppContext();
 
@@ -206,7 +207,7 @@ const Test = ({ data }) => {
             <div>
               <h3>{`${studentData?.firstname} ${studentData?.lastname}`}</h3>
               <p>{studentData?.dept}</p>
-              <p>{studentData?.studentID}</p>
+              <p>{studentData?.matricNo}</p>
             </div>
           </div>
         </div>
@@ -247,7 +248,7 @@ const Test = ({ data }) => {
                 </div>
 
                 {/* toggle to test confirmaton component */}
-                <button
+                {/* <button
                   onClick={() => setConfirmationIsOpen(true)}
                   className="bg-rose-800 text-white py-1 px-2 m-5 "
                 >
@@ -258,7 +259,7 @@ const Test = ({ data }) => {
                   className="bg-rose-800 text-white py-1 px-2"
                 >
                   Show Success Message
-                </button>
+                </button> */}
               </div>
               {/* Questions selection section */}
               <div className="flex flex-col justify-between p-2 bg-gray-700 w-3/12 h-[500px] overflow-auto rounded-md shadow-md ">

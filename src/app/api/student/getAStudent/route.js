@@ -5,16 +5,21 @@ import Student from "@/models/Student";
 export async function GET(req) {
     const url = new URL(req.url)
     const searchParams = new URLSearchParams(url.searchParams)
-    const matricNo = searchParams.get('matricNo')
+    const _matricNo = searchParams.get('matricNo')
     const _id = searchParams.get('id')
+    console.log("matricNo in getAStudent: ", _matricNo, "& ID: ", _id)
 
     let query
 
-    if(_id && ! matricNo){
+    if(_id && ! _matricNo){
         query = {_id}
+        console.log("query is id obj: ", query)
     }
-    else if(matricNo && !_id){
+    else if(_matricNo && !_id){
+        // replace all the ',' with '/'
+        const matricNo = _matricNo.replace(/,/g, '/')
         query = {matricNo}
+        console.log("query is matricNo obj: ", query );
     }
 
     

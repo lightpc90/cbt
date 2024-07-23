@@ -55,10 +55,14 @@ const Result = ({ userInfo, data }) => {
                                 // the user is not an admin and has no course registered under him
                                 `No Course Registered`}
                     </div>
+
+
+
+
                     {/*  Students and their Results */}
                     <div className='p-2 text-sm h-[750px] overflow-auto gap-2 flex flex-col'>
                         {/* Dynamic result shows here */}
-                        {selectedCourse?.results ? Object.entries(selectedCourse?.results).map(([id, result], i) => (
+                        {selectedCourse?.results ? Object.entries(selectedCourse.results).map(([id, result], i) => (
                             <ResultLayout key={i} id={id} result={result} selectedCourse={selectedCourse} />
                         )) : <p className='text-slate-800 font-bold text-center'>No Result For the Selected Course</p>}
 

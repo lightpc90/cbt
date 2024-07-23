@@ -9,10 +9,9 @@ import { IoTimeSharp } from "react-icons/io5";
 import { updatedList } from '@/UtilityFunctions/updatedList';
 
 const ManageExam = ({data}) => {
-  const {staffs, setCourses} = useAppContext()
+  const {courses, setCourses} = useAppContext()
   const staffsData = data.staffs
-  const coursesData = data.courses
-  const published = coursesData.filter((course) => (course.published === true))
+  const published = courses.filter((course) => (course.published === true))
 
   const getStaffs = (courseCode) => {
     const courseStaffs = staffsData.filter((staff) => (staff.courses.includes(courseCode)))

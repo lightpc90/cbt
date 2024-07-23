@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
-
+import toast from "react-hot-toast";
 
 const CourseForm = ({ course, setShow, show }) => {
   const { setCourses, courses } = useAppContext();
@@ -19,8 +19,15 @@ const CourseForm = ({ course, setShow, show }) => {
   const [registering, setRegistering] = useState(false);
   const [updating, setUpdating] = useState(false);
   //   form data
-  const [courseData, setCourseData] = useState(show? updateInitialCourse : initialCourseData);
+  const [courseData, setCourseData] = useState(
+    show ? updateInitialCourse : initialCourseData
+  );
 
+  const updatedList = (prev, newData) => {
+    return prev.map((eachExistingCourse) =>
+      eachExistingCourse._id === newData._id ? newData : eachExistingCourse
+    );
+  };
   // function to register course
   const handleCourseRegistration = async () => {
     console.log("couseData sent to api: ", courseData);
@@ -47,24 +54,26 @@ const CourseForm = ({ course, setShow, show }) => {
     } else if (_res?.success) {
       console.log("message: ", _res.message);
       // add the new course to the list of courses in app state
-      setCourses([...courses, _res.data]);
+      setCourses((prev) => updatedList(prev, _res.data));
+      
+      setCourseData(initialCourseData);
       toast.success(_res.message);
+      setRegistering(false);
+      setShow(false);
     }
-    setCourseData(initialCourseData);
-    setRegistering(false);
   };
 
   // FUNCTIONS USED IN EDITING MODE
   // course update function
-  const handleCourseUpdate=async()=>{
+  const handleCourseUpdate = async () => {
     // call course creation API
-    setUpdating(true)
+    setUpdating(true);
     const res = await fetch("/api/course/updateACourse", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({_id: course._id, update: courseData}),
+      body: JSON.stringify({ _id: course._id, update: courseData }),
     });
     if (!res.ok) {
       console.log("failed to make api call");
@@ -83,8 +92,8 @@ const CourseForm = ({ course, setShow, show }) => {
       setCourses([...courses, _res.data]);
       toast.success(_res.message);
     }
-    setUpdating(false)
-  }
+    setUpdating(false);
+  };
 
   return (
     <div>
@@ -162,7 +171,6 @@ const CourseForm = ({ course, setShow, show }) => {
           )}
         </div>
       </div>
-      
     </div>
   );
 };

@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"
 
-import React from "react";
+import React, { Suspense } from "react";
 import Examiner from "@/components/dashboards/examiner/Examiner";
 
 
@@ -64,7 +64,13 @@ const Page = async() => {
     console.error(error);
   }
 
-  return <Examiner data={data}/>;
+  return (
+    <>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Examiner data={data} />
+      </Suspense>
+    </>
+  );
 };
 
 export default Page;

@@ -79,20 +79,25 @@ const Admin = ({ data }) => {
             ))}
           </div>
         </div>
-        {/* logout button */}
-        <button
-          onClick={signOut}
-          className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white"
-        >
-          Logout
-        </button>
+        <div className="flex flex-col gap-2">
+          <button className="border-2 border-slate-900 rounded-md px-2 py-1 shadow-md">
+            Settings
+          </button>
+          {/* logout button */}
+          <button
+            onClick={signOut}
+            className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white"
+          >
+            Logout
+          </button>
+        </div>
       </div>
       {/* Right Pane */}
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
         {selectedMenu == `course_and_staff` && (
           <div className="">
-            <RegisterCourseAndLecturer data={data} />
+            <RegisterCourseAndLecturer data={data} user={user} />
           </div>
         )}
         {/* Manage Exam */}

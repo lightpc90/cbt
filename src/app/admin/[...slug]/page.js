@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"
 
-import React from "react";
+import React, { Suspense } from "react";
 import Admin from "@/components/dashboards/admin/Admin";
 
 
@@ -62,7 +62,11 @@ export default async function Page() {
     console.error(error);
   }
 
-  return <div>
-    <Admin data={data} />
-  </div>;
+  return (
+    <div>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Admin data={data} />
+      </Suspense>
+    </div>
+  );
 } 

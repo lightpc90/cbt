@@ -10,7 +10,7 @@ import CourseForm from './CourseForm'
 
 
 
-const RegisterCourseAndLecturer = ({ data }) => {
+const RegisterCourseAndLecturer = ({ data, user }) => {
   const {courses, staffs} = useAppContext()
   // const courses = data.courses
   // const staffs = data.staffs
@@ -47,7 +47,7 @@ const RegisterCourseAndLecturer = ({ data }) => {
         <div className='bg-white h-[20%] overflow-auto text-black flex gap-2 p-1'>
 
           {/* list of courses */}
-          {courses.map((course, i) => (
+          {courses?.map((course, i) => (
             <CourseLayout key={i} course={course} />
           ))}
         </div>
@@ -55,8 +55,8 @@ const RegisterCourseAndLecturer = ({ data }) => {
         <p className='bg-rose-800 p-1 text-sm mt-5'>Registered Lecturer</p>
         <div className=' bg-white h-[68%] overflow-auto text-black p-2 gap-3'>
           {/* list of lecturers */}
-          {staffs.map((staff, i) => (
-            <StaffLayout key={i} staff={staff} />
+          {staffs?.map((staff, i) => (
+            <StaffLayout key={i} staff={staff} user={user}/>
           ))}
         </div>
       </div>

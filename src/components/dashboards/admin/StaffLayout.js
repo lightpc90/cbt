@@ -10,7 +10,8 @@ import { useAppContext } from "@/appContext/appState";
 
 import toast from "react-hot-toast";
 
-const StaffLayout = ({ staff }) => {
+const StaffLayout = ({ staff, user }) => {
+  
   const { courses } = useAppContext();
 
   const [open, setOpen] = useState(false);
@@ -36,6 +37,10 @@ const StaffLayout = ({ staff }) => {
     setCheckedCourses(initialCheckedCourses);
   }, [courses, staff]);
 
+  if (staff._id == user._id) {
+    return <></>;
+  }
+
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setCheckedCourses((prevState) => ({
@@ -43,6 +48,9 @@ const StaffLayout = ({ staff }) => {
       [name]: checked,
     }));
   };
+
+  
+  
 
   const handleUpdateCourse = async () => {
     setLoading(true);

@@ -16,7 +16,7 @@ const CourseEdit = ({course, show, setShow}) => {
      return course.code === deleteInfo;
    };
 
-   const handleCourseDeletion = async() => {
+   const handleCourseDelete = async() => {
     console.log("entering delete function");
     if (confirmDeleteInfo() === false) {
       console.log("wrong input");
@@ -27,7 +27,7 @@ const CourseEdit = ({course, show, setShow}) => {
     try {
       console.log("entering the delete api...");
       setIsDeleting(true);
-      const res = await fetch("/api/student/deleteACourse", {
+      const res = await fetch("/api/course/deleteACourse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const CourseEdit = ({course, show, setShow}) => {
             </label>
             <div className="space-x-2 mt-3">
               <button
-                onClick={handleCourseDeletion}
+                onClick={handleCourseDelete}
                 className="bg-rose-900 py-1 px-2 hover:bg-rose-700"
               >
                 {isDeleting ? `Deleting...` : `Delete Staff`}

@@ -37,10 +37,6 @@ const StaffLayout = ({ staff, user }) => {
     setCheckedCourses(initialCheckedCourses);
   }, [courses, staff]);
 
-  if (staff._id == user._id) {
-    return <></>;
-  }
-
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setCheckedCourses((prevState) => ({

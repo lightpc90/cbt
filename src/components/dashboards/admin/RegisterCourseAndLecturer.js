@@ -56,6 +56,8 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
         <div className=' bg-white h-[68%] overflow-auto text-black p-2 gap-3'>
           {/* list of lecturers */}
           {staffs?.map((staff, i) => (
+            // do not render the current admin with the list of staffs
+            user._id !== staff._id &&
             <StaffLayout key={i} staff={staff} user={user}/>
           ))}
         </div>

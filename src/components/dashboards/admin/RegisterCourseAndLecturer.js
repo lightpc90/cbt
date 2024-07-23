@@ -45,7 +45,6 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
         <p className='bg-rose-800 p-1 text-sm'>Registered Courses</p>
         {/* View Registered Courses container */}
         <div className='bg-white h-[20%] overflow-auto text-black flex gap-2 p-1'>
-
           {/* list of courses */}
           {courses?.map((course, i) => (
             <CourseLayout key={i} course={course} />

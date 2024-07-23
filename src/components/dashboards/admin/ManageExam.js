@@ -6,9 +6,10 @@ import toast from 'react-hot-toast'
 
 import { MdDateRange } from "react-icons/md";
 import { IoTimeSharp } from "react-icons/io5";
+import { updatedList } from '@/UtilityFunctions/updatedList';
 
 const ManageExam = ({data}) => {
-  const {staffs, courses} = useAppContext()
+  const {staffs, setCourses} = useAppContext()
   const staffsData = data.staffs
   const coursesData = data.courses
   const published = coursesData.filter((course) => (course.published === true))
@@ -33,6 +34,7 @@ const ManageExam = ({data}) => {
       toast.error(uploaded.error)
     }
     else if(uploaded.success === true ){
+      setCourses((prev) => updatedList(prev, uploaded.data));
       toast.success(uploaded.message)
 
     }

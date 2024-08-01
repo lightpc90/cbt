@@ -21,7 +21,7 @@ async function getLiveCourses() {
   return courses.data
 }
 
-const getAStudent = async (id) => {
+const getAStudent = async (id: string) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/student/getAStudent?id=${id}`)
 
   if (!res.ok) {

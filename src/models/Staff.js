@@ -39,14 +39,11 @@ const StaffSchema = new mongoose.Schema(
     username: {
       type: String,
     },
-    birthdayMonth: {
+    dob: {
       type: String,
     },
     image: {
       type: String,
-    },
-    birthDay: {
-      type: Number,
     },
     dept: {
       type: String,

@@ -32,14 +32,11 @@ const StudentSchema = new mongoose.Schema(
     username: {
       type: String,
     },
-    birthdayMonth: {
+    dob: {
       type: String,
     },
     imageUrl: {
       type: String,
-    },
-    birthDay: {
-      type: Number,
     },
     dept: {
       type: String,

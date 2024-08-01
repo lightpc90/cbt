@@ -1,5 +1,3 @@
-
-
 export const General_Knowledge = [
   {
     question: `What is the capital of Brazil?`,
@@ -157,7 +155,6 @@ export const General_Knowledge = [
   },
 ];
 
-
 export const Physics = [
   {
     question: `What is the SI unit of force?`,
@@ -225,7 +222,7 @@ export const Physics = [
   },
   {
     question: `What is the law that states that the pressure of a gas is inversely proportional to its volume at constant temperature?`,
-    incorrectAnswers: [`Charles's Law`, `Gay-Lussac's Law`, `Avogado's Law`],
+    incorrectAnswers: [`Charles's Law`, `Gay-Lussac's Law`, `Avogad   o's Law`],
     correctAnswer: `Boyle's Law`,
   },
   {
@@ -284,5 +281,5 @@ export const Physics = [
   },
 ];
 
-export const Chemistry = []
-export const Biology = []
+export const Chemistry = [];
+export const Biology = [];

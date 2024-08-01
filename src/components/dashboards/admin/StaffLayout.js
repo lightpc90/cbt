@@ -101,55 +101,61 @@ const StaffLayout = ({ staff, user }) => {
         <p className="text-rose-300">{`| Logged in: ${staff.createdPwd}`}</p>
       </div>
       <div className="flex gap-2 justify-center items-center">
-        {/* Update course */}
-        <div className="relative">
-          <button
-            onClick={() => setOpen(!open)}
-            className="flex items-center text-sm ring-1 ring-rose-800 px-2 rounded-md"
-          >
-            Update Course
-            <span>
-              {!open ? (
-                <HiChevronRight size={30} />
-              ) : (
-                <HiChevronDown size={30} />
-              )}
-            </span>
-          </button>
-          {open && (
-            <div className="bg-rose-600 p-1 absolute right-0 w-full z-20">
-              {allCodes.map((code, i) => (
-                <div key={i} className="">
-                  <label className="flex gap-1">
-                    {code}
-                    <input
-                      type="checkbox"
-                      name={code}
-                      checked={checkedCourses[code]}
-                      onChange={handleCheckboxChange}
-                    />
-                  </label>
-                  <hr />
+        { staff?.admin === false ?
+          <>
+            {/* Update course */}
+            <div className="relative">
+              <button
+                onClick={() => setOpen(!open)}
+                className="flex items-center text-sm ring-1 ring-rose-800 px-2 rounded-md"
+              >
+                Update Course
+                <span>
+                  {!open ? (
+                    <HiChevronRight size={30} />
+                  ) : (
+                    <HiChevronDown size={30} />
+                  )}
+                </span>
+              </button>
+              {open && (
+                <div className="bg-rose-600 p-1 absolute right-0 w-full z-20">
+                  {allCodes.map((code, i) => (
+                    <div key={i} className="">
+                      <label className="flex gap-1">
+                        {code}
+                        <input
+                          type="checkbox"
+                          name={code}
+                          checked={checkedCourses[code]}
+                          onChange={handleCheckboxChange}
+                        />
+                      </label>
+                      <hr />
+                    </div>
+                  ))}
+                  {allCodes.length > 0 && (
+                    <button
+                      onClick={handleUpdateCourse}
+                      className="bg-slate-800 p-1 mt-5"
+                    >
+                      {loading ? `loading..` : `Update!`}
+                    </button>
+                  )}
                 </div>
-              ))}
-              {allCodes.length > 0 && (
-                <button
-                  onClick={handleUpdateCourse}
-                  className="bg-slate-800 p-1 mt-5"
-                >
-                  {loading ? `loading..` : `Update!`}
-                </button>
               )}
             </div>
-          )}
-        </div>
-        {/* edit button */}
-        <button
-          onClick={() => setIsEditing(true)}
-          className="flex items-center gap-2 border px-2 py-1 rounded-md  hover:bg-slate-300  hover:text-slate-900"
-        >
-          Edit <FaEdit size={20} />
-        </button>
+            {/* edit button */}
+            <button
+              onClick={() => setIsEditing(true)}
+              className="flex items-center gap-2 border px-2 py-1 rounded-md  hover:bg-slate-300  hover:text-slate-900"
+            >
+              Edit <FaEdit size={20} />
+            </button>
+          </> :
+          // 
+          <div className="bg-rose-800 text-white py-1 px-5 text-sm rounded-md ring-1 ring-white mr-auto">admin</div>
+        }
       </div>
     </div>
   );

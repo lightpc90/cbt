@@ -56,20 +56,23 @@ const LoginForm = ({admin=false}) => {
   return (
     <div className="bg-slate-300 h-[300px] w-3/12 flex flex-col justify-center items-center gap-3 rounded-md shadow-md ">
       {/* admin login form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-8/12 text-slate-900">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-3 w-8/12 text-slate-900"
+      >
         {/* username input */}
+        <label htmlFor="email">Email</label>
         <input
           value={formData.email}
-          onChange={(e) =>
-            setFormData({ ...formData, email: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           type="email"
           name="email"
-          placeholder="Email"
-          className="p-2 rounded-md "
+          placeholder="example@domain.com"
+          className="p-2 rounded-md"
         />
 
         {/* password input */}
+        <label htmlFor="password">Password</label>
         <input
           value={formData.pwd}
           onChange={(e) => {
@@ -77,16 +80,18 @@ const LoginForm = ({admin=false}) => {
           }}
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="password"
           className="p-2 rounded-md "
         />
         <button
           type="submit"
           className="bg-slate-800 p-1 rounded-md shadow-md font-semibold text-lg text-white hover:text-gray-800 hover:bg-white"
         >
-          { loading ? `Logging in...` : `login`}
+          {loading ? `Logging in...` : `login`}
         </button>
-        <Link href="/login/passwordCreation">First Login? Create Your Password</Link>
+       {!admin && <Link href="/login/passwordCreation">
+          First Login? Create Your Password
+        </Link>}
       </form>
     </div>
   );

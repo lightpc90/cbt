@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { useAppContext } from '@/appContext/appState'
 import toast from 'react-hot-toast'
 
@@ -9,6 +10,7 @@ import { IoTimeSharp } from "react-icons/io5";
 import { updatedList } from '@/UtilityFunctions/updatedList';
 
 const ManageExam = ({data}) => {
+  const router = useRouter()
   const {courses, setCourses} = useAppContext()
   const staffsData = data.staffs
   const published = courses.filter((course) => (course.published === true))
@@ -34,8 +36,8 @@ const ManageExam = ({data}) => {
     }
     else if(uploaded.success === true ){
       setCourses((prev) => updatedList(prev, uploaded.data));
+      router.refresh()
       toast.success(uploaded.message)
-
     }
 
   }

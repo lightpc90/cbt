@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useAppContext } from "@/appContext/appState";
+import { useRouter } from "next/navigation";
 
 const CourseManagement = ({ userInfo, data }) => {
+  const router = useRouter()
   const { courses, setCourses } = useAppContext();
 
   const [drafts, setDrafts] = useState([]);
@@ -89,9 +91,8 @@ const CourseManagement = ({ userInfo, data }) => {
       toast.success(_res.message);
       const newDoc = _res.data;
       console.log("newDoc: ", newDoc);
-      setCourses((prev) => (
-        newList(prev, newDoc)
-    ));
+      setCourses((prev) => newList(prev, newDoc));
+      router.refresh()
     }
   };
 

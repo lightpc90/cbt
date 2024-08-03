@@ -10,7 +10,8 @@ import { ActionCommand, useAppContext } from "@/appContext/appState";
 import Image from "next/image";
 import ManageStudent from "./ManageStudent";
 import { IStaff } from "@/components/interfaces/interfaces";
-import { SignOut } from "@/app/auth/signOut";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const menuVariants = [
   { menu: `course_and_staff`, name: `Course and Staff` },
@@ -21,21 +22,19 @@ const menuVariants = [
 
 const Admin = ({ data }) => {
   const searchParams = useSearchParams();
-  const selectedMenu = searchParams.get("menu") ;
+  const selectedMenu = searchParams.get("menu");
   // const [menu, setMenu] = useState({ registerCourseAndLecturer: false, manageExam: false, manageStudent: false, result: false })
-  const { currentUserId, setUserData, setStudents, setStaffs, setCourses, state, dispatch } =
-    useAppContext();
+  const { currentUserId, setUserData, dispatch } = useAppContext();
+
+  const router = useRouter()
 
   const [user, setUser] = useState<IStaff>();
 
   useEffect(() => {
     console.log("passing data to the states...");
-    dispatch({type: ActionCommand.SET_STAFFS, payload: data.staffs})
-    dispatch({type: ActionCommand.SET_COURSES, payload: data.courses})
-    dispatch({type: ActionCommand.SET_STUDENTS, payload: data.students})
-    // setStudents(data.students);
-    // setStaffs(data.staffs);
-    // setCourses(data.courses);
+    dispatch({ type: ActionCommand.SET_STAFFS, payload: data.staffs });
+    dispatch({ type: ActionCommand.SET_COURSES, payload: data.courses });
+    dispatch({ type: ActionCommand.SET_STUDENTS, payload: data.students });
     console.log("done passing data to the states...");
     const userInfo = localStorage.getItem("userData")
       ? JSON.parse(localStorage.getItem("userData"))
@@ -44,6 +43,21 @@ const Admin = ({ data }) => {
 
     setUser(userInfo);
   }, [currentUserId]);
+
+  const signOut = async () => {
+    const response = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+    if(!response.ok){return}
+    const loggedOut = await response.json()
+    if(loggedOut.success){
+      router.push('/')
+      toast.success(loggedOut.message)
+    }
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("userData");
+    setUserData({});
+  };
 
   return (
     <div className="h-screen bg-slate-900 text-white flex">
@@ -90,7 +104,7 @@ const Admin = ({ data }) => {
           </button>
           {/* logout button */}
           <button
-            onClick={()=>SignOut(setUserData)}
+            onClick={signOut}
             className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white"
           >
             Logout

@@ -2,18 +2,16 @@
 
 import StudentLayout from "./StudentLayout";
 import StudentForm from "./StudentForm";
-import { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
 
 import { BsFilterSquareFill, BsFilterSquare } from "react-icons/bs";
 import { RiFilterFill } from "react-icons/ri";
+import { IStudent } from "@/components/interfaces/interfaces";
 
 const ManageStudent = ({ data }) => {
-  const { students } = useAppContext();
+  const { state } = useAppContext();
 
   // const [students, setStudents] = useState(studentsData?.length > 0 ? studentsData : [])
-
-
   return (
     <div className="">
       <p className="text-2xl font-bold my-2">Manage Students</p>
@@ -41,10 +39,9 @@ const ManageStudent = ({ data }) => {
           </div>
           <div className="h-[85%] overflow-auto flex flex-col p-2 gap-2">
             {/* list of Students */}
-            {students?.map((student, i) => (
+            {state.students?.map((student:IStudent, i:number) => (
               <StudentLayout
                 key={i}
-                num={i}
                 student={student}
               />
             ))}

@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useAppContext } from "@/appContext/appState";
+import { Dispatch, SetStateAction, useState } from "react";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
+import { ICourse } from '../../interfaces/interfaces';
+
+type FormUpdateProps = {course?:ICourse; setShow?:Dispatch<SetStateAction<boolean>>; show?:boolean}
 
 
-const CourseForm = ({ course, setShow, show }) => {
-  const { setCourses, courses } = useAppContext();
+const CourseForm = ({ course, setShow, show=false }:FormUpdateProps) => {
+  const { dispatch } = useAppContext();
 
   // form data initialization
   const initialCourseData = { title: "", code: "", dept: "", level: "" };
@@ -22,11 +25,12 @@ const CourseForm = ({ course, setShow, show }) => {
   //   form data
   const [courseData, setCourseData] = useState(show? updateInitialCourse : initialCourseData);
 
-  const updatedList=(prev, newData)=>{
-    return prev.map((eachExistingCourse)=>(
-      eachExistingCourse._id === newData._id ? newData : eachExistingCourse
-    ))
-  }
+  // const updatedList=(prev, newData)=>{
+  //   return prev.map((eachExistingCourse)=>(
+  //     eachExistingCourse._id === newData._id ? newData : eachExistingCourse
+  //   ))
+  // }
+
   // function to register course
   const handleCourseRegistration = async () => {
     console.log("couseData sent to api: ", courseData);
@@ -53,9 +57,7 @@ const CourseForm = ({ course, setShow, show }) => {
     } else if (_res?.success) {
       console.log("message: ", _res.message);
       // add the new course to the list of courses in app state
-      setCourses(prev=>(
-        [...prev, _res.data]
-      ));
+      dispatch({type: ActionCommand.SET_COURSES, payload: _res.data})
       toast.success(_res.message);
     }
     setCourseData(initialCourseData);
@@ -88,9 +90,7 @@ const CourseForm = ({ course, setShow, show }) => {
     } else if (_res?.success === true) {
       console.log("message: ", _res.message);
       // add the new course to the list of courses in app state
-      setCourses(prev=>(
-        updatedList(prev, _res.data)
-      ));
+      dispatch({type: ActionCommand.UPDATE_COURSES, payload: _res.data})
       toast.success(_res.message);
       setShow(false)
     }
@@ -100,8 +100,10 @@ const CourseForm = ({ course, setShow, show }) => {
   return (
     <div>
       <div className="my-6">
-        {!show && <p className="text-2xl text-white mb-2">Register a Course</p>}
         <div className="flex flex-col gap-2 ">
+          <label htmlFor="courseTitle" className="text-sm">
+            Course Title
+          </label>
           <input
             value={courseData.title}
             onChange={(e) =>
@@ -109,10 +111,13 @@ const CourseForm = ({ course, setShow, show }) => {
             }
             type="text"
             name="courseTitle"
-            placeholder="Course Title"
+            placeholder="Introduction to Calculus"
             required
             className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
           />
+          <label htmlFor="courseCode" className="text-sm">
+            Course Code
+          </label>
           <input
             value={courseData.code}
             onChange={(e) =>
@@ -120,10 +125,13 @@ const CourseForm = ({ course, setShow, show }) => {
             }
             type="text"
             name="courseCode"
-            placeholder="Course Code"
+            placeholder="MTS101"
             required
             className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
           />
+          <label htmlFor="courseDept" className="text-sm">
+            Department
+          </label>
           <input
             value={courseData.dept}
             onChange={(e) =>
@@ -131,10 +139,13 @@ const CourseForm = ({ course, setShow, show }) => {
             }
             type="text"
             name="courseDept"
-            placeholder="Dept"
+            placeholder="Mathematics"
             required
             className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
           />
+          <label htmlFor="courseDept" className="text-sm">
+            Level
+          </label>
           <input
             value={courseData.level}
             onChange={(e) =>
@@ -142,7 +153,7 @@ const CourseForm = ({ course, setShow, show }) => {
             }
             type="text"
             name="courseLevel"
-            placeholder="Level"
+            placeholder="100"
             required
             className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
           />
@@ -173,7 +184,6 @@ const CourseForm = ({ course, setShow, show }) => {
           )}
         </div>
       </div>
-      
     </div>
   );
 };

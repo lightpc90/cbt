@@ -3,11 +3,12 @@
 import React from 'react'
 import { GiStamper } from "react-icons/gi";
 import { useAppContext } from '@/appContext/appState';
+import { IStudent } from '@/components/interfaces/interfaces';
 
 const ResultLayout = ({ id, result, selectedCourse }) => {
-    const {students} = useAppContext()
+    const { state} = useAppContext()
     // get the name of the student from the studentsData list using the student id
-    const studentInfo = students?.find((student)=>(student._id == id))
+    const studentInfo = state.students?.find((student: IStudent)=>(student._id == id))
 
     // get the number of questions in the exam
     const noOfQuestions = selectedCourse?.question?.questions?.length

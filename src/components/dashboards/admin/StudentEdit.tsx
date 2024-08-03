@@ -5,13 +5,11 @@ import StudentForm from './StudentForm'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { RiDeleteBinFill } from "react-icons/ri";
-import { useAppContext } from '@/appContext/appState'
+import { ActionCommand, useAppContext } from '@/appContext/appState'
 
-const StudentEdit = ({  student, num, setIsEditing, isEditing }) => {
+const StudentEdit = ({  student, setIsEditing, isEditing }) => {
 
-  console.log("student in edit: ", student, 'key: ', num)
-
-  const {setStudents} = useAppContext()
+  const { dispatch} = useAppContext()
   
   const [openDeletBox, setOpenDeleteBox] = useState(false)
 
@@ -46,7 +44,8 @@ const StudentEdit = ({  student, num, setIsEditing, isEditing }) => {
         toast.error(isDeleted.error)
       }
       else{
-        setStudents(prevStudents=>prevStudents.filter((existingStudent)=>(existingStudent._id !== student._id)))
+        dispatch({type: ActionCommand.DELETE_STUDENT, payload: student._id})
+        // setStudents(prevStudents=>prevStudents.filter((existingStudent)=>(existingStudent._id !== student._id)))
         toast.success(isDeleted.message)
       }
       setIsEditing(false)
@@ -64,7 +63,7 @@ const StudentEdit = ({  student, num, setIsEditing, isEditing }) => {
   return (
     <div className='max-w-[450px] max-h-[900px] bg-slate-900 py-12 px-5 overflow-auto'>
       <p className='text-center font-bold text-2xl mb-5'>Update Student Information</p>
-      <StudentForm key={num} num={num} isEditing={isEditing} student={student} setIsEditing={setIsEditing} />
+      <StudentForm isEditing={isEditing} student={student} setIsEditing={setIsEditing} />
       <div className='mt-10'>
         {!openDeletBox && <button className='flex items-center gap-2 text-rose-800 font-semibold' onClick={()=>setOpenDeleteBox(true)}>Delete Student Info <RiDeleteBinFill size={20}/></button>}
         {openDeletBox && <div>

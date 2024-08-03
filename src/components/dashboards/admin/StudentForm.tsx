@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
+import { IStudent } from "@/components/interfaces/interfaces";
 
 const Depts = [
   "Computer Science",
@@ -15,8 +15,12 @@ const Depts = [
 ];
 const Genders = ["Male", "Female"];
 
-const StudentForm = ({ student, isEditing, setIsEditing }) => {
-  const { setStudents } = useAppContext();
+type StudentFormType={
+  student?: IStudent; isEditing?: boolean, setIsEditing?:(arg:boolean)=>boolean
+}
+
+const StudentForm = ({ student, isEditing, setIsEditing }: StudentFormType) => {
+  const { dispatch } = useAppContext();
 
   console.log("is editing? ", isEditing);
 
@@ -43,7 +47,7 @@ const StudentForm = ({ student, isEditing, setIsEditing }) => {
   };
 
   const [formData, setFormData] = useState(
-    !isEditing || isEditing === false ? initialFormData : updatingInitialData
+    isEditing === true ? updatingInitialData : initialFormData
   );
   const [file, setFile] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -142,7 +146,8 @@ const StudentForm = ({ student, isEditing, setIsEditing }) => {
       if (isUpdate.success === false) {
         toast.error(isUpdate.error);
       } else {
-        setStudents((prev) => getUpdatedList(prev, isUpdate.data));
+        dispatch({type: ActionCommand.UPDATE_STUDENTS, payload: isUpdate.data})
+        // setStudents((prev) => getUpdatedList(prev, isUpdate.data));
         toast.success(isUpdate.message);
       }
       setIsLoading(false);
@@ -172,7 +177,8 @@ const StudentForm = ({ student, isEditing, setIsEditing }) => {
       console.log(result.error);
       toast.error(result.error);
     } else {
-      setStudents((prev) => [...prev, result.data]);
+      dispatch({type: ActionCommand.ADD_STUDENT, payload: result.data})
+      // setStudents((prev) => [...prev, result.data]);
       toast.success(result.message);
       setFormData(initialFormData);
     }

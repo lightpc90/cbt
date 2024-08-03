@@ -5,13 +5,14 @@ import Image from "next/image";
 import { HiChevronRight, HiChevronDown } from "react-icons/hi";
 import { FaEdit } from "react-icons/fa";
 import StudentEdit from "./StudentEdit";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
+import { ICourse } from "@/components/interfaces/interfaces";
 
 const StudentLayout = ({ student }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { courses } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const [loading, setLoading] = useState(false);
 
   const [opened, setOpened] = useState(false);
@@ -23,15 +24,15 @@ const StudentLayout = ({ student }) => {
     : `/image/default_dp.png`;
 
   useEffect(() => {
-    const allCourseCodes = courses?.map((course) => course.code);
+    const allCourseCodes = state.courses?.map((course: ICourse) => course.code);
     setAllCodes(allCourseCodes);
     // get initial checked courses
-    const initialCheckedCourses = allCourseCodes.reduce((acc, item) => {
+    const initialCheckedCourses = allCourseCodes.reduce((acc:{}, item:string) => {
       acc[item] = student.courses.includes(item);
       return acc;
     }, {});
     setCheckedCourses(initialCheckedCourses);
-  }, [student, courses]);
+  }, [student, state.courses]);
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -66,6 +67,7 @@ const StudentLayout = ({ student }) => {
       console.log(update.error);
       toast.error(update.error);
     } else if (update.success === true) {
+      dispatch({type: ActionCommand.UPDATE_STUDENTS, payload: update.data})
       console.log(update.success);
       toast.success(update.message);
     }

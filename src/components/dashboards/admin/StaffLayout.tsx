@@ -6,13 +6,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { FaEdit } from "react-icons/fa";
 import StaffEdit from "./StaffEdit";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 
 import toast from "react-hot-toast";
+import { ICourse } from "@/components/interfaces/interfaces";
 
 const StaffLayout = ({ staff, user }) => {
   
-  const { courses } = useAppContext();
+  const {state, dispatch } = useAppContext();
 
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -26,7 +27,7 @@ const StaffLayout = ({ staff, user }) => {
 
   useEffect(() => {
     // extract all the course codes in the coursesData object into a list
-    const allCourseCodes = courses?.map((course) => course.code);
+    const allCourseCodes = state.courses?.map((course:ICourse) => course.code);
     setAllCodes(allCourseCodes);
 
     // get initial checked courses
@@ -35,7 +36,7 @@ const StaffLayout = ({ staff, user }) => {
       return acc;
     }, {});
     setCheckedCourses(initialCheckedCourses);
-  }, [courses, staff]);
+  }, [state.courses, staff]);
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -74,6 +75,7 @@ const StaffLayout = ({ staff, user }) => {
       console.log("error: ", _res.error);
       toast.error(_res.error);
     } else if (_res.success === true) {
+      dispatch({type: ActionCommand.UPDATE_STAFFS, payload: _res.data})
       console.log("message: ", _res.message);
       toast.success(_res.message);
     }

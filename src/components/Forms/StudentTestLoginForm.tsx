@@ -4,12 +4,13 @@ import { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { SignIn } from "@/app/auth/signIn";
 
 const StudentTestLoginForm = () => {
   const initialFormData = { matricNo: "", surname: "" };
   const [formData, setFormData] = useState(initialFormData);
 
-  const { signIn } = useAppContext();
+  const { setCurrentUserId, setUserData } = useAppContext();
   const router = useRouter();
 
   // loading states
@@ -42,7 +43,7 @@ const StudentTestLoginForm = () => {
         else if (loggedIn.success === true) {
           // returned a success
           console.log("logged in successfully");
-          signIn(loggedIn.data._id, loggedIn.data);
+          SignIn(loggedIn.data._id, loggedIn.data, setCurrentUserId, setUserData);
           // redirect to page where the student will choose the exam course
           router.push(
             `/start_test/pre/${loggedIn.data.firstname}_${loggedIn.data.lastname}/${loggedIn.data._id}`

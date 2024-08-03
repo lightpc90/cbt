@@ -3,11 +3,11 @@
 import {useState} from "react";
 import CourseForm from "./CourseForm";
 import { RiDeleteBinFill } from "react-icons/ri";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 
 const CourseEdit = ({course, show, setShow}) => {
-  const {setCourses} = useAppContext()
+  const {dispatch} = useAppContext()
   const [openDeletBox, setOpenDeleteBox] = useState(false);
   const [deleteInfo, setDeleteInfo] = useState("");
 
@@ -39,9 +39,7 @@ const CourseEdit = ({course, show, setShow}) => {
       if (isDeleted.success === false) {
         toast.error(isDeleted.error);
       } else {
-        setCourses((prev) =>
-          prev.filter((existingCourse) => existingCourse._id !== course._id)
-        );
+        dispatch({type: ActionCommand.DELETE_COURSE, payload: course._id})
         toast.success(isDeleted.message);
       }
     } catch (err) {

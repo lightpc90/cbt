@@ -2,25 +2,28 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { useAppContext } from '@/appContext/appState'
+import { ActionCommand, useAppContext } from '@/appContext/appState'
 import toast from 'react-hot-toast'
+
+import { Types } from 'mongoose'
 
 import { MdDateRange } from "react-icons/md";
 import { IoTimeSharp } from "react-icons/io5";
 import { updatedList } from '@/UtilityFunctions/updatedList';
+import { ICourse, IStaff } from '@/components/interfaces/interfaces'
 
 const ManageExam = ({data}) => {
   const router = useRouter()
-  const {courses, setCourses} = useAppContext()
+  const { dispatch, state} = useAppContext()
   const staffsData = data.staffs
-  const published = courses.filter((course) => (course.published === true))
+  const published: ICourse[] = state.courses.filter((course: ICourse) => (course.published === true))
 
-  const getStaffs = (courseCode) => {
-    const courseStaffs = staffsData.filter((staff) => (staff.courses.includes(courseCode)))
+  const getStaffs = (courseCode: string) => {
+    const courseStaffs: IStaff[] = staffsData.filter((staff: IStaff) => (staff.courses.includes(courseCode)))
     return courseStaffs
   }
 
-  const uploadOrPullDownExamQuestion=async(_id, option)=>{
+  const uploadOrPullDownExamQuestion=async(_id: Types.ObjectId | string, option:boolean)=>{
     const res = await fetch('/api/course/updateACourse', {
       method: 'POST',
       body: JSON.stringify({_id, update:{live: option}})
@@ -35,7 +38,8 @@ const ManageExam = ({data}) => {
       toast.error(uploaded.error)
     }
     else if(uploaded.success === true ){
-      setCourses((prev) => updatedList(prev, uploaded.data));
+      dispatch({type: ActionCommand.UPDATE_COURSES, payload: uploaded.data})
+      // setCourses((prev) => updatedList(prev, uploaded.data));
       router.refresh()
       toast.success(uploaded.message)
     }

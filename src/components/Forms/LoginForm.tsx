@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 
 import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
+import { SignIn } from "@/app/auth/signIn";
 
 const LoginForm = ({admin=false}) => {
+  const {setCurrentUserId, setUserData} = useAppContext()
   const router = useRouter()
-  const {signIn} = useAppContext()
   const initialFormData = { email: "", pwd: "",  };
   const [formData, setFormData] = useState(initialFormData);
   const [loading, setLoading] = useState(false)
@@ -45,7 +46,7 @@ const LoginForm = ({admin=false}) => {
     if(_res.success){
       console.log(_res.message)
       console.log("user login data: ", _res.data)
-      signIn(_res.data._id, _res.data)
+      SignIn(_res.data._id, _res.data, setCurrentUserId, setUserData)
       toast.success(_res.message)
       if(_res.data.admin){
         router.push(`/admin/${_res.data.firstname}_${_res.data.lastname}/${_res.data._id}`)

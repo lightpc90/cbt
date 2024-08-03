@@ -2,12 +2,14 @@ import { StringSchemaDefinition, Types } from "mongoose";
 
 // Define types for complex state objects
 export interface IStudent {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
   firstname: string;
   middlename: string;
   lastname: string;
+  matricNo: string;
   timestamp: Date;
   phone?: number;
+  imageUrl?: string;
   email?: string;
   result?: {}[];
   dob?: string;
@@ -21,7 +23,7 @@ export interface IStudent {
 }
 
 export interface IStaff {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
   firstname: string;
   middlename: string;
   lastname: string;
@@ -46,7 +48,7 @@ export interface IStaff {
 }
 
 export interface ICourse {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
   title: string;
   code: string;
   staffs?: {}[];
@@ -54,7 +56,13 @@ export interface ICourse {
   timestamp: Date;
   dept: string;
   level: number;
-  question?: {};
+  question?: {
+    questions: {}[];
+    params: {
+      dateAndTime: string;
+      testMinDuration: string;
+    };
+  };
   results?: {};
   active: boolean;
   published: boolean;

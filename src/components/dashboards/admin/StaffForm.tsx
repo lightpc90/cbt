@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
+import { ICourse, IStaff } from "@/components/interfaces/interfaces";
 
 const Titles = [
   { value: "", name: "Choose Title" },
@@ -20,8 +21,19 @@ const Genders = [
   { value: "Female", name: "Female" },
 ];
 
-const StaffForm = ({ staff, isEditing, setIsEditing }) => {
-  const { courses, setStaffs } = useAppContext();
+type StaffFormUpdateProps={staff?:IStaff; isEditing?: boolean; setIsEditing?:(arg:boolean)=>boolean}
+
+  type FormDataType = {
+    title: string;
+    firstname: string;
+    middlename: string;
+    lastname: string;
+    email: string;
+    dept: string;
+    gender: string;
+    staffID: string;
+    courseCodes?: string[];
+  };
   const initialFormData = {
     title: "",
     firstname: "",
@@ -31,19 +43,24 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
     dept: "",
     staffID: "",
     gender: "",
-    courses: [],
+    courseCodes: [],
   };
-  const updateInitialFormData = {
-    title: staff?.title,
-    firstname: staff?.firstname,
-    middlename: staff?.middlename,
-    lastname: staff?.lastname,
-    email: staff?.email,
-    dept: staff?.dept,
-    gender: staff?.gender,
-    staffID: staff?.staffID,
-  };
-  const [formData, setFormData] = useState(
+ 
+
+const StaffForm = ({ staff, isEditing, setIsEditing }: StaffFormUpdateProps) => {
+  const { state, dispatch } = useAppContext();
+
+ const updateInitialFormData = {
+   title: staff?.title,
+   firstname: staff?.firstname,
+   middlename: staff?.middlename,
+   lastname: staff?.lastname,
+   email: staff?.email,
+   dept: staff?.dept,
+   gender: staff?.gender,
+   staffID: staff?.staffID,
+ };
+  const [formData, setFormData] = useState<FormDataType>(
     isEditing ? updateInitialFormData : initialFormData
   );
 
@@ -51,12 +68,12 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
   const [updating, setUpdating] = useState(false);
   const [registering, setRegistering] = useState(false);
 
-  let tempPwd;
+  let tempPwd: string;
 
   // temp pasword generating funtion
-  const genTempPassword = (data) => {
+  const genTempPassword = (data:FormDataType) => {
     // function to randomly pick a letter from a name
-    function pickRandomLetter(name) {
+    function pickRandomLetter(name: string) {
       // Check if the name is not empty
       if (name.length === 0) {
         console.log("name is empty");
@@ -113,17 +130,18 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
       console.log("message: ", _res.message);
       // add the new staff to the list of staffs in app state
       // setStaffsData([...staffsData, _res.data])
-      setStaffs((prevData) => {
-        return [...prevData, _res.data];
-      });
+      dispatch({type: ActionCommand.ADD_STAFF, payload: _res.data})
+      // setStaffs((prevData) => {
+      //   return [...prevData, _res.data];
+      // });
     }
-    setFormData(initialStaffData);
+    setFormData(initialFormData);
     setRegistering(false);
   };
 
-  const bindCoursesToStaff = (course) => {
+  const bindCoursesToStaff = (course: ICourse) => {
     // if code is included in the staff already, remove it
-    const existingCourses = formData.courses;
+    const existingCourses = formData.courseCodes;
     console.log("staff courses: ", existingCourses);
     if (existingCourses.includes(course.code)) {
       const indexToRemove = existingCourses.indexOf(course.code);
@@ -142,14 +160,14 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
     }
   };
 
-  const getUpdatedList = (prevList, updatedData) => {
-    console.log("prevList: ", prevList, "and new studn: ", updatedData);
-    const newList = prevList.map((eachStudent) =>
-      eachStudent._id == updatedData._id ? updatedData : eachStudent
-    );
-    console.log("new list: ", newList);
-    return newList;
-  };
+  // const getUpdatedList = (prevList, updatedData) => {
+  //   console.log("prevList: ", prevList, "and new studn: ", updatedData);
+  //   const newList = prevList.map((eachStudent) =>
+  //     eachStudent._id == updatedData._id ? updatedData : eachStudent
+  //   );
+  //   console.log("new list: ", newList);
+  //   return newList;
+  // };
 
   // Update function
   const handleStaffUpdate = async () => {
@@ -185,7 +203,8 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
     if (isUpdate.success === false) {
       toast.error(isUpdate.error);
     } else {
-      setStaffs((prev) => getUpdatedList(prev, isUpdate.data));
+      dispatch({type: ActionCommand.UPDATE_STAFFS, payload: isUpdate.data})
+      // setStaffs((prev) => getUpdatedList(prev, isUpdate.data));
       toast.success(isUpdate.message);
     }
     setUpdating(false);
@@ -195,6 +214,9 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
   return (
     <div className="flex flex-col gap-2">
       {/* title */}
+      <label htmlFor="title" className="text-sm">
+        Staff Title:
+      </label>
       <select
         name="title"
         value={formData.title}
@@ -209,6 +231,9 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
         ))}
       </select>
       {/* firstname */}
+      <label htmlFor="firstname" className="text-sm">
+        First Name:
+      </label>
       <input
         value={formData.firstname}
         onChange={(e) =>
@@ -216,11 +241,14 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
         }
         type="text"
         name="firstname"
-        placeholder="First Name"
+        placeholder="John"
         required
         className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
       />
       {/* middlename */}
+      <label htmlFor="middlename" className="text-sm">
+        Middle Name:
+      </label>
       <input
         value={formData.middlename}
         onChange={(e) =>
@@ -228,30 +256,39 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
         }
         type="text"
         name="middlename"
-        placeholder="Middle Name"
+        placeholder="Miller"
         className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
       />
       {/* lastname */}
+      <label htmlFor="lastname" className="text-sm">
+        Last Name:
+      </label>
       <input
         value={formData.lastname}
         onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
         type="text"
         name="lastname"
-        placeholder="Last Name"
+        placeholder="Doe"
         required
         className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
       />
       {/* email */}
+      <label htmlFor="email" className="text-sm">
+        Email:
+      </label>
       <input
         value={formData.email}
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         type="email"
         name="email"
-        placeholder="Email"
+        placeholder="staff@domain.com"
         required
         className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
       />
       {/* gender select input */}
+      <label htmlFor="gender" className="text-sm">
+        Staff Gender:
+      </label>
       <select
         value={formData.gender}
         name="gender"
@@ -266,6 +303,9 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
         ))}
       </select>
       {/* dept select input */}
+      <label htmlFor="dept" className="text-sm">
+        Staff Department:
+      </label>
       <select
         value={formData.dept}
         name="dept"
@@ -274,16 +314,19 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
         className="bg-inherit border rounded-md p-2"
       >
         <option value="">Choose Dept</option>
-        {courses?.map((course, i) => (
+        {state.courses?.map((course: ICourse, i: number) => (
           <option key={i} value={course.dept} className="text-slate-900">
             {course.dept}
           </option>
         ))}
       </select>
-      <p>
-        If a dept is missing, register it by registering a course under the dept
+      <p className="text-slate-500">
+        NOTE: dept must first be registered via Course Registration
       </p>
       {/* staff id */}
+      <label htmlFor="dept" className="text-sm">
+        Staff ID:
+      </label>
       <input
         value={formData.staffID}
         onChange={(e) => setFormData({ ...formData, staffID: e.target.value })}
@@ -311,11 +354,11 @@ const StaffForm = ({ staff, isEditing, setIsEditing }) => {
           </p>
           <div className="flex flex-wrap gap-2 my-4">
             {/* map department here */}
-            {courses?.map((course, i) => (
+            {state.courses?.map((course: ICourse, i: number) => (
               <button
                 onClick={() => bindCoursesToStaff(course)}
                 className={`ring-2 ring-blue-800 ${
-                  formData.courses.includes(course.code)
+                  formData.courseCodes.includes(course.code)
                     ? `bg-green-900 text-white`
                     : ``
                 } p-1 text-sm rounded-md hover:bg-rose-800 hover:text-white`}

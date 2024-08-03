@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 import { useRouter } from "next/navigation";
+import { ICourse } from "@/components/interfaces/interfaces";
+import { Types } from "mongoose";
 
 const CourseManagement = ({ userInfo, data }) => {
   const router = useRouter()
-  const { courses, setCourses } = useAppContext();
+  const { state, dispatch } = useAppContext();
 
   const [drafts, setDrafts] = useState([]);
   const [published, setPublished] = useState([]);
@@ -19,16 +21,16 @@ const CourseManagement = ({ userInfo, data }) => {
   const [isDrafting, setIsDrafting] = useState(false);
 
   // find course selected from the list of courses list using course code
-  const getCourse = (courseCode) => {
-    const _courseSelected = courses?.find(
-      (course) => course.code == courseCode
+  const getCourse = (courseCode: string) => {
+    const _courseSelected = state.courses?.find(
+      (course: ICourse) => course.code == courseCode
     );
     return _courseSelected;
   };
 
   const getDraftQuestions = () => {
-    const _drafts = courses?.filter(
-      (course) =>
+    const _drafts = state.courses?.filter(
+      (course: ICourse) =>
         userInfo.courses.includes(course.code) &&
         course.question?.questions.length > 0 &&
         course.published === false
@@ -40,7 +42,7 @@ const CourseManagement = ({ userInfo, data }) => {
   };
 
   const getPublishedQuestions = () => {
-    const _published = courses?.filter(
+    const _published = state.courses?.filter(
       (course) =>
         userInfo.courses.includes(course.code) &&
         course.question?.questions.length > 0 &&
@@ -54,8 +56,8 @@ const CourseManagement = ({ userInfo, data }) => {
   useEffect(() => {
     getDraftQuestions();
     getPublishedQuestions();
-    getCourse();
-  }, [courses]);
+    // getCourse();
+  }, [state.courses]);
 
   const newList = (prev, updated) => {
     return prev.filter((eachPrev) =>
@@ -63,7 +65,7 @@ const CourseManagement = ({ userInfo, data }) => {
     );
   };
 
-  const publishOrPulldownQuestion = async (option, id) => {
+  const publishOrPulldownQuestion = async (option: boolean, id: number | Types.ObjectId) => {
     // if(option === true){
     //   setIsPublishing(true)
     // }
@@ -85,20 +87,19 @@ const CourseManagement = ({ userInfo, data }) => {
     const _res = await res.json();
     if (_res.success === false) {
       console.log("error: ", _res.error);
-      toast.success(_es.error);
+      toast.success(_res.error);
     } else if (_res.success === true) {
+      dispatch({type: ActionCommand.UPDATE_COURSES, payload: _res.data})
       console.log("message: ", _res.message);
       toast.success(_res.message);
-      const newDoc = _res.data;
-      console.log("newDoc: ", newDoc);
-      setCourses((prev) => newList(prev, newDoc));
+      // setCourses((prev) => newList(prev, newDoc));
       router.refresh()
     }
   };
 
   return (
     <div>
-      <p>Course Management</p>
+      <p className="text-2xl font-bold my-2">Course Management</p>
       <div className="h-[250px] bg-gray-300 text-slate-800 font-semibold rounded-md shadow-md my-3 overflow-auto">
         <p className="bg-rose-800 p-1 text-white">My Course(s)</p>
         <div className="p-2 flex gap-2 overflow-auto">

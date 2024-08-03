@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 
 const QuestionsComponent = ({ userInfo, data }) => {
-  const { courses, setCourses } = useAppContext();
+  const { state, dispatch } = useAppContext();
 
   // const [userInfo, setUserInfo] = useState(typeof window !== 'undefined' ? localStorage.getItem("userData") & JSON.parse(localStorage.getItem('userData')) : {})
 
@@ -143,7 +143,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
       return;
     }
 
-    const selectedCourse = courses.find(
+    const selectedCourse = state.courses.find(
       (course) => course.code == examPara.course
     );
     console.log("selectedCourse: ", selectedCourse);
@@ -174,7 +174,8 @@ const QuestionsComponent = ({ userInfo, data }) => {
     } else {
       console.log(_res.message);
       const newData = _res.data;
-      setCourses([...courses, newData]);
+      dispatch({type: ActionCommand.UPDATE_COURSES, payload: newData})
+      // setCourses([...courses, newData]);
       toast.success(_res.message);
 
       // empty the question form when questions saved sucessfully

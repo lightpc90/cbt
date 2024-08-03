@@ -2,16 +2,13 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { RiDeleteBinFill } from "react-icons/ri";
-import { useSearchParams } from "next/navigation";
-import { useAppContext } from "@/appContext/appState";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
 
 import StaffForm from "./StaffForm";
 
 const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
-  const { setStaffs } = useAppContext();
+  const { dispatch } = useAppContext();
 
   const [openDeletBox, setOpenDeleteBox] = useState(false);
 
@@ -42,9 +39,10 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
       if (isDeleted.success === false) {
         toast.error(isDeleted.error);
       } else {
-        setStaffs((prevStaffs) =>
-          prevStaffs.filter((existingStaff) => existingStaff._id !== staff._id)
-        );
+        dispatch({type: ActionCommand.DELETE_STAFF, payload: staff._id})
+        // setStaffs((prevStaffs) =>
+        //   prevStaffs.filter((existingStaff) => existingStaff._id !== staff._id)
+        // );
         toast.success(isDeleted.message);
       }
     } catch (err) {

@@ -42,7 +42,7 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
       }
       else{console.log('value to this key is initially null: ', eachQuestion, "::::setting the value...")}
    setObjectKey(savedAnswers) 
-  }, [eachQuestion, ]);
+  }, [eachQuestion ]);
 
 
   return (

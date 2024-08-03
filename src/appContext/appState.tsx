@@ -129,25 +129,30 @@ const contextInit = {
   students: [],
   loading: false,
   state: initialState,
-}
+  dispatch: () => null,
+  userData: {},
+};
 
-const AppContext = createContext(contextInit);
-export const useAppContext = () => useContext(AppContext);
+const AppContext = createContext<
+  { state: State; dispatch: Dispatch<Action> } | {}
+>(contextInit);
+
+export const useAppContext = () => {
+  useContext(AppContext)
+};
 
 export const AppProvider = ({ children }:{children: ReactElement | ReactElement[]}) => {
- 
   const [state, dispatch] = useReducer(reducer, initialState);
-  // State for the app context.
-  const [students, setStudents] = useState([]);
-  const [staffs, setStaffs] = useState([]);
-  const [courses, setCourses] = useState([]);
 
-  const [userData, setUserData] = useState<(IStaff)>(
-    typeof window !== "undefined" ? localStorage.getItem("userData") && JSON.parse(localStorage.getItem("userData")) : iStaff);
+  const [userData, setUserData] = useState<IStaff>(
+    typeof window !== "undefined"
+      ? localStorage.getItem("userData") &&
+          JSON.parse(localStorage.getItem("userData"))
+      : iStaff
+  );
   const [currentUserId, setCurrentUserId] = useState(
     typeof window !== "undefined" ? localStorage.getItem("currentUserId") : ""
   );
-
   return (
     <AppContext.Provider
       value={{
@@ -157,12 +162,6 @@ export const AppProvider = ({ children }:{children: ReactElement | ReactElement[
         setUserData,
         currentUserId,
         setCurrentUserId,
-        students,
-        setStudents,
-        staffs,
-        setStaffs,
-        courses,
-        setCourses,
       }}
     >
       {children}

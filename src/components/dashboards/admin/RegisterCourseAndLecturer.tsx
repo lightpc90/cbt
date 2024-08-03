@@ -1,26 +1,24 @@
-'use client'
+"use client";
 
-import CourseLayout from './CourseLayout'
-import StaffLayout from './StaffLayout'
-import StaffForm from './StaffForm'
-import { useAppContext } from '@/appContext/appState'
-import CourseForm from './CourseForm'
-import { ICourse, IStaff } from '@/components/interfaces/interfaces'
-import { useState } from 'react'
-
-
+import CourseLayout from "./CourseLayout";
+import StaffLayout from "./StaffLayout";
+import StaffForm from "./StaffForm";
+import { useAppContext } from "@/appContext/appState";
+import CourseForm from "./CourseForm";
+import { ICourse, IStaff } from "@/components/interfaces/interfaces";
+import { useState } from "react";
 
 const RegisterCourseAndLecturer = ({ data, user }) => {
-  const { state,} = useAppContext()
+  const { state } = useAppContext();
   // const courses = data.courses
   // const staffs = data.staffs
 
-  enum FormShow{
-    COURSE_CREATION_FORM = 'COURSE_CREATION_FORM',
-    STAFF_CREATION_FORM = 'STAFF_CREATION_FORM'
+  enum FormShow {
+    COURSE_CREATION_FORM = "COURSE_CREATION_FORM",
+    STAFF_CREATION_FORM = "STAFF_CREATION_FORM",
   }
 
-  const [showForm, setShowform] = useState(FormShow.COURSE_CREATION_FORM)
+  const [showForm, setShowform] = useState(FormShow.COURSE_CREATION_FORM);
 
   return (
     <div className="flex justify-around">
@@ -73,6 +71,6 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
       </div>
     </div>
   );
-}
+};
 
-export default RegisterCourseAndLecturer
+export default RegisterCourseAndLecturer;

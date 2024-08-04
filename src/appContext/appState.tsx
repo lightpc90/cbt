@@ -130,7 +130,7 @@ const contextInit = {
   loading: false,
   state: initialState,
   dispatch: () => null,
-  userData: {},
+  userData: {firstname: ''},
 };
 
 const AppContext = createContext<

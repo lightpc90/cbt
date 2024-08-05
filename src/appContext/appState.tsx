@@ -141,8 +141,6 @@ const useAppContextFn = () => {
   const [currentUserId, setCurrentUserId] = useState(
     typeof window !== "undefined" ? localStorage.getItem("currentUserId") : ""
   );
- const setData = (action: Action)=>dispatch(action)
- const updatData = (action: Action)=>dispatch(action)
  return {state, dispatch, userData, setUserData, currentUserId, setCurrentUserId}
 };
 
@@ -151,7 +149,7 @@ const initContextState: UseAppContextType = {
   dispatch: ()=>null,
   userData: {} as IStaff,
   setUserData: ()=>{},
-  currentUserId: '',
+  currentUserId: '' as string,
   setCurrentUserId: ()=>{}
 }
 

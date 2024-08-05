@@ -1,4 +1,6 @@
-export const iStaff =  {
+import { IStaff } from "../types/types";
+
+export const iStaff: IStaff =  {
   _id: '',
   firstname: '',
   middlename: '',

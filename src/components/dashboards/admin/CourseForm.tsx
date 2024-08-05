@@ -3,12 +3,15 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
-import { ICourse } from '../../interfaces/interfaces';
+import { ICourse } from "../../types/types";
 
-type FormUpdateProps = {course?:ICourse; setShow?:Dispatch<SetStateAction<boolean>>; show?:boolean}
+type FormUpdateProps = {
+  course?: ICourse;
+  setShow?: Dispatch<SetStateAction<boolean>>;
+  show?: boolean;
+};
 
-
-const CourseForm = ({ course, setShow, show=false }:FormUpdateProps) => {
+const CourseForm = ({ course, setShow, show = false }: FormUpdateProps) => {
   const { dispatch } = useAppContext();
 
   // form data initialization
@@ -23,7 +26,9 @@ const CourseForm = ({ course, setShow, show=false }:FormUpdateProps) => {
   const [registering, setRegistering] = useState(false);
   const [updating, setUpdating] = useState(false);
   //   form data
-  const [courseData, setCourseData] = useState(show? updateInitialCourse : initialCourseData);
+  const [courseData, setCourseData] = useState(
+    show ? updateInitialCourse : initialCourseData
+  );
 
   // const updatedList=(prev, newData)=>{
   //   return prev.map((eachExistingCourse)=>(
@@ -57,7 +62,7 @@ const CourseForm = ({ course, setShow, show=false }:FormUpdateProps) => {
     } else if (_res?.success) {
       console.log("message: ", _res.message);
       // add the new course to the list of courses in app state
-      dispatch({type: ActionCommand.SET_COURSES, payload: _res.data})
+      dispatch({ type: ActionCommand.SET_COURSES, payload: _res.data });
       toast.success(_res.message);
     }
     setCourseData(initialCourseData);
@@ -66,15 +71,15 @@ const CourseForm = ({ course, setShow, show=false }:FormUpdateProps) => {
 
   // FUNCTIONS USED IN EDITING MODE
   // course update function
-  const handleCourseUpdate=async()=>{
+  const handleCourseUpdate = async () => {
     // call course creation API
-    setUpdating(true)
+    setUpdating(true);
     const res = await fetch("/api/course/updateACourse", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({_id: course._id, update: courseData}),
+      body: JSON.stringify({ _id: course._id, update: courseData }),
     });
     if (!res.ok) {
       console.log("failed to make api call");
@@ -90,12 +95,12 @@ const CourseForm = ({ course, setShow, show=false }:FormUpdateProps) => {
     } else if (_res?.success === true) {
       console.log("message: ", _res.message);
       // add the new course to the list of courses in app state
-      dispatch({type: ActionCommand.UPDATE_COURSES, payload: _res.data})
+      dispatch({ type: ActionCommand.UPDATE_COURSES, payload: _res.data });
       toast.success(_res.message);
-      setShow(false)
+      setShow(false);
     }
-    setUpdating(false)
-  }
+    setUpdating(false);
+  };
 
   return (
     <div>

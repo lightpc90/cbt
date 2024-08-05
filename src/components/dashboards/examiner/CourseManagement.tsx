@@ -5,11 +5,11 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import { useRouter } from "next/navigation";
-import { ICourse } from "@/components/interfaces/interfaces";
+import { ICourse } from "@/components/types/types";
 import { Types } from "mongoose";
 
 const CourseManagement = ({ userInfo, data }) => {
-  const router = useRouter()
+  const router = useRouter();
   const { state, dispatch } = useAppContext();
 
   const [drafts, setDrafts] = useState([]);
@@ -65,7 +65,10 @@ const CourseManagement = ({ userInfo, data }) => {
     );
   };
 
-  const publishOrPulldownQuestion = async (option: boolean, id: number | Types.ObjectId) => {
+  const publishOrPulldownQuestion = async (
+    option: boolean,
+    id: number | Types.ObjectId
+  ) => {
     // if(option === true){
     //   setIsPublishing(true)
     // }
@@ -89,11 +92,11 @@ const CourseManagement = ({ userInfo, data }) => {
       console.log("error: ", _res.error);
       toast.success(_res.error);
     } else if (_res.success === true) {
-      dispatch({type: ActionCommand.UPDATE_COURSES, payload: _res.data})
+      dispatch({ type: ActionCommand.UPDATE_COURSES, payload: _res.data });
       console.log("message: ", _res.message);
       toast.success(_res.message);
       // setCourses((prev) => newList(prev, newDoc));
-      router.refresh()
+      router.refresh();
     }
   };
 

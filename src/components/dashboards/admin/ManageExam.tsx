@@ -1,50 +1,55 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { useRouter } from 'next/navigation'
-import { ActionCommand, useAppContext } from '@/appContext/appState'
-import toast from 'react-hot-toast'
+import React from "react";
+import { useRouter } from "next/navigation";
+import { ActionCommand, useAppContext } from "@/appContext/appState";
+import toast from "react-hot-toast";
 
-import { Types } from 'mongoose'
+import { Types } from "mongoose";
 
 import { MdDateRange } from "react-icons/md";
 import { IoTimeSharp } from "react-icons/io5";
-import { updatedList } from '@/UtilityFunctions/updatedList';
-import { ICourse, IStaff } from '@/components/interfaces/interfaces'
+import { updatedList } from "@/UtilityFunctions/updatedList";
+import { ICourse, IStaff } from "@/components/types/types";
 
-const ManageExam = ({data}) => {
-  const router = useRouter()
-  const { dispatch, state} = useAppContext()
-  const staffsData = data.staffs
-  const published: ICourse[] = state.courses.filter((course: ICourse) => (course.published === true))
+const ManageExam = ({ data }) => {
+  const router = useRouter();
+  const { dispatch, state } = useAppContext();
+  const staffsData = data.staffs;
+  const published: ICourse[] = state.courses.filter(
+    (course: ICourse) => course.published === true
+  );
 
   const getStaffs = (courseCode: string) => {
-    const courseStaffs: IStaff[] = staffsData.filter((staff: IStaff) => (staff.courses.includes(courseCode)))
-    return courseStaffs
-  }
+    const courseStaffs: IStaff[] = staffsData.filter((staff: IStaff) =>
+      staff.courses.includes(courseCode)
+    );
+    return courseStaffs;
+  };
 
-  const uploadOrPullDownExamQuestion=async(_id: Types.ObjectId | string, option:boolean)=>{
-    const res = await fetch('/api/course/updateACourse', {
-      method: 'POST',
-      body: JSON.stringify({_id, update:{live: option}})
-    })
+  const uploadOrPullDownExamQuestion = async (
+    _id: Types.ObjectId | string,
+    option: boolean
+  ) => {
+    const res = await fetch("/api/course/updateACourse", {
+      method: "POST",
+      body: JSON.stringify({ _id, update: { live: option } }),
+    });
 
-    if(!res.ok){
-      toast.error("Failed! Try again")
-      return
+    if (!res.ok) {
+      toast.error("Failed! Try again");
+      return;
     }
-    const uploaded = await res.json()
-    if(uploaded.success === false){
-      toast.error(uploaded.error)
-    }
-    else if(uploaded.success === true ){
-      dispatch({type: ActionCommand.UPDATE_COURSES, payload: uploaded.data})
+    const uploaded = await res.json();
+    if (uploaded.success === false) {
+      toast.error(uploaded.error);
+    } else if (uploaded.success === true) {
+      dispatch({ type: ActionCommand.UPDATE_COURSES, payload: uploaded.data });
       // setCourses((prev) => updatedList(prev, uploaded.data));
-      router.refresh()
-      toast.success(uploaded.message)
+      router.refresh();
+      toast.success(uploaded.message);
     }
-
-  }
+  };
 
   return (
     <div className="">
@@ -183,7 +188,9 @@ const ManageExam = ({data}) => {
                           </span>
                         </div>
                         <button
-                          onClick={() => uploadOrPullDownExamQuestion(courseData._id, false)}
+                          onClick={() =>
+                            uploadOrPullDownExamQuestion(courseData._id, false)
+                          }
                           className="bg-rose-500 hover:bg-slate-500 px-1 flex"
                         >
                           Pull Down
@@ -198,6 +205,6 @@ const ManageExam = ({data}) => {
       </div>
     </div>
   );
-}
+};
 
-export default ManageExam
+export default ManageExam;

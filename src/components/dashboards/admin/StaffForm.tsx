@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
-import { ICourse, IStaff } from "@/components/interfaces/interfaces";
+import { ICourse, IStaff } from "@/components/types/types";
 
 const Titles = [
   { value: "", name: "Choose Title" },
@@ -21,45 +21,52 @@ const Genders = [
   { value: "Female", name: "Female" },
 ];
 
-type StaffFormUpdateProps={staff?:IStaff; isEditing?: boolean; setIsEditing?:(arg:boolean)=>boolean}
+type StaffFormUpdateProps = {
+  staff?: IStaff;
+  isEditing?: boolean;
+  setIsEditing?: (arg: boolean) => boolean;
+};
 
-  type FormDataType = {
-    title: string;
-    firstname: string;
-    middlename: string;
-    lastname: string;
-    email: string;
-    dept: string;
-    gender: string;
-    staffID: string;
-    courseCodes?: string[];
-  };
-  const initialFormData = {
-    title: "",
-    firstname: "",
-    middlename: "",
-    lastname: "",
-    email: "",
-    dept: "",
-    staffID: "",
-    gender: "",
-    courseCodes: [],
-  };
- 
+type FormDataType = {
+  title: string;
+  firstname: string;
+  middlename: string;
+  lastname: string;
+  email: string;
+  dept: string;
+  gender: string;
+  staffID: string;
+  courseCodes?: string[];
+};
+const initialFormData = {
+  title: "",
+  firstname: "",
+  middlename: "",
+  lastname: "",
+  email: "",
+  dept: "",
+  staffID: "",
+  gender: "",
+  courseCodes: [],
+};
 
-const StaffForm = ({ staff, isEditing, setIsEditing }: StaffFormUpdateProps) => {
+const StaffForm = ({
+  staff,
+  isEditing,
+  setIsEditing,
+}: StaffFormUpdateProps) => {
   const { state, dispatch } = useAppContext();
 
- const updateInitialFormData = {
-   title: staff?.title,
-   firstname: staff?.firstname,
-   middlename: staff?.middlename,
-   lastname: staff?.lastname,
-   email: staff?.email,
-   dept: staff?.dept,
-   gender: staff?.gender,
-   staffID: staff?.staffID,
- };
+  const updateInitialFormData = {
+    title: staff?.title,
+    firstname: staff?.firstname,
+    middlename: staff?.middlename,
+    lastname: staff?.lastname,
+    email: staff?.email,
+    dept: staff?.dept,
+    gender: staff?.gender,
+    staffID: staff?.staffID,
+  };
   const [formData, setFormData] = useState<FormDataType>(
     isEditing ? updateInitialFormData : initialFormData
   );
@@ -71,7 +78,7 @@ const StaffForm = ({ staff, isEditing, setIsEditing }: StaffFormUpdateProps) => 
   let tempPwd: string;
 
   // temp pasword generating funtion
-  const genTempPassword = (data:FormDataType) => {
+  const genTempPassword = (data: FormDataType) => {
     // function to randomly pick a letter from a name
     function pickRandomLetter(name: string) {
       // Check if the name is not empty
@@ -130,7 +137,7 @@ const StaffForm = ({ staff, isEditing, setIsEditing }: StaffFormUpdateProps) => 
       console.log("message: ", _res.message);
       // add the new staff to the list of staffs in app state
       // setStaffsData([...staffsData, _res.data])
-      dispatch({type: ActionCommand.ADD_STAFF, payload: _res.data})
+      dispatch({ type: ActionCommand.ADD_STAFF, payload: _res.data });
       // setStaffs((prevData) => {
       //   return [...prevData, _res.data];
       // });
@@ -203,7 +210,7 @@ const StaffForm = ({ staff, isEditing, setIsEditing }: StaffFormUpdateProps) => 
     if (isUpdate.success === false) {
       toast.error(isUpdate.error);
     } else {
-      dispatch({type: ActionCommand.UPDATE_STAFFS, payload: isUpdate.data})
+      dispatch({ type: ActionCommand.UPDATE_STAFFS, payload: isUpdate.data });
       // setStaffs((prev) => getUpdatedList(prev, isUpdate.data));
       toast.success(isUpdate.message);
     }

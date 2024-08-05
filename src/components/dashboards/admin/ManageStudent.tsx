@@ -6,7 +6,7 @@ import { useAppContext } from "@/appContext/appState";
 
 import { BsFilterSquareFill, BsFilterSquare } from "react-icons/bs";
 import { RiFilterFill } from "react-icons/ri";
-import { IStudent } from "@/components/interfaces/interfaces";
+import { IStudent } from "@/components/types/types";
 
 const ManageStudent = ({ data }) => {
   const { state } = useAppContext();
@@ -39,11 +39,8 @@ const ManageStudent = ({ data }) => {
           </div>
           <div className="h-[85%] overflow-auto flex flex-col p-2 gap-2">
             {/* list of Students */}
-            {state.students?.map((student:IStudent, i:number) => (
-              <StudentLayout
-                key={i}
-                student={student}
-              />
+            {state.students?.map((student: IStudent, i: number) => (
+              <StudentLayout key={i} student={student} />
             ))}
           </div>
         </div>

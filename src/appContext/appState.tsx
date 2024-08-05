@@ -1,16 +1,23 @@
 "use client";
 
-import { createContext, useContext, useState, useReducer, ReactElement, Dispatch, SetStateAction, DispatchWithoutAction } from "react";
-import { ICourse, IStaff, IStudent } from "@/components/interfaces/interfaces";
+import {
+  createContext,
+  useContext,
+  useState,
+  useReducer,
+  ReactElement,
+} from "react";
+import { ICourse, IStaff, IStudent } from "@/components/types/types";
 import { Types } from "mongoose";
 import { iStaff } from "@/components/InitialData/initialData";
 
-interface State {
+
+type StateType = {
   students: IStudent[];
   staffs: IStaff[];
   courses: ICourse[];
   loading: boolean;
-}
+};
 
 type Action =
   | { type: "SET_STUDENTS"; payload?: IStudent[] }
@@ -45,7 +52,7 @@ export enum ActionCommand {
   CLEAR_ALL = "CLEAR_ALL",
 }
 
-function reducer(state: State, action: Action): State  {
+function reducer(state: StateType, action: Action): StateType {
   switch (action.type) {
     // RUN SET ACTIONS
     case ActionCommand.SET_STUDENTS:
@@ -61,7 +68,7 @@ function reducer(state: State, action: Action): State  {
 
     // RUN ADD ACTIONS
     case ActionCommand.ADD_STUDENT:
-      return { ...state, students: [...state.students, action.payload ]};
+      return { ...state, students: [...state.students, action.payload] };
     case ActionCommand.ADD_STAFF:
       return { ...state, staffs: [...state.staffs, action.payload] };
     case ActionCommand.ADD_COURSE:
@@ -116,34 +123,15 @@ function reducer(state: State, action: Action): State  {
   }
 }
 
- const initialState: State = {
-   students: [],
-   staffs: [],
-   courses: [],
-   loading: false,
- };
-
-const contextInit = {
-  courses: [],
-  staffs: [],
+const initState: StateType = {
   students: [],
+  staffs: [],
+  courses: [],
   loading: false,
-  state: initialState,
-  dispatch: () => null,
-  userData: {firstname: ''},
 };
 
-const AppContext = createContext<
-  { state: State; dispatch: Dispatch<Action> } | {}
->(contextInit);
-
-export const useAppContext = () => {
-  useContext(AppContext)
-};
-
-export const AppProvider = ({ children }:{children: ReactElement | ReactElement[]}) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+const useAppContextFn = () => {
+ const [state, dispatch] = useReducer(reducer, initState);
   const [userData, setUserData] = useState<IStaff>(
     typeof window !== "undefined"
       ? localStorage.getItem("userData") &&
@@ -153,18 +141,54 @@ export const AppProvider = ({ children }:{children: ReactElement | ReactElement[
   const [currentUserId, setCurrentUserId] = useState(
     typeof window !== "undefined" ? localStorage.getItem("currentUserId") : ""
   );
+ const setData = (action: Action)=>dispatch(action)
+ const updatData = (action: Action)=>dispatch(action)
+ return {state, dispatch, userData, setUserData, currentUserId, setCurrentUserId}
+};
+
+const initContextState: UseAppContextType = {
+  state: initState,
+  dispatch: ()=>null,
+  userData: {} as IStaff,
+  setUserData: ()=>{},
+  currentUserId: '',
+  setCurrentUserId: ()=>{}
+}
+
+type UseAppContextType = ReturnType<typeof useAppContextFn>
+
+const AppContext = createContext<
+  UseAppContextType
+>(initContextState);
+
+
+
+export const AppProvider = ({
+  children,
+}: {
+  children: ReactElement | ReactElement[];
+}): ReactElement => {
+ 
   return (
     <AppContext.Provider
-      value={{
-        state,
-        dispatch,
-        userData,
-        setUserData,
-        currentUserId,
-        setCurrentUserId,
-      }}
+      value={
+       useAppContextFn()
+      }
     >
       {children}
     </AppContext.Provider>
   );
 };
+
+// create custome hook
+export const useAppContext = () => {
+  const {state:{staffs, students, courses, loading}, dispatch, userData, setUserData, currentUserId, setCurrentUserId} = useContext(AppContext);
+  return {
+    state: { staffs, students, courses, loading },
+    dispatch,
+    userData,
+    setUserData,
+    currentUserId,
+    setCurrentUserId,
+  };
+  };

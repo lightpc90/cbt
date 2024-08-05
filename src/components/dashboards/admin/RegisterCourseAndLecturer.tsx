@@ -5,7 +5,7 @@ import StaffLayout from "./StaffLayout";
 import StaffForm from "./StaffForm";
 import { useAppContext } from "@/appContext/appState";
 import CourseForm from "./CourseForm";
-import { ICourse, IStaff } from "@/components/interfaces/interfaces";
+import { ICourse, IStaff } from "@/components/types/types";
 import { useState } from "react";
 
 const RegisterCourseAndLecturer = ({ data, user }) => {

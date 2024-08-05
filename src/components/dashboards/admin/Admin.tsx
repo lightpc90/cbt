@@ -9,9 +9,10 @@ import Link from "next/link";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import Image from "next/image";
 import ManageStudent from "./ManageStudent";
-import { IStaff } from "@/components/interfaces/interfaces";
+import { IStaff } from "@/components/types/types";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { iStaff } from "@/components/InitialData/initialData";
 
 const menuVariants = [
   { menu: `course_and_staff`, name: `Course and Staff` },
@@ -26,7 +27,7 @@ const Admin = ({ data }) => {
   // const [menu, setMenu] = useState({ registerCourseAndLecturer: false, manageExam: false, manageStudent: false, result: false })
   const { currentUserId, setUserData, dispatch } = useAppContext();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const [user, setUser] = useState<IStaff>();
 
@@ -48,15 +49,17 @@ const Admin = ({ data }) => {
     const response = await fetch("/api/auth/logout", {
       method: "POST",
     });
-    if(!response.ok){return}
-    const loggedOut = await response.json()
-    if(loggedOut.success){
-      router.push('/')
-      toast.success(loggedOut.message)
+    if (!response.ok) {
+      return;
+    }
+    const loggedOut = await response.json();
+    if (loggedOut.success) {
+      router.push("/");
+      toast.success(loggedOut.message);
     }
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("userData");
-    setUserData({});
+    setUserData(iStaff);
   };
 
   return (

@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { IStaff } from "@/components/interfaces/interfaces";
+import { IStaff } from "@/components/types/types";
 import { Dispatch, SetStateAction } from "react";
 
 // signin function

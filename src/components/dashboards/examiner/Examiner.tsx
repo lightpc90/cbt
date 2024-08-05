@@ -9,7 +9,7 @@ import { ActionCommand, useAppContext } from "@/appContext/appState";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { IStaff } from "@/components/interfaces/interfaces";
+import { IStaff } from "@/components/types/types";
 import toast from "react-hot-toast";
 
 const menuVariants = [
@@ -21,7 +21,7 @@ const menuVariants = [
 // data arg comes from examiner page, server fetching
 const Examiner = ({ data }) => {
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const { currentUserId, setUserData, dispatch, state } = useAppContext();
 
   // const [menu, setMenu] = useState({
@@ -63,22 +63,22 @@ const Examiner = ({ data }) => {
   //   setMenu({ ...menu })
   // }
 
-   const signOut = async () => {
-     const response = await fetch("/api/auth/logout", {
-       method: "POST",
-     });
-     if (!response.ok) {
-       return;
-     }
-     const loggedOut = await response.json();
-     if (loggedOut.success) {
-       router.push("/");
-       toast.success(loggedOut.message);
-     }
-     localStorage.removeItem("currentUserId");
-     localStorage.removeItem("userData");
-     setUserData({});
-   };
+  const signOut = async () => {
+    const response = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+    if (!response.ok) {
+      return;
+    }
+    const loggedOut = await response.json();
+    if (loggedOut.success) {
+      router.push("/");
+      toast.success(loggedOut.message);
+    }
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("userData");
+    setUserData({});
+  };
 
   return (
     <div className="h-screen bg-slate-900 text-white flex">

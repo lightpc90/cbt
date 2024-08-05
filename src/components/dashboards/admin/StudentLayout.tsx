@@ -7,7 +7,7 @@ import { FaEdit } from "react-icons/fa";
 import StudentEdit from "./StudentEdit";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
-import { ICourse } from "@/components/interfaces/interfaces";
+import { ICourse } from "@/components/types/types";
 
 const StudentLayout = ({ student }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -27,10 +27,13 @@ const StudentLayout = ({ student }) => {
     const allCourseCodes = state.courses?.map((course: ICourse) => course.code);
     setAllCodes(allCourseCodes);
     // get initial checked courses
-    const initialCheckedCourses = allCourseCodes.reduce((acc:{}, item:string) => {
-      acc[item] = student.courses.includes(item);
-      return acc;
-    }, {});
+    const initialCheckedCourses = allCourseCodes.reduce(
+      (acc: {}, item: string) => {
+        acc[item] = student.courses.includes(item);
+        return acc;
+      },
+      {}
+    );
     setCheckedCourses(initialCheckedCourses);
   }, [student, state.courses]);
 
@@ -67,7 +70,7 @@ const StudentLayout = ({ student }) => {
       console.log(update.error);
       toast.error(update.error);
     } else if (update.success === true) {
-      dispatch({type: ActionCommand.UPDATE_STUDENTS, payload: update.data})
+      dispatch({ type: ActionCommand.UPDATE_STUDENTS, payload: update.data });
       console.log(update.success);
       toast.success(update.message);
     }

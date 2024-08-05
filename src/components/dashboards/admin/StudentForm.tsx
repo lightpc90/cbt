@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
-import { IStudent } from "@/components/interfaces/interfaces";
+import { IStudent } from "@/components/types/types";
 
 const Depts = [
   "Computer Science",
@@ -15,9 +15,11 @@ const Depts = [
 ];
 const Genders = ["Male", "Female"];
 
-type StudentFormType={
-  student?: IStudent; isEditing?: boolean, setIsEditing?:(arg:boolean)=>boolean
-}
+type StudentFormType = {
+  student?: IStudent;
+  isEditing?: boolean;
+  setIsEditing?: (arg: boolean) => boolean;
+};
 
 const StudentForm = ({ student, isEditing, setIsEditing }: StudentFormType) => {
   const { dispatch } = useAppContext();
@@ -146,7 +148,10 @@ const StudentForm = ({ student, isEditing, setIsEditing }: StudentFormType) => {
       if (isUpdate.success === false) {
         toast.error(isUpdate.error);
       } else {
-        dispatch({type: ActionCommand.UPDATE_STUDENTS, payload: isUpdate.data})
+        dispatch({
+          type: ActionCommand.UPDATE_STUDENTS,
+          payload: isUpdate.data,
+        });
         // setStudents((prev) => getUpdatedList(prev, isUpdate.data));
         toast.success(isUpdate.message);
       }
@@ -177,7 +182,7 @@ const StudentForm = ({ student, isEditing, setIsEditing }: StudentFormType) => {
       console.log(result.error);
       toast.error(result.error);
     } else {
-      dispatch({type: ActionCommand.ADD_STUDENT, payload: result.data})
+      dispatch({ type: ActionCommand.ADD_STUDENT, payload: result.data });
       // setStudents((prev) => [...prev, result.data]);
       toast.success(result.message);
       setFormData(initialFormData);

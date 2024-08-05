@@ -1,7 +1,7 @@
 import { StringSchemaDefinition, Types } from "mongoose";
 
 // Define types for complex state objects
-export interface IStudent {
+export type IStudent = {
   _id: Types.ObjectId | string;
   firstname: string;
   middlename: string;
@@ -22,13 +22,13 @@ export interface IStudent {
   residentialAddress?: string;
 }
 
-export interface IStaff {
+export type IStaff = {
   _id: Types.ObjectId | string;
   firstname: string;
   middlename: string;
   lastname: string;
   department: string;
-  timestamp: Date;
+  timestamp: string;
   createdPwd: boolean;
   staffID: string;
   phone?: string;
@@ -47,7 +47,7 @@ export interface IStaff {
   residentialAddress?: string;
 }
 
-export interface ICourse {
+export type ICourse = {
   _id: Types.ObjectId | string;
   title: string;
   code: string;

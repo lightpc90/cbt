@@ -9,11 +9,10 @@ import StaffEdit from "./StaffEdit";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 
 import toast from "react-hot-toast";
-import { ICourse } from "@/components/interfaces/interfaces";
+import { ICourse } from "@/components/types/types";
 
 const StaffLayout = ({ staff, user }) => {
-  
-  const {state, dispatch } = useAppContext();
+  const { state, dispatch } = useAppContext();
 
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +26,7 @@ const StaffLayout = ({ staff, user }) => {
 
   useEffect(() => {
     // extract all the course codes in the coursesData object into a list
-    const allCourseCodes = state.courses?.map((course:ICourse) => course.code);
+    const allCourseCodes = state.courses?.map((course: ICourse) => course.code);
     setAllCodes(allCourseCodes);
 
     // get initial checked courses
@@ -45,9 +44,6 @@ const StaffLayout = ({ staff, user }) => {
       [name]: checked,
     }));
   };
-
-  
-  
 
   const handleUpdateCourse = async () => {
     setLoading(true);
@@ -75,7 +71,7 @@ const StaffLayout = ({ staff, user }) => {
       console.log("error: ", _res.error);
       toast.error(_res.error);
     } else if (_res.success === true) {
-      dispatch({type: ActionCommand.UPDATE_STAFFS, payload: _res.data})
+      dispatch({ type: ActionCommand.UPDATE_STAFFS, payload: _res.data });
       console.log("message: ", _res.message);
       toast.success(_res.message);
     }
@@ -103,7 +99,7 @@ const StaffLayout = ({ staff, user }) => {
         <p className="text-rose-300">{`| Logged in: ${staff.createdPwd}`}</p>
       </div>
       <div className="flex gap-2 justify-center items-center">
-        { staff?.admin === false ?
+        {staff?.admin === false ? (
           <>
             {/* Update course */}
             <div className="relative">
@@ -154,10 +150,13 @@ const StaffLayout = ({ staff, user }) => {
             >
               Edit <FaEdit size={20} />
             </button>
-          </> :
-          // 
-          <div className="bg-rose-800 text-white py-1 px-5 text-sm rounded-md ring-1 ring-white mr-auto">admin</div>
-        }
+          </>
+        ) : (
+          //
+          <div className="bg-rose-800 text-white py-1 px-5 text-sm rounded-md ring-1 ring-white mr-auto">
+            admin
+          </div>
+        )}
       </div>
     </div>
   );

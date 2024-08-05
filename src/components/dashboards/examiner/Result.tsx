@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/appContext/appState";
 import ResultLayout from "./ResultLayout";
-import { ICourse } from "@/components/interfaces/interfaces";
+import { ICourse } from "@/components/types/types";
 
 const Result = ({ userInfo, data }) => {
   const { state } = useAppContext();

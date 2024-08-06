@@ -52,7 +52,7 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
         {/* View Registered Courses container */}
         <div className="bg-white h-[20%] overflow-auto text-black flex gap-2 p-3">
           {/* list of courses */}
-          {state.courses?.map((course: ICourse, i: number) => (
+          {state?.courses?.map((course: ICourse, i: number) => (
             <CourseLayout key={i} course={course} />
           ))}
         </div>
@@ -60,7 +60,7 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
         <p className="bg-rose-800 p-1 text-sm mt-5">Registered Lecturer</p>
         <div className=" bg-white h-[68%] overflow-auto text-black p-2 gap-3">
           {/* list of lecturers */}
-          {state.staffs?.map(
+          {state?.staffs?.map(
             (staff: IStaff, i: number) =>
               // do not render the current admin with the list of staffs
               user._id !== staff._id && (

@@ -64,7 +64,7 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
             (staff: IStaff, i: number) =>
               // do not render the current admin with the list of staffs
               user._id !== staff._id && (
-                <StaffLayout key={i} staff={staff} user={user} />
+                <StaffLayout key={i} staff={staff} index={i} />
               )
           )}
         </div>

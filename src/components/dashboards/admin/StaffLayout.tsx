@@ -10,14 +10,20 @@ import { ActionCommand, useAppContext } from "@/appContext/appState";
 
 import toast from "react-hot-toast";
 import { ICourse } from "@/components/types/types";
+import Image from "next/image";
 
-const StaffLayout = ({ staff, user }) => {
+import StaffDP from '../../../../public/image/staffDP.jpg'
+
+const StaffLayout = ({ staff, index }) => {
   const { state, dispatch } = useAppContext();
 
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
+  const [tooltipsOpen, setTooltips] = useState(false)
+
   const firstnameInitial = staff.firstname[0];
+  const middlenameInitial = staff.middlename[0];
 
   const [checkedCourses, setCheckedCourses] = useState({});
   const [allCodes, setAllCodes] = useState([]);
@@ -80,7 +86,11 @@ const StaffLayout = ({ staff, user }) => {
   };
 
   return (
-    <div className="flex bg-slate-800 px-2 py-1 text-white justify-between my-1 ">
+    <div
+      className="text-white w-full"
+      onMouseEnter={() => setTooltips(true)}
+      onMouseLeave={() => setTooltips(false)}
+    >
       {/* Editing component: it displays only when enabled */}
       {isEditing && (
         <div className="absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-700 opacity-[99%]  z-40">
@@ -91,72 +101,101 @@ const StaffLayout = ({ staff, user }) => {
           />
         </div>
       )}
-
       {/* when not editing */}
-      <div className="flex gap-2">
-        <p className="font-bold">{`${firstnameInitial}. ${staff.lastname}`}</p>
-        <p className="text-rose-600">{staff.tempPwd}</p>
-        <p className="text-rose-300">{`| Logged in: ${staff.createdPwd}`}</p>
-      </div>
-      <div className="flex gap-2 justify-center items-center">
-        {staff?.admin === false ? (
-          <>
-            {/* Update course */}
-            <div className="relative">
-              <button
-                onClick={() => setOpen(!open)}
-                className="flex items-center text-sm ring-1 ring-rose-800 px-2 rounded-md"
-              >
-                Update Course
-                <span>
-                  {!open ? (
-                    <HiChevronRight size={30} />
-                  ) : (
-                    <HiChevronDown size={30} />
-                  )}
-                </span>
-              </button>
-              {open && (
-                <div className="bg-rose-600 p-1 absolute right-0 w-full z-20">
-                  {allCodes.map((code, i) => (
-                    <div key={i} className="">
-                      <label className="flex gap-1">
-                        {code}
-                        <input
-                          type="checkbox"
-                          name={code}
-                          checked={checkedCourses[code]}
-                          onChange={handleCheckboxChange}
-                        />
-                      </label>
-                      <hr />
-                    </div>
-                  ))}
-                  {allCodes.length > 0 && (
-                    <button
-                      onClick={handleUpdateCourse}
-                      className="bg-slate-800 p-1 mt-5"
-                    >
-                      {loading ? `loading..` : `Update!`}
-                    </button>
-                  )}
-                </div>
-              )}
+      <div className="flex w-full bg-slate-800 px-2 py-1 text-white items-center justify-between relative my-1  ">
+        {/* TOOLTIPS */}
+        {tooltipsOpen && (
+          <div
+            className={`bg-white text-slate-800 rounded-md absolute ${
+              index < 5 ? `top-[40px]` : "bottom-[40px]"
+            } z-30  shadow-lg px-2 py-5`}
+          >
+            <div className="flex gap-2">
+              <span>{staff?.title}</span>
+              <span>{staff?.firstname}</span>
+              <span>{staff?.middlename}</span>
+              <span>{staff?.lastname}</span>
             </div>
-            {/* edit button */}
-            <button
-              onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 border px-2 py-1 rounded-md  hover:bg-slate-300  hover:text-slate-900"
-            >
-              Edit <FaEdit size={20} />
-            </button>
-          </>
-        ) : (
-          //
-          <div className="bg-rose-800 text-white py-1 px-5 text-sm rounded-md ring-1 ring-white mr-auto">
-            admin
+            <p>{staff?.email}</p>
+            <p>{staff?.dept} Department</p>
+            <p>{staff.tempPwd}</p>
+            <p className="text-rose-300">{`| Logged in: ${staff.createdPwd}`}</p>
           </div>
         )}
+
+        {/* staffs info */}
+        <div className="flex gap-2 justify-center items-center">
+          <div className="h-[40px] w-[40px] rounded-full overflow-hidden">
+            <Image src={StaffDP} width={500} height={500} alt="staff_dp" />
+          </div>
+          <span>{staff?.title}</span>
+          <span>
+            {firstnameInitial}.{middlenameInitial}.
+          </span>
+          <span>{staff.lastname}</span>
+        </div>
+
+        {/* update and edit */}
+        <div className="flex gap-2">
+          {staff?.admin === false ? (
+            <>
+              {/* Update course */}
+              <div className="relative">
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="flex items-center text-sm ring-1 ring-rose-800 px-2 rounded-md"
+                >
+                  Update Course
+                  <span>
+                    {!open ? (
+                      <HiChevronRight size={30} />
+                    ) : (
+                      <HiChevronDown size={30} />
+                    )}
+                  </span>
+                </button>
+                {open && (
+                  <div className="bg-rose-600 p-1 absolute right-0 w-full z-20">
+                    {allCodes.map((code, i) => (
+                      <div key={i} className="">
+                        <label className="flex gap-1">
+                          {code}
+                          <input
+                            type="checkbox"
+                            name={code}
+                            checked={checkedCourses[code]}
+                            onChange={handleCheckboxChange}
+                          />
+                        </label>
+                        <hr />
+                      </div>
+                    ))}
+                    {allCodes.length > 0 && (
+                      <button
+                        onClick={handleUpdateCourse}
+                        className="bg-slate-800 p-1 mt-5"
+                      >
+                        {loading ? `loading..` : `Update!`}
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+              {/* edit button */}
+              <button
+                onClick={() => setIsEditing(true)}
+                className="flex items-center gap-2 border px-2 py-1 rounded-md  hover:bg-slate-300  hover:text-slate-900"
+              >
+                Edit <FaEdit size={20} />
+              </button>
+            </>
+          ) : (
+            //
+            <div className="bg-rose-800 text-white py-1 px-5 text-sm rounded-md ring-1 ring-white mr-auto">
+              admin
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

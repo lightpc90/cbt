@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAppContext } from "@/appContext/appState";
 import { useRouter } from "next/navigation";
+import { iStaff } from "../InitialData/initialData";
 
 const Logout = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const Logout = () => {
     if (response.ok) {
       localStorage.removeItem("currentUserId");
       localStorage.removeItem("userData");
-      setUserData({});
+      setUserData(iStaff);
       router.push("/");
     } else {
       // Handle errors if needed

@@ -106,7 +106,7 @@ const StaffLayout = ({ staff, index }) => {
         {/* TOOLTIPS */}
         {tooltipsOpen && (
           <div
-            className={`bg-white text-slate-800 rounded-md absolute ${
+            className={`bg-white text-slate-800 border-l-4 border-rose-800 rounded-md absolute ${
               index < 5 ? `top-[40px]` : "bottom-[40px]"
             } z-30  shadow-lg px-2 py-5`}
           >
@@ -114,10 +114,10 @@ const StaffLayout = ({ staff, index }) => {
               <span>{staff?.title}</span>
               <span>{staff?.firstname}</span>
               <span>{staff?.middlename}</span>
-              <span>{staff?.lastname}</span>
+              <span className="font-bold">{staff?.lastname}</span>
             </div>
-            <p>{staff?.email}</p>
-            <p>{staff?.dept} Department</p>
+            <p className="text-sm text-slate-500">{staff?.email}</p>
+            <p className="text-sm">{staff?.dept} Department</p>
             <p>{staff.tempPwd}</p>
             <p className="text-rose-300">{`| Logged in: ${staff.createdPwd}`}</p>
           </div>

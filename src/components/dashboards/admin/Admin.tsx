@@ -10,9 +10,6 @@ import { ActionCommand, useAppContext } from "@/appContext/appState";
 import Image from "next/image";
 import ManageStudent from "./ManageStudent";
 import { IStaff } from "@/components/types/types";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { iStaff } from "@/components/InitialData/initialData";
 import { SignOut } from "@/components/ui/SignOut";
 
 const menuVariants = [

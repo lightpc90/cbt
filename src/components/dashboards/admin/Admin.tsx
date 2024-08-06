@@ -25,9 +25,7 @@ const menuVariants = [
 const Admin = ({ data }) => {
   const searchParams = useSearchParams();
   const selectedMenu = searchParams.get("menu");
-  const { currentUserId, setUserData, dispatch } = useAppContext();
-
-  const router = useRouter();
+  const { currentUserId, dispatch} = useAppContext();
 
   const [user, setUser] = useState<IStaff>();  
 

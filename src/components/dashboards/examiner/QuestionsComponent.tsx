@@ -143,7 +143,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
       return;
     }
 
-    const selectedCourse = state.courses.find(
+    const selectedCourse = state?.courses?.find(
       (course) => course.code == examPara.course
     );
     console.log("selectedCourse: ", selectedCourse);

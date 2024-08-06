@@ -22,7 +22,6 @@ const menuVariants = [
 // data arg comes from examiner page, server fetching
 const Examiner = ({ data }) => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const { currentUserId, setUserData, dispatch, state } = useAppContext();
 
   const [user, setUser] = useState<IStaff>();
@@ -32,13 +31,13 @@ const Examiner = ({ data }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (state.courses?.length < 1) {
+    if (state?.courses?.length < 1) {
       dispatch({ type: ActionCommand.SET_COURSES, payload: data.courses });
     }
-    if (state.staffs?.length < 1) {
+    if (state?.staffs?.length < 1) {
       dispatch({ type: ActionCommand.SET_STAFFS, payload: data.staffs });
     }
-    if (state.students?.length < 1) {
+    if (state?.students?.length < 1) {
       dispatch({ type: ActionCommand.SET_STUDENTS, payload: data.students });
     }
     const userInfo: IStaff = localStorage.getItem("userData")
@@ -47,7 +46,7 @@ const Examiner = ({ data }) => {
     console.log("userInfo: ", userInfo);
 
     setUser(userInfo);
-  }, [currentUserId, state.students, state.courses, state.staffs]);
+  }, [currentUserId, state?.students, state?.courses, state?.staffs]);
 
   // const handleMenuChange = (menubutton) => {
   //   menu[menubutton] = true

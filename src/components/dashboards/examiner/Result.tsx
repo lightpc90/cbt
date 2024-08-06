@@ -13,16 +13,16 @@ const Result = ({ userInfo, data }) => {
 
   // NOTE: I WANT TO SIMPLIFY THIS CODE AND REMOVE THE EFFECT HERE!
   useEffect(() => {
-    if (state.courses) {
+    if (state?.courses) {
       const getCourse = () => {
-        const _courseSelected = state.courses.find(
+        const _courseSelected = state?.courses.find(
           (course: ICourse) => course.code == activeCode
         );
         setSelectedCourse(_courseSelected);
       };
       getCourse();
     }
-  }, [activeCode, state.courses]);
+  }, [activeCode, state?.courses]);
 
   const handleActiveCode = (code: string) => {
     setActiveCode(() => {
@@ -39,9 +39,9 @@ const Result = ({ userInfo, data }) => {
           <div className="bg-rose-800 h-[50px] overflow-auto flex items-center p-2 gap-2">
             {userInfo?.admin
               ? // the user is an admin
-                state.courses?.length > 0
+                state?.courses?.length > 0
                 ? // the user is an admin and courses are registered
-                  state.courses.map((course: ICourse, i: number) => (
+                  state?.courses.map((course: ICourse, i: number) => (
                     <button
                       key={i}
                       onClick={() => handleActiveCode(course.code)}

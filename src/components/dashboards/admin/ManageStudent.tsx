@@ -39,7 +39,7 @@ const ManageStudent = ({ data }) => {
           </div>
           <div className="h-[85%] overflow-auto flex flex-col p-2 gap-2">
             {/* list of Students */}
-            {state.students?.map((student: IStudent, i: number) => (
+            {state?.students?.map((student: IStudent, i: number) => (
               <StudentLayout key={i} student={student} />
             ))}
           </div>

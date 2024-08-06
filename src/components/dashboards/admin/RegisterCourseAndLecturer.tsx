@@ -13,6 +13,8 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
   // const courses = data.courses
   // const staffs = data.staffs
 
+  console.log("state object: ", state)
+
   enum FormShow {
     COURSE_CREATION_FORM = "COURSE_CREATION_FORM",
     STAFF_CREATION_FORM = "STAFF_CREATION_FORM",

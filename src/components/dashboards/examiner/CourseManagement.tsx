@@ -22,14 +22,14 @@ const CourseManagement = ({ userInfo, data }) => {
 
   // find course selected from the list of courses list using course code
   const getCourse = (courseCode: string) => {
-    const _courseSelected = state.courses?.find(
+    const _courseSelected = state?.courses?.find(
       (course: ICourse) => course.code == courseCode
     );
     return _courseSelected;
   };
 
   const getDraftQuestions = () => {
-    const _drafts = state.courses?.filter(
+    const _drafts = state?.courses?.filter(
       (course: ICourse) =>
         userInfo.courses.includes(course.code) &&
         course.question?.questions.length > 0 &&
@@ -42,7 +42,7 @@ const CourseManagement = ({ userInfo, data }) => {
   };
 
   const getPublishedQuestions = () => {
-    const _published = state.courses?.filter(
+    const _published = state?.courses?.filter(
       (course) =>
         userInfo.courses.includes(course.code) &&
         course.question?.questions.length > 0 &&
@@ -57,13 +57,7 @@ const CourseManagement = ({ userInfo, data }) => {
     getDraftQuestions();
     getPublishedQuestions();
     // getCourse();
-  }, [state.courses]);
-
-  const newList = (prev, updated) => {
-    return prev.filter((eachPrev) =>
-      eachPrev._id == updated._id ? updated : eachPrev
-    );
-  };
+  }, [state?.courses]);
 
   const publishOrPulldownQuestion = async (
     option: boolean,

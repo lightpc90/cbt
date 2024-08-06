@@ -16,12 +16,12 @@ const ManageExam = ({ data }) => {
   const router = useRouter();
   const { dispatch, state } = useAppContext();
   const staffsData = data.staffs;
-  const published: ICourse[] = state.courses.filter(
+  const published: ICourse[] = state?.courses?.filter(
     (course: ICourse) => course.published === true
   );
 
   const getStaffs = (courseCode: string) => {
-    const courseStaffs: IStaff[] = staffsData.filter((staff: IStaff) =>
+    const courseStaffs: IStaff[] = staffsData?.filter((staff: IStaff) =>
       staff.courses.includes(courseCode)
     );
     return courseStaffs;

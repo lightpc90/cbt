@@ -31,6 +31,7 @@ const Admin = ({ data }) => {
 
   useEffect(() => {
     console.log("passing data to the states...");
+    console.log("data being passed: ", data)
     dispatch({ type: ActionCommand.SET_STAFFS, payload: data.staffs });
     dispatch({ type: ActionCommand.SET_COURSES, payload: data.courses });
     dispatch({ type: ActionCommand.SET_STUDENTS, payload: data.students });

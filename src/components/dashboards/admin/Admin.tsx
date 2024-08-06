@@ -24,12 +24,11 @@ const menuVariants = [
 const Admin = ({ data }) => {
   const searchParams = useSearchParams();
   const selectedMenu = searchParams.get("menu");
-  // const [menu, setMenu] = useState({ registerCourseAndLecturer: false, manageExam: false, manageStudent: false, result: false })
   const { currentUserId, setUserData, dispatch } = useAppContext();
 
   const router = useRouter();
 
-  const [user, setUser] = useState<IStaff>();
+  const [user, setUser] = useState<IStaff>();  
 
   useEffect(() => {
     console.log("passing data to the states...");

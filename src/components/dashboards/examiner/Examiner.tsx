@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { IStaff } from "@/components/types/types";
 import toast from "react-hot-toast";
+import { SignOut } from "@/components/ui/SignOut";
 
 const menuVariants = [
   { menu: `set_test_questions`, name: `Set Test Questions` },
@@ -24,11 +25,6 @@ const Examiner = ({ data }) => {
   const router = useRouter();
   const { currentUserId, setUserData, dispatch, state } = useAppContext();
 
-  // const [menu, setMenu] = useState({
-  //   questionSet: false,
-  //   courseManagement: false,
-  //   result: false,
-  // });
   const [user, setUser] = useState<IStaff>();
 
   const selectedMenu = searchParams.get("menu");
@@ -62,23 +58,6 @@ const Examiner = ({ data }) => {
   //   }
   //   setMenu({ ...menu })
   // }
-
-  const signOut = async () => {
-    const response = await fetch("/api/auth/logout", {
-      method: "POST",
-    });
-    if (!response.ok) {
-      return;
-    }
-    const loggedOut = await response.json();
-    if (loggedOut.success) {
-      router.push("/");
-      toast.success(loggedOut.message);
-    }
-    localStorage.removeItem("currentUserId");
-    localStorage.removeItem("userData");
-    setUserData({});
-  };
 
   return (
     <div className="h-screen bg-slate-900 text-white flex">
@@ -120,12 +99,7 @@ const Examiner = ({ data }) => {
           </div>
         </div>
         {/* logout button */}
-        <button
-          onClick={signOut}
-          className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white"
-        >
-          Logout
-        </button>
+        <SignOut />
       </div>
       {/* Right Pane */}
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">

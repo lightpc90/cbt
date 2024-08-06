@@ -5,17 +5,16 @@ import QueOptsLayout from "@/components/pageLayouts/QueOptsLayout";
 import CountdownTimer from "./TestCountDownTimer";
 import Image from "next/image";
 
-import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 import Confirmation from "./Confirmation";
 import SuccessMessage from "./SuccessMessage";
+import { SignOut } from "@/components/ui/SignOut";
+
 
 const Test = ({ data }) => {
   const examData = data?.examData;
   const studentData = data?.student;
   console.log("student data in test: ", studentData)
-
-  const { signOut } = useAppContext();
 
   const examQuestions = examData?.question.questions;
 
@@ -161,7 +160,7 @@ const Test = ({ data }) => {
       {/* this SuccessMessage component will be displayed when exam is submitted successfully */}
       {successIsOpen && (
         <div className="absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-900 opacity-95">
-          <SuccessMessage setSuccessIsOpen={setSuccessIsOpen} />
+          <SuccessMessage/>
         </div>
       )}
 
@@ -175,12 +174,7 @@ const Test = ({ data }) => {
           <p>{`Session: ${examData.question.params.schoolSession}`}</p>
           <p>{`Exam Duration: ${examData.question.params.testMinDuration}min`}</p>
         </div>
-        <button
-          onClick={signOut}
-          className="bt-10 bg-slate-800 p-1 rounded-md shadow-md font-semibold hover:bg-rose-800"
-        >
-          Logout
-        </button>
+        <SignOut/>
       </div>
       {/* right pane student profile */}
       <div className="flex flex-col w-10/12">

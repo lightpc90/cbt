@@ -13,6 +13,7 @@ import { IStaff } from "@/components/types/types";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { iStaff } from "@/components/InitialData/initialData";
+import { SignOut } from "@/components/ui/SignOut";
 
 const menuVariants = [
   { menu: `course_and_staff`, name: `Course and Staff` },
@@ -44,22 +45,6 @@ const Admin = ({ data }) => {
     setUser(userInfo);
   }, [currentUserId]);
 
-  const signOut = async () => {
-    const response = await fetch("/api/auth/logout", {
-      method: "POST",
-    });
-    if (!response.ok) {
-      return;
-    }
-    const loggedOut = await response.json();
-    if (loggedOut.success) {
-      router.push("/");
-      toast.success(loggedOut.message);
-    }
-    localStorage.removeItem("currentUserId");
-    localStorage.removeItem("userData");
-    setUserData(iStaff);
-  };
 
   return (
     <div className="h-screen bg-slate-900 text-white flex">
@@ -105,12 +90,7 @@ const Admin = ({ data }) => {
             Settings
           </button>
           {/* logout button */}
-          <button
-            onClick={signOut}
-            className="bg-slate-700 py-1 rounded-md hover:ring-2 hover:ring-white"
-          >
-            Logout
-          </button>
+         <SignOut/>
         </div>
       </div>
       {/* Right Pane */}

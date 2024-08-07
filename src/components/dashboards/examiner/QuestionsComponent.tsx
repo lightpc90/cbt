@@ -19,7 +19,7 @@ const courseQuesInit = {
 const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues }) => {
   const { state, dispatch } = useAppContext();
 
-  const bottomRef = useRef(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
 
   const [questions, setQuestions] = useState([
     { question: "", answer: "", options: ["", "", "", ""] },
@@ -236,11 +236,11 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
       <div className="flex gap-2 items-center">
         {/* Course choose input */}
         <div className="mr-3">
-            <p className="font-bold mb-2">
-              {userInfo?.courses?.length > 0
-                ? `Choose Course`
-                : `No Course Registered`}
-            </p>
+          <p className="font-bold mb-2">
+            {userInfo?.courses?.length > 0
+              ? `Choose Course`
+              : `No Course Registered`}
+          </p>
           <select
             className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md"
             value={examPara?.course}
@@ -252,7 +252,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
             <option value="" className="bg-inherit text-slate-800">
               Select Course
             </option>
-            { userInfo?.courses?.length > 0
+            {userInfo?.courses?.length > 0
               ? userInfo?.courses?.map((code, i) => (
                   <option
                     key={i}
@@ -317,58 +317,58 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
         </div>
       </div>
       <div className="">
-      {questions?.map((q, questionIndex) => (
-        <div key={questionIndex} className="flex flex-col w-5/12 gap-2 mt-5">
-          <div className="flex gap-2 items-center">
-            {/* delete button */}
-            <button
-              className="h-[15px] w-[15px] ring-1 ring-white rounded-sm shadow-md bg-red-800 flex justify-center items-center"
-              onClick={() => {
-                handleQuestionDelete(questionIndex);
-              }}
-            >
-              x
-            </button>
-            <p>Question {1 + questionIndex}</p>
-          </div>
-
-          <textarea
-            placeholder="Enter question"
-            value={q.question}
-            disabled={userInfo?.courses?.length < 1}
-            onChange={(e) => handleQuestionChange(questionIndex, e)}
-            className="p-2 bg-inherit ring-2 ring-white rounded-md"
-          />
-          <p className="text-gray-500">
-            Note: You must tick one of the options as your correct answer
-          </p>
-          {q?.options?.map((option, optionIndex) => (
-            <div key={optionIndex} className="flex gap-2">
-              <input
-                type="text"
-                placeholder={`Option ${numberToAlphabet(optionIndex + 1)}`}
-                value={option}
-                onChange={(e) =>
-                  handleOptionChange(questionIndex, optionIndex, e)
-                }
-                className="p-2 bg-inherit border-b rounded-md"
-              />
-              <input
-                type="radio"
-                id={`opt-${questionIndex}-${optionIndex}`}
-                name={`opt-${questionIndex}`}
-                value={option}
-                checked={questions[questionIndex].answer == option}
-                disabled={!option}
-                onChange={() => {
-                  handleSetAnswer(questionIndex, option);
+        {questions?.map((q, questionIndex) => (
+          <div key={questionIndex} className="flex flex-col w-5/12 gap-2 mt-5">
+            <div className="flex gap-2 items-center">
+              {/* delete button */}
+              <button
+                className="h-[15px] w-[15px] ring-1 ring-white rounded-sm shadow-md bg-red-800 flex justify-center items-center"
+                onClick={() => {
+                  handleQuestionDelete(questionIndex);
                 }}
-              />
+              >
+                x
+              </button>
+              <p>Question {1 + questionIndex}</p>
             </div>
-          ))}
-          <div>{`answer: ${questions[questionIndex].answer}`}</div>
-        </div>
-      ))}
+
+            <textarea
+              placeholder="Enter question"
+              value={q.question}
+              disabled={userInfo?.courses?.length < 1}
+              onChange={(e) => handleQuestionChange(questionIndex, e)}
+              className="p-2 bg-inherit ring-2 ring-white rounded-md"
+            />
+            <p className="text-gray-500">
+              Note: You must tick one of the options as your correct answer
+            </p>
+            {q?.options?.map((option, optionIndex) => (
+              <div key={optionIndex} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder={`Option ${numberToAlphabet(optionIndex + 1)}`}
+                  value={option}
+                  onChange={(e) =>
+                    handleOptionChange(questionIndex, optionIndex, e)
+                  }
+                  className="p-2 bg-inherit border-b rounded-md"
+                />
+                <input
+                  type="radio"
+                  id={`opt-${questionIndex}-${optionIndex}`}
+                  name={`opt-${questionIndex}`}
+                  value={option}
+                  checked={questions[questionIndex].answer == option}
+                  disabled={!option}
+                  onChange={() => {
+                    handleSetAnswer(questionIndex, option);
+                  }}
+                />
+              </div>
+            ))}
+            <div>{`answer: ${questions[questionIndex].answer}`}</div>
+          </div>
+        ))}
       </div>
       <div ref={bottomRef} className="flex-inline gap-3">
         <button
@@ -384,6 +384,12 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
           onClick={handleQuestionSaving}
         >
           {loading ? `Saving...` : `Save Questions`}
+        </button>
+        <button
+          className="ring-2 ring-white p-2 rounded-md block mt-4 bg-rose-800"
+          onClick={()=>setViewingQues(false)}
+        >
+          {`Close`}
         </button>
       </div>
     </div>

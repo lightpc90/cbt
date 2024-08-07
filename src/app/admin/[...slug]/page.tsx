@@ -3,6 +3,8 @@ export const dynamic = "force-dynamic"
 import { Suspense } from "react";
 import Admin from "@/components/dashboards/admin/Admin";
 
+console.log("APP URL: ", process.env.NEXT_PUBLIC_API_URL);
+
 
 async function getAllStaffs() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/staff/fetchAllStaffs`, { next: { tags: ['staffs'] }})

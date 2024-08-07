@@ -59,10 +59,13 @@ const LoginForm = ({admin=false}) => {
       {/* admin login form */}
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-3 w-8/12 text-slate-900"
+        className="flex flex-col gap-2 w-8/12 text-slate-900"
       >
         {/* username input */}
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email" className="flex flex-col">
+          <span> 
+           Email:
+          </span>
         <input
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -71,9 +74,13 @@ const LoginForm = ({admin=false}) => {
           placeholder="example@domain.com"
           className="p-2 rounded-md"
         />
+        </label>
 
         {/* password input */}
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password" className="flex flex-col">
+          <span>
+          Password
+          </span>
         <input
           value={formData.pwd}
           onChange={(e) => {
@@ -84,6 +91,7 @@ const LoginForm = ({admin=false}) => {
           placeholder="password"
           className="p-2 rounded-md "
         />
+          </label>
         <button
           type="submit"
           className="bg-slate-800 p-1 rounded-md shadow-md font-semibold text-lg text-white hover:text-gray-800 hover:bg-white"

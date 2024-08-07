@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef} from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
-import { IStaff } from "@/components/types/types";
 
 const paramInit = {
   course: "",
@@ -17,8 +16,10 @@ const courseQuesInit = {
    questions: [], params: paramInit
 };
 
-const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit }) => {
+const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues }) => {
   const { state, dispatch } = useAppContext();
+
+  const bottomRef = useRef(null)
 
   const [questions, setQuestions] = useState([
     { question: "", answer: "", options: ["", "", "", ""] },
@@ -75,7 +76,10 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
 
        handleQuestionLoading()
     }
-  }, [])
+    if(bottomRef.current){
+      bottomRef.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [bottomRef, courseQues, isViewing])
 
   const addQuestion = () => {
     setQuestions((prev) => {
@@ -224,6 +228,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
       );
     }
     setLoading(false);
+    setViewingQues(false)
   };
 
   return (
@@ -311,6 +316,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
           <p>{examPara?.dateAndTime}</p>
         </div>
       </div>
+      <div className="">
       {questions?.map((q, questionIndex) => (
         <div key={questionIndex} className="flex flex-col w-5/12 gap-2 mt-5">
           <div className="flex gap-2 items-center">
@@ -363,7 +369,8 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
           <div>{`answer: ${questions[questionIndex].answer}`}</div>
         </div>
       ))}
-      <div className="flex-inline gap-3">
+      </div>
+      <div ref={bottomRef} className="flex-inline gap-3">
         <button
           className="bg-slate-800 p-2 rounded-md mr-3"
           onClick={addQuestion}

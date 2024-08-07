@@ -108,12 +108,16 @@ const CourseManagement = ({ userInfo, data }) => {
 
   return (
     <div>
-      {viewingQues &&
-        courseQues && (
-          <div className="absolute top-0 left-0 w-full h-full bg-slate-900 p-10 overflow-auto">
-            <QuestionsComponent userInfo={userInfo} isViewing={true} courseQues={courseQues} />
-          </div>
-        )}
+      {viewingQues && courseQues && (
+        <div className="absolute top-0 left-0 w-full h-full bg-slate-900 p-10 overflow-auto">
+          <QuestionsComponent
+            userInfo={userInfo}
+            isViewing={true}
+            courseQues={courseQues}
+            setViewingQues={setViewingQues}
+          />
+        </div>
+      )}
       <p className="text-2xl font-bold my-2">Course Management</p>
       <div className="h-[250px] bg-gray-300 text-slate-800 font-semibold rounded-md shadow-md my-3 overflow-auto">
         <p className="bg-rose-800 p-1 text-white">My Course(s)</p>
@@ -181,12 +185,12 @@ const CourseManagement = ({ userInfo, data }) => {
                   <p className="text-rose-400 text-sm">{`Exam Date and Time: ${published.question?.params?.dateAndTime}`}</p>
                   <hr className="my-2" />
                   <div className="space-x-2">
-                    <Link
+                    {/* <Link
                       className="border border-rose-400 p-1 hover:bg-rose-500"
                       href={`/`}
                     >
                       View
-                    </Link>
+                    </Link> */}
                     <button
                       onClick={() =>
                         publishOrPulldownQuestion(false, published._id)

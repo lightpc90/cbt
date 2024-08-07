@@ -11,7 +11,7 @@ async function getAllStaffs() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    console.log('Failed to fetch data')
+    console.log('Failed to fetch staffs data', res)
   }
 
   const staffs = await res.json()
@@ -27,7 +27,7 @@ async function getAllCourses() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    console.log('Failed to fetch data')
+    console.log('Failed to fetch courses data')
   }
 
   const courses = await res.json()
@@ -43,7 +43,7 @@ async function getAllStudents() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    console.log('Failed to fetch data')
+    console.log('Failed to fetch students data', res)
   }
 
   const students = await res.json()

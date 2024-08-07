@@ -39,7 +39,7 @@ const Admin = ({ data }) => {
     console.log("user?: ", userInfo);
 
     setUser(userInfo);
-  }, [currentUserId]);
+  }, [currentUserId, data.courses, data.staffs, data.students, dispatch]);
 
 
   return (

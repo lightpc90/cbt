@@ -27,7 +27,7 @@ async function getAllCourses() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    console.log('Failed to fetch courses data')
+    console.log('Failed to fetch courses data', res)
   }
 
   const courses = await res.json()

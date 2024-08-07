@@ -86,11 +86,7 @@ const StaffLayout = ({ staff, index }) => {
   };
 
   return (
-    <div
-      className="text-white w-full"
-      onMouseEnter={() => setTooltips(true)}
-      onMouseLeave={() => setTooltips(false)}
-    >
+    <div className="text-white w-full">
       {/* Editing component: it displays only when enabled */}
       {isEditing && (
         <div className="absolute right-0 top-0 w-full h-full flex justify-center items-center bg-slate-700 opacity-[99%]  z-40">
@@ -102,7 +98,7 @@ const StaffLayout = ({ staff, index }) => {
         </div>
       )}
       {/* when not editing */}
-      <div className="flex w-full bg-slate-800 px-2 py-1 text-white items-center justify-between relative my-1  ">
+      <div className="flex w-full bg-slate-800 px-2 py-1 text-white items-center justify-between relative my-1 shadow-md ">
         {/* TOOLTIPS */}
         {tooltipsOpen && (
           <div
@@ -124,7 +120,11 @@ const StaffLayout = ({ staff, index }) => {
         )}
 
         {/* staffs info */}
-        <div className="flex gap-2 justify-center items-center">
+        <div
+          className="flex gap-2 justify-center items-center"
+          onMouseEnter={() => setTooltips(true)}
+          onMouseLeave={() => setTooltips(false)}
+        >
           <div className="h-[40px] w-[40px] rounded-full overflow-hidden">
             <Image src={StaffDP} width={500} height={500} alt="staff_dp" />
           </div>

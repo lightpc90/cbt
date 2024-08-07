@@ -89,6 +89,8 @@ const Admin = ({ data }) => {
          <SignOut/>
         </div>
       </div>
+
+      
       {/* Right Pane */}
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}

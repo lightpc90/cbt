@@ -49,18 +49,18 @@ const RegisterCourseAndLecturer = ({ data, user }) => {
       </div>
 
       {/* Courses and lectures view container */}
-      <div className="w-6/12 bg-slate-500 h-[800px] py-2">
-        <p className="bg-rose-800 p-1 text-sm">Registered Courses</p>
+      <div className="w-6/12 bg-slate-700 h-[800px]">
+        <p className="bg-rose-500 p-1 text-sm">Registered Courses</p>
         {/* View Registered Courses container */}
-        <div className="bg-white h-[20%] overflow-auto text-black flex gap-2 p-3">
+        <div className="h-[20%] overflow-auto text-black flex gap-2 p-3">
           {/* list of courses */}
           {state?.courses?.map((course: ICourse, i: number) => (
             <CourseLayout key={i} course={course} />
           ))}
         </div>
         {/* View Registered Lecturer Container */}
-        <p className="bg-rose-800 p-1 text-sm mt-5">Registered Lecturer</p>
-        <div className=" bg-white h-[68%] overflow-auto text-black p-2 gap-3">
+        <p className="bg-rose-500 p-1 text-sm mt-5">Registered Lecturer</p>
+        <div className="flex flex-col h-[68%] overflow-auto text-black p-2 gap-1">
           {/* list of lecturers */}
           {state?.staffs?.map(
             (staff: IStaff, i: number) =>

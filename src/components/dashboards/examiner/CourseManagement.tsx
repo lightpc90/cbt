@@ -8,17 +8,26 @@ import { useRouter } from "next/navigation";
 import { ICourse } from "@/components/types/types";
 import { Types } from "mongoose";
 
+import QuestionsComponent from "./QuestionsComponent";
+
 const CourseManagement = ({ userInfo, data }) => {
   const router = useRouter();
   const { state, dispatch } = useAppContext();
 
   const [drafts, setDrafts] = useState([]);
   const [published, setPublished] = useState([]);
-  const [courseTitle, setCourseTitle] = useState("");
+  const [viewingQues, setViewingQues] = useState(false);
+  const [courseQues, setCourseQues] = useState();
 
   // loading states
   const [isPublishing, setIsPublishing] = useState(false);
   const [isDrafting, setIsDrafting] = useState(false);
+
+  // Funtion used in Question View component
+  const handleViewQues = (draftQues) => {
+    setCourseQues(draftQues);
+    setViewingQues(true);
+  };
 
   // find course selected from the list of courses list using course code
   const getCourse = (courseCode: string) => {
@@ -63,12 +72,11 @@ const CourseManagement = ({ userInfo, data }) => {
     option: boolean,
     id: number | Types.ObjectId
   ) => {
-    // if(option === true){
-    //   setIsPublishing(true)
-    // }
-    // else if(option === false){
-    //   setIsDrafting(true)
-    // }
+    if (option === true) {
+      setIsPublishing(true);
+    } else if (option === false) {
+      setIsDrafting(true);
+    }
     const res = await fetch("/api/course/publishOrPulldownQuestion", {
       method: "POST",
       headers: {
@@ -79,6 +87,8 @@ const CourseManagement = ({ userInfo, data }) => {
     if (!res.ok) {
       console.log("API failed");
       toast.error("Failed! Try again");
+      setIsPublishing(false);
+      setIsDrafting(false);
       return;
     }
     const _res = await res.json();
@@ -92,10 +102,18 @@ const CourseManagement = ({ userInfo, data }) => {
       // setCourses((prev) => newList(prev, newDoc));
       router.refresh();
     }
+    setIsPublishing(false);
+    setIsDrafting(false);
   };
 
   return (
     <div>
+      {viewingQues &&
+        courseQues && (
+          <div className="absolute top-0 left-0 w-full h-full bg-slate-900 p-10 overflow-auto">
+            <QuestionsComponent userInfo={userInfo} isViewing={true} courseQues={courseQues} />
+          </div>
+        )}
       <p className="text-2xl font-bold my-2">Course Management</p>
       <div className="h-[250px] bg-gray-300 text-slate-800 font-semibold rounded-md shadow-md my-3 overflow-auto">
         <p className="bg-rose-800 p-1 text-white">My Course(s)</p>
@@ -129,15 +147,15 @@ const CourseManagement = ({ userInfo, data }) => {
                   <p className="text-rose-400 text-sm">{`Exam Date and Time: ${draft.question?.params?.dateAndTime}`}</p>
                   <hr className="my-2" />
                   <div className="space-x-2">
-                    <Link
-                      className="border border-rose-400 p-1 hover:bg-rose-500"
-                      href={`/`}
+                    <button
+                      className="border border-rose-400 py-1 px-2 text-sm hover:bg-rose-500"
+                      onClick={() => handleViewQues(draft.question)}
                     >
                       View
-                    </Link>
+                    </button>
                     <button
                       onClick={() => publishOrPulldownQuestion(true, draft._id)}
-                      className="bg-rose-800 py-1 px-2 hover:bg-rose-500"
+                      className="bg-rose-800 py-1 px-2 text-sm hover:bg-rose-500"
                     >
                       Publish
                     </button>

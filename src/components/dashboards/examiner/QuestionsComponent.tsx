@@ -4,11 +4,21 @@ import { useState, useEffect } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
+import { IStaff } from "@/components/types/types";
 
-const QuestionsComponent = ({ userInfo, data }) => {
+const paramInit = {
+  course: "",
+  testMinDuration: "",
+  schoolSession: "",
+  dateAndTime: "",
+};
+
+const courseQuesInit = {
+   questions: [], params: paramInit
+};
+
+const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit }) => {
   const { state, dispatch } = useAppContext();
-
-  // const [userInfo, setUserInfo] = useState(typeof window !== 'undefined' ? localStorage.getItem("userData") & JSON.parse(localStorage.getItem('userData')) : {})
 
   const [questions, setQuestions] = useState([
     { question: "", answer: "", options: ["", "", "", ""] },
@@ -22,24 +32,50 @@ const QuestionsComponent = ({ userInfo, data }) => {
     dateAndTime: "",
   });
 
+  console.log("is viewing?: ", isViewing)
+  console.log("course ques obj: ", courseQues)
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const savedObject = localStorage.getItem("examObject")
-      ? JSON.parse(localStorage.getItem("examObject"))
-      : {};
-    console.log("saved Object after reload: ", savedObject);
-    if (savedObject?.questions && savedObject.questions.length > 0) {
-      setQuestions(() => {
-        return savedObject.questions;
-      });
+    if(isViewing === false){     
+      const savedObject = localStorage.getItem("examObject")
+        ? JSON.parse(localStorage.getItem("examObject"))
+        : {};
+      console.log("saved Object after reload: ", savedObject);
+      if (savedObject?.questions && savedObject.questions.length > 0) {
+        setQuestions(() => {
+          return savedObject.questions;
+        });
+      }
+      if (savedObject?.examPara) {
+        setExamPara(() => {
+          return savedObject.examPara;
+        });
+      }
     }
-    if (savedObject?.examPara) {
-      setExamPara(() => {
-        return savedObject.examPara;
-      });
+    
+  }, []); 
+  
+
+  useEffect(()=>{
+    if(isViewing === true){
+      let questionList = []
+       const handleQuestionLoading = () => {
+         courseQues?.questions?.map((question) =>
+          questionList.push({
+            question: question.question,
+            answer: question.answer,
+            options: question.options,     
+          })
+         );
+         setQuestions(questionList);
+         setExamPara(courseQues?.params)
+       };
+
+       handleQuestionLoading()
     }
-  }, []); //vercel expect me to include questions and examPara as dependencies here but i think they make my app re-render endlessly
+  }, [])
 
   const addQuestion = () => {
     setQuestions((prev) => {
@@ -50,6 +86,8 @@ const QuestionsComponent = ({ userInfo, data }) => {
       JSON.stringify({ questions: [...questions], examPara: { ...examPara } })
     );
   };
+
+ 
 
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
@@ -127,6 +165,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
   // call api to save the questions into the subject db
   const handleQuestionSaving = async () => {
     setLoading(true);
+
     if (!examPara.course) {
       // window.alert("course input empty");
       toast.error("course input empty");
@@ -169,7 +208,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
     }
     const _res = await res.json();
     if (!_res.success) {
-      console.log(data.error);
+      console.log(_res.error);
       toast.error(_res.error);
     } else {
       console.log(_res.message);
@@ -181,22 +220,22 @@ const QuestionsComponent = ({ userInfo, data }) => {
       // empty the question form when questions saved sucessfully
       localStorage.setItem(
         "examObject",
-        JSON.stringify({ questions: [], examPara: {} })
+        JSON.stringify({ questions: [], examPara: paramInit })
       );
     }
     setLoading(false);
   };
 
   return (
-    <div className="flex flex-col gap-10 relative">
-      <div className="flex gap-2 items-center ">
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2 items-center">
         {/* Course choose input */}
         <div className="mr-3">
-          <p className="font-bold mb-2">
-            {userInfo?.courses?.length > 0
-              ? `Choose Course`
-              : `No Course Registered`}
-          </p>
+            <p className="font-bold mb-2">
+              {userInfo?.courses?.length > 0
+                ? `Choose Course`
+                : `No Course Registered`}
+            </p>
           <select
             className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md"
             value={examPara?.course}
@@ -208,7 +247,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
             <option value="" className="bg-inherit text-slate-800">
               Select Course
             </option>
-            {userInfo?.courses?.length > 0
+            { userInfo?.courses?.length > 0
               ? userInfo?.courses?.map((code, i) => (
                   <option
                     key={i}
@@ -245,6 +284,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
         <div>
           <p>Exam Session</p>
           <input
+            readOnly
             type="text"
             placeholder="2021/2022"
             disabled={userInfo?.courses?.length < 1}
@@ -272,7 +312,7 @@ const QuestionsComponent = ({ userInfo, data }) => {
         </div>
       </div>
       {questions?.map((q, questionIndex) => (
-        <div key={questionIndex} className="flex flex-col w-5/12 gap-2 ">
+        <div key={questionIndex} className="flex flex-col w-5/12 gap-2 mt-5">
           <div className="flex gap-2 items-center">
             {/* delete button */}
             <button

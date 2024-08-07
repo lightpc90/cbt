@@ -106,7 +106,7 @@ const Examiner = ({ data }) => {
         {selectedMenu === `set_test_questions` && (
           <div className="">
             <p className="text-4xl font-bold my-5">Set Test Questions</p>
-            <QuestionsComponent userInfo={user} data={data} />
+            <QuestionsComponent userInfo={user} />
           </div>
         )}
         {/* Course management subpage */}

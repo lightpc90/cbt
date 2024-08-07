@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 
 const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers }) => {
@@ -18,19 +18,21 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
     setAnswers({ ...answers, [question]: answer });
   }
 
-  const setObjectKey=(savedAnswers)=>{
-    if (savedAnswers[eachQuestion]  == null || savedAnswers[eachQuestion] == undefined) {
-      // If the user has not answered this question yet, initialize it to null.
-      setAnswers((prevAnswers) => ({ ...prevAnswers, [eachQuestion]: '' }));
-      console.log("key set to empty string...")
+  const setObjectKey = useCallback((savedAnswers) => {
+    if (
+      savedAnswers[eachQuestion] == null ||
+      savedAnswers[eachQuestion] == undefined
+    ) {
+      // If the user has not answered this question yet, initialize it to empty string.
+      setAnswers((prevAnswers) => ({ ...prevAnswers, [eachQuestion]: "" }));
+      console.log("key set to empty string...");
     } else {
       setAnswers(savedAnswers);
-      console.log("the key has a defined value, nothing to set")
+      console.log("the key has a defined value, nothing to set");
     }
-    setKeyIsSet(true)
-    console.log("setKeyIsSet is set to true..." )
-  }
-
+    setKeyIsSet(true);
+    console.log("setKeyIsSet is set to true...");
+  }, [setAnswers, eachQuestion]);
 
   useEffect(() => {
     console.log("entering effect in quesoption layout")
@@ -42,7 +44,7 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
       }
       else{console.log('value to this key is initially null: ', eachQuestion, "::::setting the value...")}
    setObjectKey(savedAnswers) 
-  }, [eachQuestion ]);
+  }, [eachQuestion, setObjectKey ]);
 
 
   return (

@@ -115,7 +115,7 @@ const Test = ({ data }) => {
     const _res = await res.json();
     if (_res.success === false) {
       console.log("Error: ", _res.error);
-      toast.success(_res.error);
+      toast.error(_res.error);
     } else if (_res.success === true) {
       console.log("Message", _res.message);
       toast.success(_res.message);
@@ -126,6 +126,10 @@ const Test = ({ data }) => {
       }
       // display success message
       setSuccessIsOpen(true);
+
+      // delete student answers stored in browser storage
+      localStorage.setItem("answers", {})
+      setAnswers({})
     }
   };
 

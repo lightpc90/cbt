@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 import { SignIn } from "@/app/auth/signIn";
 import Navbar from "../navbar/Navbar";
 
+import { RiAdminFill } from "react-icons/ri";
+import { FaUserTie } from "react-icons/fa";
+
 const LoginForm = ({admin=false}) => {
   const {setCurrentUserId, setUserData} = useAppContext()
   const router = useRouter()
@@ -58,12 +61,13 @@ const LoginForm = ({admin=false}) => {
   return (
     <div className="flex flex-col h-full w-full justify-center items-center">
       <Navbar />
-      <div className="h-full flex flex-col w-[400px] justify-center items-center gap-3 rounded-md shadow-md ">
+      <div className="h-full flex flex-col w-[400px] justify-center items-center ">
         {/* admin login form */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col justify-center items-center p-3 gap-2 w-full h-[500px] text-slate-900 bg-slate-300 rounded-lg shadow-md ring-2 ring-rose-900"
         >
+          {admin ? <RiAdminFill size={30}/> : <FaUserTie size={30}/>}
           <h1 className="text-2xl font-bold text-center">{`${admin? `Admin` : `Staff`} Login`}</h1>
           {/* username input */}
           <label htmlFor="email" className="flex flex-col w-[80%]">
@@ -101,8 +105,8 @@ const LoginForm = ({admin=false}) => {
             {loading ? `Logging in...` : `login`}
           </button>
           {!admin && (
-            <Link href="/login/passwordCreation">
-              First Login? Create Your Password
+            <Link href="/login/passwordCreation" className="text-rose-800 font-semibold">
+              First Login? Create Password with your OTP
             </Link>
           )}
         </form>

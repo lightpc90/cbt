@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 import { SignIn } from "@/app/auth/signIn";
+import Navbar from "../navbar/Navbar";
 
 const LoginForm = ({admin=false}) => {
   const {setCurrentUserId, setUserData} = useAppContext()
@@ -55,55 +56,60 @@ const LoginForm = ({admin=false}) => {
     }
   };
   return (
-    <div className="bg-slate-300 h-[300px] w-3/12 flex flex-col justify-center items-center gap-3 rounded-md shadow-md ">
-      {/* admin login form */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-2 w-8/12 text-slate-900"
-      >
-        {/* username input */}
-        <label htmlFor="email" className="flex flex-col">
-          <span> 
-           Email:
-          </span>
-        <input
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          type="email"
-          name="email"
-          placeholder="example@domain.com"
-          className="p-2 rounded-md"
-        />
-        </label>
-
-        {/* password input */}
-        <label htmlFor="password" className="flex flex-col">
-          <span>
-          Password
-          </span>
-        <input
-          value={formData.pwd}
-          onChange={(e) => {
-            setFormData({ ...formData, pwd: e.target.value });
-          }}
-          type="password"
-          name="password"
-          placeholder="password"
-          className="p-2 rounded-md "
-        />
-          </label>
-        <button
-          type="submit"
-          className="bg-slate-800 p-1 rounded-md shadow-md font-semibold text-lg text-white hover:text-gray-800 hover:bg-white"
+    <div className="flex flex-col h-full w-full justify-center items-center">
+      <Navbar />
+      <div className="h-full flex flex-col w-[400px] justify-center items-center gap-3 rounded-md shadow-md ">
+        {/* admin login form */}
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col justify-center items-center p-3 gap-2 w-full h-[500px] text-slate-900 bg-slate-300 rounded-lg shadow-md ring-2 ring-rose-900"
         >
-          {loading ? `Logging in...` : `login`}
-        </button>
-       {!admin && <Link href="/login/passwordCreation">
-          First Login? Create Your Password
-        </Link>}
-      </form>
+          <h1 className="text-2xl font-bold text-center">{`${admin? `Admin` : `Staff`} Login`}</h1>
+          {/* username input */}
+          <label htmlFor="email" className="flex flex-col w-[80%]">
+            <span>Email:</span>
+            <input
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              type="email"
+              name="email"
+              placeholder="example@domain.com"
+              className="p-2 rounded-md"
+            />
+          </label>
+
+          {/* password input */}
+          <label htmlFor="password" className="flex flex-col w-[80%]">
+            <span>Password</span>
+            <input
+              value={formData.pwd}
+              onChange={(e) => {
+                setFormData({ ...formData, pwd: e.target.value });
+              }}
+              type="password"
+              name="password"
+              placeholder="password"
+              className="p-2 rounded-md "
+            />
+          </label>
+          <button
+            type="submit"
+            className="bg-slate-800 p-1 rounded-md shadow-md font-semibold text-lg text-white hover:text-gray-800 hover:bg-white w-[80%]"
+          >
+            {loading ? `Logging in...` : `login`}
+          </button>
+          {!admin && (
+            <Link href="/login/passwordCreation">
+              First Login? Create Your Password
+            </Link>
+          )}
+        </form>
+      </div>
     </div>
   );
+    
 };
 
 export default LoginForm;

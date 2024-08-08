@@ -16,7 +16,7 @@ const courseQuesInit = {
    questions: [], params: paramInit
 };
 
-const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues }) => {
+const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues=(s:boolean)=>null }) => {
   const { state, dispatch } = useAppContext();
 
   const bottomRef = useRef<HTMLDivElement>(null)

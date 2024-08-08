@@ -5,10 +5,7 @@ import FormHeader from "@/components/Forms/FormHeader";
 const Page = () => {
   const admin = true
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-slate-950">
-      <FormHeader/>
-      <p className="mt-10 font-bold text-white">ADMIN LOGIN</p>
-      <p>Folahan Institute of Technology</p>
+    <div className=" h-screen bg-slate-800">
       <LoginForm admin={admin} />
     </div>
   );

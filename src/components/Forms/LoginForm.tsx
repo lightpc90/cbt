@@ -59,13 +59,13 @@ const LoginForm = ({admin=false}) => {
     }
   };
   return (
-    <div className="flex flex-col h-full w-full justify-center items-center">
+    <div className="flex flex-col h-full w-full justify-center items-center z-30">
       <Navbar />
       <div className="h-full flex flex-col w-[400px] justify-center items-center ">
         {/* admin login form */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col justify-center items-center p-3 gap-2 w-full h-[500px] text-slate-900 bg-slate-300 rounded-lg shadow-md ring-2 ring-rose-900"
+          className="flex flex-col justify-center items-center p-3 gap-2 w-full h-[500px] text-slate-900 bg-slate-300 rounded-lg shadow-md ring-2 ring-rose-900 z-20"
         >
           {admin ? <RiAdminFill size={30}/> : <FaUserTie size={30}/>}
           <h1 className="text-2xl font-bold text-center">{`${admin? `Admin` : `Staff`} Login`}</h1>

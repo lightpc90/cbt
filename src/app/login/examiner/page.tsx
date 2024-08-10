@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const Page = () => {
   return (
-    <div className=" h-screen bg-slate-800 relative">
+    <div className="h-screen bg-slate-800 overflow-auto relative">
       <Image
         src={backgroundImage}
         alt="background image"

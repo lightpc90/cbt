@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef} from "react";
+import { useState, useEffect, useRef, isValidElement} from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
@@ -79,7 +79,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
     if(bottomRef.current){
       bottomRef.current.scrollIntoView({behavior: 'smooth'})
     }
-  }, [bottomRef, courseQues, isViewing])
+  }, [bottomRef, courseQues, isViewing, questions])
 
   const addQuestion = () => {
     setQuestions((prev) => {
@@ -385,12 +385,14 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
         >
           {loading ? `Saving...` : `Save Questions`}
         </button>
-        <button
-          className="ring-2 ring-white p-2 rounded-md block mt-4 bg-rose-800"
-          onClick={()=>setViewingQues(false)}
-        >
-          {`Close`}
-        </button>
+        {isViewing && (
+          <button
+            className="ring-2 ring-white p-2 rounded-md block mt-4 bg-rose-800"
+            onClick={() => setViewingQues(false)}
+          >
+            {`Close`}
+          </button>
+        )}
       </div>
     </div>
   );

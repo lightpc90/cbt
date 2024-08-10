@@ -66,7 +66,7 @@ export default async function Page() {
 
   return (
     <div>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<p className="flex justify-center items-center h-full">Loading...</p>}>
         <Admin data={data} />
       </Suspense>
     </div>

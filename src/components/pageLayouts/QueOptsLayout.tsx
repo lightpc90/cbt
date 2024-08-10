@@ -36,6 +36,7 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
 
   useEffect(() => {
     console.log("entering effect in quesoption layout")
+    console.log(localStorage.getItem("answers"))
     const savedAnswers = localStorage.getItem("answers")
       ? JSON.parse(localStorage.getItem("answers"))
       : {};

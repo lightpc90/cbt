@@ -45,12 +45,12 @@ const Admin = ({ data }) => {
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}
-      <div className="w-2/12 flex flex-col bg-slate-950 h-full p-5 justify-between border-r-2">
+      <div className="w-2/12 flex flex-col bg-slate-950 h-full p-5 lg:pt-5 lg:px-3 mb-auto justify-between border-r-2 overflow-auto">
         <div>
           {/* profile section */}
-          <div className="p-2 flex flex-col  mb-10">
+          <div className="p-2 flex flex-col  mb-10 lg:mb-3">
             {/* Staff Display Picture */}
-            <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5 overflow-auto flex justify-center items-center ">
+            <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5 overflow-hidden flex justify-center items-center ">
               <Image
                 src={`/image/studentDP.jpg`}
                 alt="studentDP"
@@ -65,7 +65,7 @@ const Admin = ({ data }) => {
           </div>
           <hr />
           {/* Navigation section */}
-          <div className="flex flex-col mt-10 gap-3">
+          <div className="flex flex-col mt-5 gap-3">
             {menuVariants.map(({ menu, name }, i) => (
               <Link
                 key={i}

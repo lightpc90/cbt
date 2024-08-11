@@ -8,6 +8,8 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Image from "next/image";
 
+import { LuLogIn } from "react-icons/lu";
+
 import backgroundImage from '../../public/image/formulaeBG.png'
 
 
@@ -23,10 +25,12 @@ export default function Home() {
       {/* Exam porta login */}
       <div className="flex gap-3 items-center bg-white p-10 shadow-md rounded-md border-2 border-blue z-10">
         <div className="text-slate-950 text-2xl font-semibold">
-          <IoSchool size={50} />
+          <IoSchool size={30} className="text-center w-full" />
           <p>Exam Portal</p>
-          <p>Student Login</p>
-          <FaLongArrowAltRight size={50} />
+          <span className="flex items-center gap-2">
+            <p className="text-slate-400 text-sm">Student Login</p>
+            <LuLogIn size={20} />
+          </span>
         </div>
         {/* vertical divider */}
         <div className="border-2 border-r-slate-800 h-full"></div>

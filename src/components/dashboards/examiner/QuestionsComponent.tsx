@@ -12,8 +12,11 @@ const paramInit = {
   dateAndTime: "",
 };
 
+const quesInit = [{ question: "", answer: "", options: ["", "", "", ""] }];
+
 const courseQuesInit = {
-   questions: [], params: paramInit
+  questions: quesInit,
+  params: paramInit,
 };
 
 const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues=(s:boolean)=>null }) => {
@@ -21,17 +24,10 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
 
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  const [questions, setQuestions] = useState([
-    { question: "", answer: "", options: ["", "", "", ""] },
-  ]);
+  const [questions, setQuestions] = useState(quesInit);
 
   //NOTE: the course property here refers only to the course code
-  const [examPara, setExamPara] = useState({
-    course: "",
-    testMinDuration: "",
-    schoolSession: "",
-    dateAndTime: "",
-  });
+  const [examPara, setExamPara] = useState(paramInit);
 
   console.log("is viewing?: ", isViewing)
   console.log("course ques obj: ", courseQues)
@@ -42,7 +38,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
     if(isViewing === false){     
       const savedObject = localStorage.getItem("examObject")
         ? JSON.parse(localStorage.getItem("examObject"))
-        : {};
+        : {question:courseQuesInit};
       console.log("saved Object after reload: ", savedObject);
       if (savedObject?.questions && savedObject.questions.length > 0) {
         setQuestions(() => {
@@ -56,9 +52,9 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
       }
     }
     
-  }, []); 
+  }, [isViewing]); 
   
-
+// run this effect in question viewing mode
   useEffect(()=>{
     if(isViewing === true){
       let questionList = []

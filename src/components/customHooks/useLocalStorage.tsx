@@ -26,9 +26,16 @@ function isJsonString(value: unknown): boolean {
   }
 }
 
+type questionType = {
+  question: string;
+  options: string [];
+  answer: string;
+}
+
+
 export default function useLocalStorage<T>(
   key: string,
-  initialValue: T
+  initialValue: T | questionType
 ): [T, (arg: T) => void] {
   // check the code executing enviroment if it is client
   const isClient = typeof window !== "undefined";

@@ -1,0 +1,16 @@
+.moveImg{
+    position: absolute;
+    top: 380px;
+    right: 0;
+    animation: rotateImg 30s linear infinite;
+}
+
+@keyframes rotateImg {
+    0% {
+        transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+            }
+}
+

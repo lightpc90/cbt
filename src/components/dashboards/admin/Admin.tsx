@@ -12,6 +12,9 @@ import ManageStudent from "./ManageStudent";
 import { IStaff } from "@/components/types/types";
 import { SignOut } from "@/components/ui/SignOut";
 
+import menuBg from '../../../../public/image/admin_menu_ani.png'
+import styles from './admin.module.css'
+
 const menuVariants = [
   { menu: `course_and_staff`, name: `Course and Staff` },
   { menu: `exam_management`, name: `Exam Management` },
@@ -86,11 +89,10 @@ const Admin = ({ data }) => {
             Settings
           </button>
           {/* logout button */}
-         <SignOut/>
+          <SignOut />
         </div>
       </div>
 
-      
       {/* Right Pane */}
       <div className="text-white w-10/12 py-5 px-10 overflow-auto">
         {/* Set Questions Component */}
@@ -122,8 +124,9 @@ const Admin = ({ data }) => {
           selectedMenu != `exam_management` &&
           selectedMenu != `student_management` &&
           selectedMenu != `result` && (
-            <div>
+            <div className="relative h-full">
               <p>Start by choosing any of your menu button</p>
+                {/* <Image alt="" src={menuBg} className={` ${styles.moveImg}`} /> */}
             </div>
           )}
       </div>

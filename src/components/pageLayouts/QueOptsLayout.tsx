@@ -2,51 +2,84 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
+import { answerType } from "../InitialData/initialData";
 
-const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers }) => {
-  const [keyIsSet, setKeyIsSet] = useState(false)
 
-  // 
-  const eachQuestion = currentQuestion.question
+type questionObjType = {
+  question: string;
+  options: string[];
+  answer: string;
+}
+
+type layoutPropsType = {
+  currentQuestion: questionObjType;
+  currentQueNumber: number;
+  answers: answerType;
+  setAnswers: (answer: answerType) => void;
+};
+
+const QueOptsLayout = ({
+  currentQuestion,
+  currentQueNumber,
+  answers,
+  setAnswers,
+}: layoutPropsType) => {
+  const [keyIsSet, setKeyIsSet] = useState(false);
+
+  //
+  const eachQuestion: string = currentQuestion.question;
 
   // runs the function everytime a student picks an answer; to save the student answers in local storage
-  const handleChange = (question, answer) => {
+  const handleChange = (question: string, answer: string) => {
     localStorage.setItem(
       "answers",
       JSON.stringify({ ...answers, [question]: answer })
     );
     setAnswers({ ...answers, [question]: answer });
-  }
+  };
 
-  const setObjectKey = useCallback((savedAnswers) => {
-    if (
-      savedAnswers[eachQuestion] == null ||
-      savedAnswers[eachQuestion] == undefined
-    ) {
-      // If the user has not answered this question yet, initialize it to empty string.
-      setAnswers((prevAnswers) => ({ ...prevAnswers, [eachQuestion]: "" }));
-      console.log("key set to empty string...");
-    } else {
-      setAnswers(savedAnswers);
-      console.log("the key has a defined value, nothing to set");
-    }
-    setKeyIsSet(true);
-    console.log("setKeyIsSet is set to true...");
-  }, [setAnswers, eachQuestion]);
+  const setObjectKey = useCallback(
+    (savedAnswers:answerType) => {
+      if (
+        savedAnswers[eachQuestion] == null ||
+        savedAnswers[eachQuestion] == undefined
+      ) {
+        // If the user has not answered this question yet, initialize it to empty string.
+        setAnswers({ ...answers, [eachQuestion]: "" });
+        console.log("key set to empty string...");
+      } 
+      else {
+        setAnswers(savedAnswers);
+        console.log("the key has a defined value, nothing to set");
+      }
+      setKeyIsSet(true);
+      console.log("setKeyIsSet is set to true...");
+    },
+    [setAnswers, eachQuestion, answers]
+  );
 
   useEffect(() => {
-    console.log("entering effect in quesoption layout")
-    console.log(localStorage.getItem("answers"))
+    console.log("entering effect in quesoption layout");
+    console.log(localStorage.getItem("answers"));
     const savedAnswers = localStorage.getItem("answers")
-      ? JSON.parse(localStorage.getItem("answers"))
-      : {};
-      if(savedAnswers[eachQuestion]){
-        console.log("value of the current key in savedObject: ", eachQuestion, '=', savedAnswers[eachQuestion])
-      }
-      else{console.log('value to this key is initially null: ', eachQuestion, "::::setting the value...")}
-   setObjectKey(savedAnswers) 
-  }, [eachQuestion, setObjectKey ]);
-
+      && JSON.parse(localStorage.getItem("answers"));
+    if (savedAnswers[eachQuestion]) {
+      console.log(
+        "value of the current key in savedObject: ",
+        eachQuestion,
+        "=",
+        savedAnswers[eachQuestion]
+      );
+    } 
+    else {
+      console.log(
+        "value to this key is initially null: ",
+        eachQuestion,
+        "::::setting the value..."
+      );
+    }
+    setObjectKey(savedAnswers);
+  }, [eachQuestion, setObjectKey]);
 
   return (
     <div className="flex w-full">
@@ -57,24 +90,30 @@ const QueOptsLayout = ({ currentQuestion, currentQueNumber, answers, setAnswers 
           <p>{eachQuestion}</p>
         </div>
         {/* Options section */}
-       {keyIsSet ? <div className="bg-gray-700 max-h-[310px] rounded-md p-3 shadow-md overflow-auto">
-          {currentQuestion.options.map((option, index) => (
-            <div key={index} className="flex flex-wrap hover:bg-green-600 ">
-              <p>{numberToAlphabet(1 + index)}</p>
-              <input
-                type="radio"
-                id={`opt${index}`}
-                name={`opt${index}`}
-                value={option}
-                checked={answers[eachQuestion] == option}
-                onChange={() => {
-                  handleChange(eachQuestion, option);
-                }}
-              />
-              <label htmlFor={`opt${index}`} className="ml-2">{option}</label>
-            </div>
-          ))}
-        </div> : <p>Loading...</p>}
+        {keyIsSet ? (
+          <div className="bg-gray-700 max-h-[310px] rounded-md p-3 shadow-md overflow-auto">
+            {currentQuestion.options.map((option, index) => (
+              <div key={index} className="flex flex-wrap hover:bg-green-600 ">
+                <p>{numberToAlphabet(1 + index)}</p>
+                <input
+                  type="radio"
+                  id={`opt${index}`}
+                  name={`opt${index}`}
+                  value={option}
+                  checked={answers[eachQuestion] == option}
+                  onChange={() => {
+                    handleChange(eachQuestion, option);
+                  }}
+                />
+                <label htmlFor={`opt${index}`} className="ml-2">
+                  {option}
+                </label>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
     </div>
   );

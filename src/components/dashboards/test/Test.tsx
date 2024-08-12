@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 import Confirmation from "./Confirmation";
 import SuccessMessage from "./SuccessMessage";
 import { SignOut } from "@/components/ui/SignOut";
+import { answerType } from "@/components/InitialData/initialData";
+
+
 
 
 const Test = ({ data }) => {
@@ -21,7 +24,7 @@ const Test = ({ data }) => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [currentQueNumber, setCurrentQueNumber] = useState(0); // Current question number
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState<answerType>();
 
   const [noOfUnansweredQuestions, setNoOfUnsweredQuestions] = useState(0);
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
@@ -46,7 +49,7 @@ const Test = ({ data }) => {
     }
 
     if (
-      noOfOpenedQuestions < examData.question.questions ||
+      noOfOpenedQuestions < examData.question.questions.length ||
       _noOfUnansweredQuestions > 0
     ) {
       //
@@ -128,8 +131,8 @@ const Test = ({ data }) => {
       setSuccessIsOpen(true);
 
       // delete student answers stored in browser storage
-      localStorage.setItem("answers", {})
-      setAnswers({})
+      localStorage.setItem("answers", '')
+      setAnswers({}as answerType)
     }
   };
 

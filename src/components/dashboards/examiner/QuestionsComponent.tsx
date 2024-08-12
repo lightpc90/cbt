@@ -5,19 +5,9 @@ import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 
-const paramInit = {
-  course: "",
-  testMinDuration: "",
-  schoolSession: "",
-  dateAndTime: "",
-};
+import { paramInit, quesInit, courseQuesInit } from "@/components/InitialData/question/questionInit";
 
-const quesInit = [{ question: "", answer: "", options: ["", "", "", ""] }];
 
-const courseQuesInit = {
-  questions: quesInit,
-  params: paramInit,
-};
 
 const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues=(s:boolean)=>null }) => {
   const { state, dispatch } = useAppContext();

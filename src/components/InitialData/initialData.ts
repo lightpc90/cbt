@@ -23,3 +23,7 @@ export const iStaff: IStaff =  {
   active: true,
   residentialAddress: '',
 }
+
+export type answerType = {
+  [key: string]: string;
+};

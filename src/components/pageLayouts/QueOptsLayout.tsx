@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { answerType } from "../InitialData/initialData";
+import { isJsonString } from "@/UtilityFunctions/isJsonData";
 
 
 type questionObjType = {
@@ -55,31 +56,21 @@ const QueOptsLayout = ({
       setKeyIsSet(true);
       console.log("setKeyIsSet is set to true...");
     },
-    [setAnswers, eachQuestion, answers]
+    [eachQuestion]
   );
 
   useEffect(() => {
     console.log("entering effect in quesoption layout");
     console.log(localStorage.getItem("answers"));
-    const savedAnswers = localStorage.getItem("answers")
-      && JSON.parse(localStorage.getItem("answers"));
-    if (savedAnswers[eachQuestion]) {
-      console.log(
-        "value of the current key in savedObject: ",
-        eachQuestion,
-        "=",
-        savedAnswers[eachQuestion]
-      );
+    let savedAnswers = localStorage.getItem("answers")
+    if(isJsonString(savedAnswers)){
+      const savedAnswersObj = JSON.parse(savedAnswers);
+      setObjectKey(savedAnswersObj);
     } 
-    else {
-      console.log(
-        "value to this key is initially null: ",
-        eachQuestion,
-        "::::setting the value..."
-      );
-    }
-    setObjectKey(savedAnswers);
-  }, [eachQuestion, setObjectKey]);
+    setAnswers({ ...answers, [eachQuestion]: "" });
+    setKeyIsSet(true);
+    console.log("setKeyIsSet is set to true...");
+  }, [eachQuestion]);
 
   return (
     <div className="flex w-full">

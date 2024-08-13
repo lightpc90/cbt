@@ -290,6 +290,12 @@ const QuestionsComponent = ({
     log.length < 1 ? setData(_data) : setErrorLog(log);
   };
 
+  const handlePreview =(e)=>{
+    e.preventDefault()
+    setQuestions(data)
+    setData(null)
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFileProccessing(true)
@@ -400,11 +406,12 @@ const QuestionsComponent = ({
       </div>
       <div className="">
         {/* FILE UPLOAD COMPONENT */}
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
           <div className="flex flex-col my-2 gap-1">
-            <span onClick={()=>uploadRef.current.click()} className="flex gap-2 items-center cursor-pointer bg-slate-700 py-1 px-2 shadow-md rounded-md">
+            <span onClick={()=>uploadRef.current.click()} className="flex gap-2 items-center cursor-pointer bg-slate-700 hover:bg-rose-500 py-1 px-2 shadow-md rounded-md">
               Upload an Excel file <RiFileExcel2Line size={40} />
             </span>
+            {file && file.name}
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
               <input
                 ref={uploadRef}
@@ -415,24 +422,23 @@ const QuestionsComponent = ({
                 onChange={(e) => handleFileChange(e)}
               />
               {file && (
-                <button type="submit" className=" bg-slate-400">
+                <button type="submit" className=" bg-slate-400 hover:bg-rose-400">
                   {fileprocessing ? `processing file...` : `Process File`}
                 </button>
               )}
               {data && !file && (
-                <button className=" bg-green-900">
+                <button onClick={handlePreview} className=" bg-green-900 hover:bg-green-800">
                   Preview Question
                 </button>
               )}
             </form>
-            {data && <span>Data loaded</span>}
           </div>
           {errorLog.length > 0 && (
-            <div className="bg-rose-700 text-slate-100 py-2 px-4 max-h-[150px] overflow-auto">
-              <p>Error:</p>
+            <div className="bg-rose-700 text-slate-100 py-2 px-4 max-h-[150px] max-w-[500px] overflow-auto">
+              <p>Error, Check:</p>
               {errorLog.map(({ question_number, error, statement }, i) => (
                 <p key={i}>
-                  {`question number ${question_number}: ${error.join(
+                  {`question ${question_number}: ${error.join(
                     ", "
                   )} ${statement} `}
                 </p>

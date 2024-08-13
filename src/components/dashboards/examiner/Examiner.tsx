@@ -49,22 +49,15 @@ const Examiner = ({ data }) => {
   }, [currentUserId, state?.students, state?.courses, state?.staffs]);
 
   // const handleMenuChange = (menubutton) => {
-  //   menu[menubutton] = true
-  //   for (const key in menu) {
-  //     if (key != menubutton) {
-  //       menu[key] = false
-  //     }
-  //   }
-  //   setMenu({ ...menu })
-  // }
+  
 
   return (
     <div className="h-screen bg-slate-900 text-white flex">
       {/* left pane */}
-      <div className="w-2/12 flex flex-col bg-slate-950 h-full p-5 justify-between border-r-2">
+      <div className="w-2/12 flex flex-col bg-slate-950 h-full p-5 lg:p-2 justify-between border-r-2">
         <div>
           {/* profile section */}
-          <div className="p-2 flex flex-col  mb-10">
+          <div className="p-2 flex flex-col  mb-10 lg:mb-4">
             <div className="h-[90px] w-[90px] rounded-full bg-slate-400 mb-5 overflow-hidden  ">
               <Image
                 src={`/image/staffDP.jpg`}
@@ -80,7 +73,7 @@ const Examiner = ({ data }) => {
           </div>
           <hr />
           {/* Navigation section */}
-          <div className="flex flex-col mt-10 gap-3 ">
+          <div className="flex flex-col mt-10 lg:mt-4 gap-3 ">
             <p className="text-center">Menu Navigation</p>
             {menuVariants.map(({ menu, name }, i) => (
               <Link

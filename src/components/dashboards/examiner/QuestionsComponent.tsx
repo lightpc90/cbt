@@ -84,7 +84,7 @@ const QuestionsComponent = ({
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [bottomRef, courseQues, isViewing, questions]);
+  }, [bottomRef, courseQues, isViewing, questions.length]);
 
   const addQuestion = () => {
     setQuestions((prev) => {

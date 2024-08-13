@@ -1,6 +1,6 @@
 export const paramInit = {
   course: "",
-  testMinDuration: "",
+  testMinDuration: 0,
   schoolSession: "",
   dateAndTime: "",
 };

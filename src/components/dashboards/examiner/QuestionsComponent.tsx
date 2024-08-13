@@ -1,34 +1,54 @@
 "use client";
 
-import { useState, useEffect, useRef, isValidElement} from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  isValidElement,
+  ChangeEvent,
+} from "react";
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
+import { RiFileExcel2Line } from "react-icons/ri";
 
-import { paramInit, quesInit, courseQuesInit } from "@/components/InitialData/question/questionInit";
+import {
+  paramInit,
+  quesInit,
+  courseQuesInit,
+} from "@/components/InitialData/question/questionInit";
 
-
-
-const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesInit, setViewingQues=(s:boolean)=>null }) => {
+const QuestionsComponent = ({
+  userInfo,
+  isViewing = false,
+  courseQues = courseQuesInit,
+  setViewingQues = (s: boolean) => null,
+}) => {
   const { state, dispatch } = useAppContext();
 
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const [file, setFile] = useState(null);
+  const [data, setData] = useState(null);
+  const [errorLog, setErrorLog] = useState([]);
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const uploadRef = useRef(null);
 
   const [questions, setQuestions] = useState(quesInit);
 
   //NOTE: the course property here refers only to the course code
   const [examPara, setExamPara] = useState(paramInit);
 
-  console.log("is viewing?: ", isViewing)
-  console.log("course ques obj: ", courseQues)
+  console.log("is viewing?: ", isViewing);
+  console.log("course ques obj: ", courseQues);
 
   const [loading, setLoading] = useState(false);
+ const [fileprocessing, setFileProccessing] = useState(false)
 
   useEffect(() => {
-    if(isViewing === false){     
+    if (isViewing === false) {
       const savedObject = localStorage.getItem("examObject")
         ? JSON.parse(localStorage.getItem("examObject"))
-        : {question:courseQuesInit};
+        : { question: courseQuesInit };
       console.log("saved Object after reload: ", savedObject);
       if (savedObject?.questions && savedObject.questions.length > 0) {
         setQuestions(() => {
@@ -41,31 +61,30 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
         });
       }
     }
-    
-  }, [isViewing]); 
-  
-// run this effect in question viewing mode
-  useEffect(()=>{
-    if(isViewing === true){
-      let questionList = []
-       const handleQuestionLoading = () => {
-         courseQues?.questions?.map((question) =>
+  }, [isViewing]);
+
+  // run this effect in question viewing mode
+  useEffect(() => {
+    if (isViewing === true) {
+      let questionList = [];
+      const handleQuestionLoading = () => {
+        courseQues?.questions?.map((question) =>
           questionList.push({
             question: question.question,
             answer: question.answer,
-            options: question.options,     
+            options: question.options,
           })
-         );
-         setQuestions(questionList);
-         setExamPara(courseQues?.params)
-       };
+        );
+        setQuestions(questionList);
+        setExamPara(courseQues?.params);
+      };
 
-       handleQuestionLoading()
+      handleQuestionLoading();
     }
-    if(bottomRef.current){
-      bottomRef.current.scrollIntoView({behavior: 'smooth'})
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [bottomRef, courseQues, isViewing, questions])
+  }, [bottomRef, courseQues, isViewing, questions]);
 
   const addQuestion = () => {
     setQuestions((prev) => {
@@ -76,8 +95,6 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
       JSON.stringify({ questions: [...questions], examPara: { ...examPara } })
     );
   };
-
- 
 
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
@@ -203,7 +220,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
     } else {
       console.log(_res.message);
       const newData = _res.data;
-      dispatch({type: ActionCommand.UPDATE_COURSES, payload: newData})
+      dispatch({ type: ActionCommand.UPDATE_COURSES, payload: newData });
       // setCourses([...courses, newData]);
       toast.success(_res.message);
 
@@ -214,7 +231,86 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
       );
     }
     setLoading(false);
-    setViewingQues(false)
+    setViewingQues(false);
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setErrorLog([]);
+    setData(null);
+    console.log("change event for file input");
+    // setFile(prev=>prev !== null && null )
+    const _file = e.target.files[0];
+    console.log("file before storing in state: ", _file);
+    setFile(e.target.files[0]);
+  };
+
+  const handleDataFormatting = (data) => {
+    
+    const log: {}[] = [];
+    // check if all the objects in the array has key; question, optionA, optionB, optionC, optionD and answer
+    const _data = data.map((item, index) => {
+      if (
+        item.question &&
+        item.optionA &&
+        item.optionB &&
+        item.optionC &&
+        item.optionD &&
+        item.answer
+      ) {
+        return {
+          question: item.question,
+          options: [item.optionA, item.optionB, item.optionC, item.optionD],
+          answer: item.answer,
+        };
+      } else {
+        const errorObj = {
+          question_number: index + 1,
+          error: [],
+          statement: "are missing",
+        };
+        //  push error to log
+        if (!item.question) {
+          errorObj.error.push("question");
+        }
+        if (!item.optionA) {
+          errorObj.error.push("optionA");
+        }
+        if (!item.optionB) {
+          errorObj.error.push("optionB");
+        }
+        if (!item.optionD) {
+          errorObj.error.push("optionD");
+        }
+        if (!item.answer) {
+          errorObj.error.push("answer");
+        }
+        log.push(errorObj);
+      }
+    });
+    log.length < 1 ? setData(_data) : setErrorLog(log);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFileProccessing(true)
+    const formData = new FormData();
+    console.log("file to be uploaded: ", file);
+    formData.append("file", file);
+    const res = fetch("/api/course/uploadExamFile", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success(data.message);
+          handleDataFormatting(data.data);
+          setFile(null);
+        } else {
+          toast.error(data.error);
+        }
+        setFileProccessing(false)
+      });
   };
 
   return (
@@ -262,7 +358,7 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
               placeholder="00"
               disabled={userInfo?.courses?.length < 1}
               className=" text-rose-800 px-2 bg-inherit border-b border-green-800"
-              value={parseInt(examPara?.testMinDuration)}
+              value={examPara?.testMinDuration}
               onChange={(e) => {
                 handleSetExamPara(e, "testMinDuration");
               }}
@@ -303,6 +399,49 @@ const QuestionsComponent = ({ userInfo, isViewing=false, courseQues=courseQuesIn
         </div>
       </div>
       <div className="">
+        {/* FILE UPLOAD COMPONENT */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-col my-2 gap-1">
+            <span onClick={()=>uploadRef.current.click()} className="flex gap-2 items-center cursor-pointer bg-slate-700 py-1 px-2 shadow-md rounded-md">
+              Upload an Excel file <RiFileExcel2Line size={40} />
+            </span>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+              <input
+                ref={uploadRef}
+                hidden
+                type="file"
+                accept=".xlsx, .xls"
+                id="file-input"
+                onChange={(e) => handleFileChange(e)}
+              />
+              {file && (
+                <button type="submit" className=" bg-slate-400">
+                  {fileprocessing ? `processing file...` : `Process File`}
+                </button>
+              )}
+              {data && !file && (
+                <button className=" bg-green-900">
+                  Preview Question
+                </button>
+              )}
+            </form>
+            {data && <span>Data loaded</span>}
+          </div>
+          {errorLog.length > 0 && (
+            <div className="bg-rose-700 text-slate-100 py-2 px-4 max-h-[150px] overflow-auto">
+              <p>Error:</p>
+              {errorLog.map(({ question_number, error, statement }, i) => (
+                <p key={i}>
+                  {`question number ${question_number}: ${error.join(
+                    ", "
+                  )} ${statement} `}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* QUESTION AND OPTIONS CONTAINER */}
         {questions?.map((q, questionIndex) => (
           <div key={questionIndex} className="flex flex-col w-5/12 gap-2 mt-5">
             <div className="flex gap-2 items-center">

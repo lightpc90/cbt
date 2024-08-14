@@ -157,24 +157,16 @@ const StaffForm = ({
       }
       // setStaffData({...staffData, courses: [existingCourses]})
       setFormData((prevData) => {
-        return { ...prevData, courses: existingCourses };
+        return { ...prevData, courseCodes: existingCourses };
       });
     } else {
       // setStaffData({...staffData, courses: [...existingCourses, course.code]})
       setFormData((prevData) => {
-        return { ...prevData, courses: [...existingCourses, course.code] };
+        return { ...prevData, courseCodes: [...existingCourses, course.code] };
       });
     }
   };
 
-  // const getUpdatedList = (prevList, updatedData) => {
-  //   console.log("prevList: ", prevList, "and new studn: ", updatedData);
-  //   const newList = prevList.map((eachStudent) =>
-  //     eachStudent._id == updatedData._id ? updatedData : eachStudent
-  //   );
-  //   console.log("new list: ", newList);
-  //   return newList;
-  // };
 
   // Update function
   const handleStaffUpdate = async () => {

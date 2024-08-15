@@ -269,18 +269,23 @@ const QuestionsComponent = ({
     const log: {}[] = [];
     // check if all the objects in the array has key; question, optionA, optionB, optionC, optionD and answer
     const _data = data.map((item, index) => {
+      const options = []
+      // save only defined options into a temporary array
+      if(item.optionA.trim()){options.push(item.optionA.trim())}
+      if(item.optionB.trim()){options.push(item.optionB.trim())}
+      if(item.optionC.trim()){options.push(item.optionC.trim())}
+      if(item.optionD.trim()){options.push(item.optionD.trim())}
+
+      // check if 1. question is set, 2. options are 4 and 3. answer set is included in options
       if (
-        item.question &&
-        item.optionA &&
-        item.optionB &&
-        item.optionC &&
-        item.optionD &&
-        item.answer
+        item.question.trim() &&
+        options.length === 4 &&
+        options.includes(item.answer.trim())
       ) {
         return {
-          question: item.question,
-          options: [item.optionA, item.optionB, item.optionC, item.optionD],
-          answer: item.answer,
+          question: item.question.trim(),
+          options: options,
+          answer: item.answer.trim(),
         };
       } else {
         const errorObj = {

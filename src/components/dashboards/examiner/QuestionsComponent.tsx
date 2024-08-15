@@ -10,7 +10,7 @@ import {
 import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
-import { RiFileExcel2Line } from "react-icons/ri";
+import { RiFileExcel2Line, RiArrowUpDoubleLine } from "react-icons/ri";
 
 import {
   paramInit,
@@ -31,6 +31,7 @@ const QuestionsComponent = ({
   const [errorLog, setErrorLog] = useState([]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
   const uploadRef = useRef(null);
 
   const [questions, setQuestions] = useState(quesInit);
@@ -42,7 +43,7 @@ const QuestionsComponent = ({
   console.log("course ques obj: ", courseQues);
 
   const [loading, setLoading] = useState(false);
- const [fileprocessing, setFileProccessing] = useState(false)
+  const [fileprocessing, setFileProccessing] = useState(false);
 
   useEffect(() => {
     if (isViewing === false) {
@@ -85,6 +86,18 @@ const QuestionsComponent = ({
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [bottomRef, courseQues, isViewing, questions.length]);
+
+  const scrollToBottom = () => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const scrollToTop = () => {
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const addQuestion = () => {
     setQuestions((prev) => {
@@ -245,7 +258,6 @@ const QuestionsComponent = ({
   };
 
   const handleDataFormatting = (data) => {
-    
     const log: {}[] = [];
     // check if all the objects in the array has key; question, optionA, optionB, optionC, optionD and answer
     const _data = data.map((item, index) => {
@@ -290,15 +302,15 @@ const QuestionsComponent = ({
     log.length < 1 ? setData(_data) : setErrorLog(log);
   };
 
-  const handlePreview =(e)=>{
-    e.preventDefault()
-    setQuestions(data)
-    setData(null)
-  }
+  const handlePreview = (e) => {
+    e.preventDefault();
+    setQuestions(data);
+    setData(null);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFileProccessing(true)
+    setFileProccessing(true);
     const formData = new FormData();
     console.log("file to be uploaded: ", file);
     formData.append("file", file);
@@ -315,13 +327,28 @@ const QuestionsComponent = ({
         } else {
           toast.error(data.error);
         }
-        setFileProccessing(false)
+        setFileProccessing(false);
       });
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2 items-center">
+      {/* Top and Bottom go-to button */}
+      <div className="flex flex-col h-full justify-between absolute top-0 right-0 py-10 pr-10 ">
+        <span
+          onClick={scrollToTop}
+          className="bg-slate-700 text-slate-900 flex items-center justify-center h-10 w-10 shadow-lg hover:bg-rose-600 hover:text-slate-100 p-2 rounded-full cursor-pointer hover:-translate-y-2 duration-500"
+        >
+          <RiArrowUpDoubleLine size={35} />
+        </span>
+        <span
+          onClick={scrollToBottom}
+          className="bg-slate-700 text-slate-900 flex items-center justify-center h-10 w-10 shadow-lg hover:bg-rose-600 hover:text-slate-100 p-2 rounded-full cursor-pointer rotate-180 hover:translate-y-2 duration-500 "
+        >
+          <RiArrowUpDoubleLine size={35} />
+        </span>
+      </div>
+      <div ref={topRef} className="flex gap-2 items-center">
         {/* Course choose input */}
         <div className="mr-3">
           <p className="font-bold mb-2">
@@ -408,7 +435,10 @@ const QuestionsComponent = ({
         {/* FILE UPLOAD COMPONENT */}
         <div className="flex items-center gap-2">
           <div className="flex flex-col my-2 gap-1">
-            <span onClick={()=>uploadRef.current.click()} className="flex gap-2 items-center cursor-pointer bg-slate-700 hover:bg-rose-500 py-1 px-2 shadow-md rounded-md">
+            <span
+              onClick={() => uploadRef.current.click()}
+              className="flex gap-2 items-center cursor-pointer bg-slate-700 hover:bg-rose-500 py-1 px-2 shadow-md rounded-md"
+            >
               Upload an Excel file <RiFileExcel2Line size={40} />
             </span>
             {file && file.name}
@@ -422,12 +452,18 @@ const QuestionsComponent = ({
                 onChange={(e) => handleFileChange(e)}
               />
               {file && (
-                <button type="submit" className=" bg-slate-400 hover:bg-rose-400">
+                <button
+                  type="submit"
+                  className=" bg-slate-400 hover:bg-rose-400"
+                >
                   {fileprocessing ? `processing file...` : `Process File`}
                 </button>
               )}
               {data && !file && (
-                <button onClick={handlePreview} className=" bg-green-900 hover:bg-green-800">
+                <button
+                  onClick={handlePreview}
+                  className=" bg-green-900 hover:bg-green-800"
+                >
                   Preview Question
                 </button>
               )}

@@ -12,12 +12,12 @@ const StaffLoginMenu = () => {
     <div>
       {!isOpen && (
         <div onClick={() => setIsOpen((prev) => !prev)}>
-          <FaAlignJustify size={35} className={`hover:text-rose-800`} />
+          <FaAlignJustify size={35} className={`hover:text-rose-800 hover:cursor-pointer`} />
         </div>
       )}
       {isOpen && (
         <div onClick={() => setIsOpen((prev) => !prev)}>
-          <FaAlignRight size={35} className={`hover:text-rose-800`} />{" "}
+          <FaAlignRight size={35} className={`hover:text-rose-800 hover:cursor-pointer`} />
         </div>
       )}
       {isOpen && (
@@ -26,13 +26,13 @@ const StaffLoginMenu = () => {
             href={`/`}
             className="flex items-center gap-1 font-semibold hover:text-rose-800"
           >
-            Home <AiFillHome size={20} />{" "}
+            Home <AiFillHome size={20} />
           </Link>
           <Link
             href={`/login/examiner`}
             className="flex items-center gap-1 font-semibold hover:text-rose-800"
           >
-            Staff Login <IoIosLogIn size={20} />{" "}
+            Staff Login <IoIosLogIn size={20} />
           </Link>
           <hr className="my-2 border border-slate-500" />
           <Link

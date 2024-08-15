@@ -25,8 +25,11 @@ export default function Home() {
       {/* Exam porta login */}
       <div className="flex gap-3 items-center bg-white p-10 shadow-md rounded-md border-2 border-blue z-10">
         <div className="text-slate-950 text-2xl font-semibold">
-          <IoSchool size={30} className="text-center w-full" />
-          <p>Exam Portal</p>
+          <div className="flex gap-2 items-center">
+            <p>Exam Portal</p>
+            <IoSchool size={24} />
+          </div>
+
           <span className="flex items-center gap-2">
             <p className="text-slate-400 text-sm">Student Login</p>
             <LuLogIn size={20} />

@@ -8,9 +8,9 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <div className="z-30 w-full">
-      <div className="h-20 bg-slate-950 text-white w-full flex justify-between items-center shadow-md px-5 ">
-        <Link href={`/`} className='hover:text-rose-700'>
+    <div className="z-30 w-full text-white">
+      <div className="h-20 bg-slate-950  w-full flex justify-between items-center shadow-md px-5 ">
+        <Link href={`/`} className="hover:text-rose-700">
           <span className="flex items-center gap-2">
             <IoIosBook size={30} />
             <h1 className="font-bold text-lg">CBT System</h1>
@@ -19,7 +19,7 @@ const Navbar = () => {
         <StaffLoginMenu />
       </div>
       <div className="flex flex-col items-center">
-        <p className="text-2xl font-bold ">
+        <p className="text-2xl font-bold">
           Folahan Institute of Technology, Wakanda
         </p>
         <p className="text-gray-400">Center of Excellence</p>

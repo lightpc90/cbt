@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
           <MdOutlinePhonelinkErase size={40} className="text-rose-800"/>
           <p className="text-2xl text-rose-800">No Access!</p>
           <p>
-            Please use a device with bigger screen to access the software, consider using a laptop
+            Please use a device with bigger screen to access the software. Consider using a laptop
           </p>
         </div>
       </body>

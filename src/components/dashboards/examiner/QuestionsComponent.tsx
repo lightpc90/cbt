@@ -11,6 +11,7 @@ import { numberToAlphabet } from "@/UtilityFunctions/numberToAlphabet";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 import { RiFileExcel2Line, RiArrowUpDoubleLine } from "react-icons/ri";
+import { GiLobArrow } from "react-icons/gi";
 
 import {
   paramInit,
@@ -108,6 +109,13 @@ const QuestionsComponent = ({
       JSON.stringify({ questions: [...questions], examPara: { ...examPara } })
     );
   };
+
+  const isQuestionSet=()=>{
+    if(questions.length>0 && questions[0].question && questions[0].options.length === 4 && questions[0].answer){
+      return true;
+      }
+      return false;
+  }
 
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
@@ -351,13 +359,13 @@ const QuestionsComponent = ({
       <div ref={topRef} className="flex gap-2 items-center">
         {/* Course choose input */}
         <div className="mr-3">
-          <p className="font-bold mb-2">
+          <p className="text-sm text-slate-400 mb-2">
             {userInfo?.courses?.length > 0
-              ? `Choose Course`
+              ? `Set Course`
               : `No Course Registered`}
           </p>
           <select
-            className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md"
+            className="py-1 px-2 bg-inherit ring-2 ring-white rounded-md text-sm"
             value={examPara?.course}
             onChange={(e) => {
               handleSetExamPara(e, "course");
@@ -382,7 +390,7 @@ const QuestionsComponent = ({
         </div>
         {/* Exam Duration Set inputs */}
         <div className="flex flex-col gap-1 ">
-          <p>Duration:</p>
+          <p className="text-sm text-slate-400">Set Exam Duration:</p>
 
           {/* Minute set input */}
           <div className="flex flex-col w-5/12 relative ">
@@ -396,13 +404,30 @@ const QuestionsComponent = ({
                 handleSetExamPara(e, "testMinDuration");
               }}
             />
-            <label className="absolute right-[0px] text-slate-400 ">Min</label>
+            <label className="absolute right-[0px] text-sm text-slate-400 ">
+              Min
+            </label>
           </div>
+        </div>
+
+        {/* Exam date */}
+        <div className="flex flex-col gap-1 mr-4">
+          <label className="text-slate-400 text-sm">Set Exam Date and Time</label>
+          <input
+            value={examPara?.dateAndTime}
+            disabled={userInfo?.courses?.length < 1}
+            onChange={(e) => {
+              handleSetExamPara(e, "dateAndTime");
+            }}
+            type="datetime-local"
+            className="bg-rose-800 rounded-md p-1"
+          />
+          <p>{examPara?.dateAndTime}</p>
         </div>
 
         {/* Session set input */}
         <div>
-          <p>Exam Session</p>
+          <p className="text-sm text-slate-400">Exam Session</p>
           <input
             readOnly
             type="text"
@@ -414,21 +439,6 @@ const QuestionsComponent = ({
               handleSetExamPara(e, "schoolSession");
             }}
           />
-        </div>
-
-        {/* Exam date */}
-        <div className="flex flex-col gap-1 ">
-          <label>Exam Date and Time</label>
-          <input
-            value={examPara?.dateAndTime}
-            disabled={userInfo?.courses?.length < 1}
-            onChange={(e) => {
-              handleSetExamPara(e, "dateAndTime");
-            }}
-            type="datetime-local"
-            className="bg-rose-800 rounded-md p-1"
-          />
-          <p>{examPara?.dateAndTime}</p>
         </div>
       </div>
       <div className="">
@@ -482,6 +492,10 @@ const QuestionsComponent = ({
             </div>
           )}
         </div>
+        <span className="flex gap-2 items-center">
+          <p>Or Manually Set Your Questions Below</p>
+          <GiLobArrow />
+        </span>
 
         {/* QUESTION AND OPTIONS CONTAINER */}
         {questions?.map((q, questionIndex) => (
@@ -545,13 +559,15 @@ const QuestionsComponent = ({
         >
           Add Question
         </button>
-        <button
-          className="ring-2 ring-white p-2 rounded-md"
-          disabled={userInfo?.courses?.length < 1 || loading}
-          onClick={handleQuestionSaving}
-        >
-          {loading ? `Saving...` : `Save Questions`}
-        </button>
+        {isQuestionSet() && (
+          <button
+            className="ring-2 ring-white p-2 rounded-md"
+            disabled={userInfo?.courses?.length < 1 || loading}
+            onClick={handleQuestionSaving}
+          >
+            {loading ? `Saving...` : `Save Questions`}
+          </button>
+        )}
         {isViewing && (
           <button
             className="ring-2 ring-white p-2 rounded-md block mt-4 bg-rose-800"

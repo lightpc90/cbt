@@ -104,7 +104,7 @@ const Examiner = ({ data }) => {
         {/* Set Questions Component */}
         {selectedMenu === `set_test_questions` && (
           <div className="">
-            <p className="text-4xl font-bold my-5">Set Test Questions</p>
+            <p className="text-2xl font-bold my-2">Set Test Questions</p>
             <QuestionsComponent userInfo={user} />
           </div>
         )}

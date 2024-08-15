@@ -7,12 +7,17 @@ import { ActionCommand, useAppContext } from "@/appContext/appState";
 import { useRouter } from "next/navigation";
 import { ICourse } from "@/components/types/types";
 import { Types } from "mongoose";
+import { courseQuesInit } from "@/components/InitialData/question/questionInit";
+
+import { FaDownload } from "react-icons/fa6";
 
 import QuestionsComponent from "./QuestionsComponent";
 
 const CourseManagement = ({ userInfo, data }) => {
   const router = useRouter();
   const { state, dispatch } = useAppContext();
+
+  const [downloadHover, setDowloadOver] = useState(false);
 
   const [drafts, setDrafts] = useState([]);
   const [published, setPublished] = useState([]);
@@ -97,13 +102,41 @@ const CourseManagement = ({ userInfo, data }) => {
       toast.success(_res.error);
     } else if (_res.success === true) {
       dispatch({ type: ActionCommand.UPDATE_COURSES, payload: _res.data });
+      router.refresh();
       console.log("message: ", _res.message);
       toast.success(_res.message);
-      // setCourses((prev) => newList(prev, newDoc));
-      router.refresh();
     }
     setIsPublishing(false);
     setIsDrafting(false);
+  };
+
+  const handleDowload = async (question: typeof courseQuesInit) => {
+    try{
+        const res = await fetch("/api/downloads/export-to-excel", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(question),
+        });
+        if (!res.ok) {
+          console.log("API failed");
+          toast.error("Failed! Try again");
+          return;
+        }
+        const blob = await res.blob();
+        // create a URL for the Excel file and trigger the download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${question.params.course}-question.xlsx`;
+        document.body.appendChild(a)
+        a.click();
+        // clean up
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url);
+    }catch(e){console.log("failed to export: ", e)}
+  
   };
 
   return (
@@ -141,7 +174,7 @@ const CourseManagement = ({ userInfo, data }) => {
           {drafts.length > 0
             ? drafts.map((draft, i) => (
                 <div
-                  className="w-[200px] h-[210px] bg-slate-900 text-white p-2 overflow-auto rounded-md shadow-md"
+                  className="w-[200px] h-[210px] bg-slate-900 text-white p-2 overflow-auto rounded-md shadow-md relative"
                   key={i}
                 >
                   <p>{`${draft.code} Question`}</p>
@@ -150,7 +183,7 @@ const CourseManagement = ({ userInfo, data }) => {
                   <p className="text-sm">{`Duration: ${draft.question?.params?.testMinDuration}Mins`}</p>
                   <p className="text-rose-400 text-sm">{`Exam Date and Time: ${draft.question?.params?.dateAndTime}`}</p>
                   <hr className="my-2" />
-                  <div className="space-x-2">
+                  <div className="flex gap-2 items-center justify-between">
                     <button
                       className="border border-rose-400 py-1 px-2 text-sm hover:bg-rose-500"
                       onClick={() => handleViewQues(draft.question)}
@@ -162,6 +195,20 @@ const CourseManagement = ({ userInfo, data }) => {
                       className="bg-rose-800 py-1 px-2 text-sm hover:bg-rose-500"
                     >
                       Publish
+                    </button>
+                    {/* button to download question obj as an excel file */}
+                    {downloadHover && (
+                      <div className="absolute bottom-12 text-sm right-0 bg-slate-200 text-slate-900 p-2 rounded-lg shadow-lg">
+                        Download as an Excel file
+                      </div>
+                    )}
+                    <button
+                      onMouseEnter={() => setDowloadOver(true)}
+                      onMouseLeave={() => setDowloadOver(false)}
+                      onClick={() => handleDowload(draft.question)}
+                      className="hover:text-green-700"
+                    >
+                      <FaDownload size={22} />
                     </button>
                   </div>
                 </div>

@@ -45,7 +45,6 @@ const ManageExam = ({ data }) => {
       toast.error(uploaded.error);
     } else if (uploaded.success === true) {
       dispatch({ type: ActionCommand.UPDATE_COURSES, payload: uploaded.data });
-      // setCourses((prev) => updatedList(prev, uploaded.data));
       router.refresh();
       toast.success(uploaded.message);
     }

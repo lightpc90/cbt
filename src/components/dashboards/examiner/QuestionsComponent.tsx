@@ -19,6 +19,15 @@ import {
   courseQuesInit,
 } from "@/components/InitialData/question/questionInit";
 
+const standardQuestionKeys = [
+  "question",
+  "optiona",
+  "optionb",
+  "optionc",
+  "optiond",
+  "answer",
+];
+
 const QuestionsComponent = ({
   userInfo,
   isViewing = false,
@@ -29,7 +38,7 @@ const QuestionsComponent = ({
 
   const [file, setFile] = useState(null);
   const [data, setData] = useState(null);
-  const [errorLog, setErrorLog] = useState([]);
+  const [errorLog, setErrorLog] = useState('');
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -110,12 +119,17 @@ const QuestionsComponent = ({
     );
   };
 
-  const isQuestionSet=()=>{
-    if(questions.length>0 && questions[0].question && questions[0].options.length === 4 && questions[0].answer){
+  const isQuestionSet = () => {
+    if (
+      questions.length > 0 &&
+      questions[0].question &&
+      questions[0].options.length === 4 &&
+      questions[0].answer
+    ) {
       return true;
-      }
-      return false;
-  }
+    }
+    return false;
+  };
 
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
@@ -256,63 +270,13 @@ const QuestionsComponent = ({
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setErrorLog([]);
+    setErrorLog('')
     setData(null);
     console.log("change event for file input");
     // setFile(prev=>prev !== null && null )
     const _file = e.target.files[0];
     console.log("file before storing in state: ", _file);
     setFile(e.target.files[0]);
-  };
-
-  const handleDataFormatting = (data) => {
-    const log: {}[] = [];
-    // check if all the objects in the array has key; question, optionA, optionB, optionC, optionD and answer
-    const _data = data.map((item, index) => {
-      const options = []
-      // save only defined options into a temporary array
-      if(item.optionA.trim()){options.push(item.optionA.trim())}
-      if(item.optionB.trim()){options.push(item.optionB.trim())}
-      if(item.optionC.trim()){options.push(item.optionC.trim())}
-      if(item.optionD.trim()){options.push(item.optionD.trim())}
-
-      // check if 1. question is set, 2. options are 4 and 3. answer set is included in options
-      if (
-        item.question.trim() &&
-        options.length === 4 &&
-        options.includes(item.answer.trim())
-      ) {
-        return {
-          question: item.question.trim(),
-          options: options,
-          answer: item.answer.trim(),
-        };
-      } else {
-        const errorObj = {
-          question_number: index + 1,
-          error: [],
-          statement: "are missing",
-        };
-        //  push error to log
-        if (!item.question) {
-          errorObj.error.push("question");
-        }
-        if (!item.optionA) {
-          errorObj.error.push("optionA");
-        }
-        if (!item.optionB) {
-          errorObj.error.push("optionB");
-        }
-        if (!item.optionD) {
-          errorObj.error.push("optionD");
-        }
-        if (!item.answer) {
-          errorObj.error.push("answer");
-        }
-        log.push(errorObj);
-      }
-    });
-    log.length < 1 ? setData(_data) : setErrorLog(log);
   };
 
   const handlePreview = (e) => {
@@ -335,10 +299,11 @@ const QuestionsComponent = ({
       .then((data) => {
         if (data.success) {
           toast.success(data.message);
-          handleDataFormatting(data.data);
+          setData(data.data)
           setFile(null);
         } else {
           toast.error(data.error);
+          setErrorLog(data.error);
         }
         setFileProccessing(false);
       });
@@ -417,7 +382,9 @@ const QuestionsComponent = ({
 
         {/* Exam date */}
         <div className="flex flex-col gap-1 mr-4">
-          <label className="text-slate-400 text-sm">Set Exam Date and Time</label>
+          <label className="text-slate-400 text-sm">
+            Set Exam Date and Time
+          </label>
           <input
             value={examPara?.dateAndTime}
             disabled={userInfo?.courses?.length < 1}
@@ -484,16 +451,9 @@ const QuestionsComponent = ({
               )}
             </form>
           </div>
-          {errorLog.length > 0 && (
+          {errorLog && (
             <div className="bg-rose-700 text-slate-100 py-2 px-4 max-h-[150px] max-w-[500px] overflow-auto">
-              <p>Error, Check:</p>
-              {errorLog.map(({ question_number, error, statement }, i) => (
-                <p key={i}>
-                  {`question ${question_number}: ${error.join(
-                    ", "
-                  )} ${statement} `}
-                </p>
-              ))}
+             <p>{errorLog}</p>
             </div>
           )}
         </div>

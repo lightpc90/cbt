@@ -220,7 +220,7 @@ const CourseManagement = ({ userInfo, data }) => {
             : `No Draft Questions`}
         </div>
       </div>
-      <div className="h-[250px]  text-slate-800 font-semibold my-3 overflow-auto">
+      <div className="h-[280px]  text-slate-800 font-semibold my-3 overflow-auto">
         <p className="bg-rose-800 px-2 py-1 text-sm ml-2 text-white w-fit mb-3 rounded-md ">
           Published Questions
         </p>
@@ -228,7 +228,7 @@ const CourseManagement = ({ userInfo, data }) => {
           {published.length > 0 ? (
             published.map((published, i) => (
               <div
-                className="w-[200px] h-[210px] bg-slate-700 text-white p-2 overflow-auto rounded-md shadow-md"
+                className="w-[200px] h-[220px] bg-slate-700 text-white p-2 overflow-auto rounded-md shadow-md"
                 key={i}
               >
                 <p>{`${published.code} Question`}</p>

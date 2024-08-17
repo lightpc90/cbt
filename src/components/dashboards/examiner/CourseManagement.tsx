@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import { ActionCommand, useAppContext } from "@/appContext/appState";
 import { useRouter } from "next/navigation";
@@ -244,14 +243,15 @@ const CourseManagement = ({ userInfo, data }) => {
                     >
                       View
                     </Link> */}
-                  <button
+                {!published.live ? <button
+                  disabled={published.live}
                     onClick={() =>
                       publishOrPulldownQuestion(false, published._id)
                     }
                     className="bg-rose-800 py-1 px-2 hover:bg-rose-500"
                   >
                     Pulldown
-                  </button>
+                  </button> : <p className="text-green-500">Exam Ongoing...</p> }
                 </div>
               </div>
             ))

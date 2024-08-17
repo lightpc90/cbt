@@ -54,31 +54,6 @@ export async function POST(request) {
         break;
       }
 
-      //   if any of the headers/key doesn't have value in any of the arrays
-    //   const log = [];
-    //   const errorObj = {
-    //     question_number: count,
-    //     error: [],
-    //   };
-      //  push error to log
-    //   !eachDoc.question && errorObj.error.push("question");
-    //   !eachDoc.optiona && errorObj.error.push("optionA");
-    //   !eachDoc.optionb && errorObj.error.push("optionB");
-    //   !eachDoc.optionc && errorObj.error.push("optionC");
-    //   !eachDoc.optiond && errorObj.error.push("optionD");
-    //   !eachDoc.answer && errorObj.error.push("answer");
-
-    //   // record the error in log
-    //   if(errorObj.error.length > 0){
-    //     log.push(errorObj);
-    //   }
-      
-    //   if (log.length > 0) {
-    //     console.log("log data: ", log);
-    //     err = `Frm Ques: ${log[0].question_number}; ${log[0].error.join(", ")}`;
-    //     break;
-    //   }
-
       // create options array and check if answer is included
       const optionKeys = filteredKeys.filter((eachKey)=> eachKey !== 'question' && eachKey !== 'answer')
       console.log("option keys ", optionKeys)

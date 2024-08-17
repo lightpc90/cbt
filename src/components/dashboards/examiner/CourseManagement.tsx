@@ -152,14 +152,16 @@ const CourseManagement = ({ userInfo, data }) => {
         </div>
       )}
       <p className="text-2xl font-bold my-2">Course Management</p>
-      <div className="h-[250px] bg-gray-300 text-slate-800 font-semibold rounded-md shadow-md my-3 overflow-auto">
-        <p className="bg-rose-800 p-1 text-white">My Course(s)</p>
+      <div className="h-[200px]  text-slate-800 font-semibold  my-3 overflow-auto">
+        <p className="bg-rose-800 px-2 py-1 text-sm ml-2 w-fit rounded-md text-white">
+          My Course(s)
+        </p>
         <div className="p-2 flex gap-2 overflow-auto">
           {userInfo?.courses?.length > 0
             ? userInfo?.courses?.map((code, i) => (
                 <div
                   key={i}
-                  className="bg-slate-900 text-white p-1 h-[180px] w-[150px] rounded-md overflow-auto "
+                  className="bg-slate-700 text-white p-1 h-[130px] w-[150px] rounded-md overflow-auto "
                 >
                   <p>{code}</p>
                   <p className="text-rose-400">{getCourse(code)?.title}</p>
@@ -168,13 +170,15 @@ const CourseManagement = ({ userInfo, data }) => {
             : `No Course(s) Registered Yet`}
         </div>
       </div>
-      <div className="h-[250px] bg-gray-300 font-semibold rounded-md shadow-md my-3 overflow-auto">
-        <p className="bg-rose-800 p-1 text-white">Draft Questions</p>
+      <div className="h-[290px] font-semibold my-3 overflow-auto">
+        <p className="bg-rose-800 px-2 py-1 text-sm ml-2 w-fit rounded-md mb-3 text-white">
+          Draft Questions
+        </p>
         <div className="px-2 py-1 overflow-auto flex gap-2">
           {drafts.length > 0
             ? drafts.map((draft, i) => (
                 <div
-                  className="w-[200px] h-[210px] bg-slate-900 text-white p-2 overflow-auto rounded-md shadow-md relative"
+                  className="w-[200px] h-[210px] bg-slate-700 text-white p-2 overflow-auto rounded-md shadow-md relative"
                   key={i}
                 >
                   <p>{`${draft.code} Question`}</p>
@@ -216,40 +220,44 @@ const CourseManagement = ({ userInfo, data }) => {
             : `No Draft Questions`}
         </div>
       </div>
-      <div className="h-[250px] bg-gray-300 text-slate-800 font-semibold rounded-md shadow-md my-3 overflow-auto">
-        <p className="bg-rose-800 p-1 text-white">Published Questions</p>
+      <div className="h-[250px]  text-slate-800 font-semibold my-3 overflow-auto">
+        <p className="bg-rose-800 px-2 py-1 text-sm ml-2 text-white w-fit mb-3 rounded-md ">
+          Published Questions
+        </p>
         <div className="px-2 py-1 overflow-auto flex gap-2">
-          {published.length > 0
-            ? published.map((published, i) => (
-                <div
-                  className="w-[200px] h-[210px] bg-slate-900 text-white p-2 overflow-auto rounded-md shadow-md"
-                  key={i}
-                >
-                  <p>{`${published.code} Question`}</p>
-                  <p>{published.title}</p>
-                  <p className="text-sm">{`${published.question?.questions?.length} questions`}</p>
-                  <p className="text-sm">{`Duration: ${published.question?.params?.testMinDuration}Mins`}</p>
-                  <p className="text-rose-400 text-sm">{`Exam Date and Time: ${published.question?.params?.dateAndTime}`}</p>
-                  <hr className="my-2" />
-                  <div className="space-x-2">
-                    {/* <Link
+          {published.length > 0 ? (
+            published.map((published, i) => (
+              <div
+                className="w-[200px] h-[210px] bg-slate-700 text-white p-2 overflow-auto rounded-md shadow-md"
+                key={i}
+              >
+                <p>{`${published.code} Question`}</p>
+                <p>{published.title}</p>
+                <p className="text-sm">{`${published.question?.questions?.length} questions`}</p>
+                <p className="text-sm">{`Duration: ${published.question?.params?.testMinDuration}Mins`}</p>
+                <p className="text-rose-400 text-sm">{`Exam Date and Time: ${published.question?.params?.dateAndTime}`}</p>
+                <hr className="my-2" />
+                <div className="space-x-2">
+                  {/* <Link
                       className="border border-rose-400 p-1 hover:bg-rose-500"
                       href={`/`}
                     >
                       View
                     </Link> */}
-                    <button
-                      onClick={() =>
-                        publishOrPulldownQuestion(false, published._id)
-                      }
-                      className="bg-rose-800 py-1 px-2 hover:bg-rose-500"
-                    >
-                      Pulldown
-                    </button>
-                  </div>
+                  <button
+                    onClick={() =>
+                      publishOrPulldownQuestion(false, published._id)
+                    }
+                    className="bg-rose-800 py-1 px-2 hover:bg-rose-500"
+                  >
+                    Pulldown
+                  </button>
                 </div>
-              ))
-            : `No Published Questions`}
+              </div>
+            ))
+          ) : (
+            <p className="text-white">No Published Questions</p>
+          )}
         </div>
       </div>
     </div>

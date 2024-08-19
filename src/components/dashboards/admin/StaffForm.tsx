@@ -350,7 +350,9 @@ const StaffForm = ({
             required
             className="bg-inherit text-white border rounded-md p-2"
           >
-            <option value="">Choose Dept</option>
+            <option value="" className="text-slate-900">
+              Choose Dept
+            </option>
             {state.courses?.map((course: ICourse, i: number) => (
               <option key={i} value={course.dept} className="text-slate-900">
                 {course.dept}

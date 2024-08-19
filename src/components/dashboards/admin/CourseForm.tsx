@@ -5,6 +5,7 @@ import { ActionCommand, useAppContext } from "@/appContext/appState";
 import toast from "react-hot-toast";
 import { ICourse } from "../../types/types";
 
+const Levels = ["100", "200", "300", "400", "500"];
 type FormUpdateProps = {
   course?: ICourse;
   setShow?: Dispatch<SetStateAction<boolean>>;
@@ -132,36 +133,48 @@ const CourseForm = ({ course, setShow, show = false }: FormUpdateProps) => {
             name="courseCode"
             placeholder="MTS101"
             required
-            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit w-fit"
           />
-          <label htmlFor="courseDept" className="text-sm">
-            Department
-          </label>
-          <input
-            value={courseData.dept}
-            onChange={(e) =>
-              setCourseData({ ...courseData, dept: e.target.value })
-            }
-            type="text"
-            name="courseDept"
-            placeholder="Mathematics"
-            required
-            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-          />
-          <label htmlFor="courseDept" className="text-sm">
-            Level
-          </label>
-          <input
-            value={courseData.level}
-            onChange={(e) =>
-              setCourseData({ ...courseData, level: e.target.value })
-            }
-            type="text"
-            name="courseLevel"
-            placeholder="100"
-            required
-            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-          />
+          <div className="flex gap-4">
+            <label
+              htmlFor="courseDept"
+              className="text-sm flex flex-col gap-1 flex-1"
+            >
+              Department
+              <input
+                value={courseData.dept}
+                onChange={(e) =>
+                  setCourseData({ ...courseData, dept: e.target.value })
+                }
+                type="text"
+                name="courseDept"
+                placeholder="Mathematics"
+                required
+                className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+              />
+            </label>
+            <label
+              htmlFor="courseDept"
+              className="text-sm flex flex-col gap-1 flex-1 "
+            >
+              Select Level
+              <select
+                name="courseLevel"
+                required
+                value={courseData.level}
+                onChange={(e) =>
+                  setCourseData({ ...courseData, level: e.target.value })
+                }
+                className="py-1 px-2 bg-inherit border rounded-md w-fit"
+              >
+                {Levels.map((level) => (
+                  <option key={level} value={level}>
+                    {level}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           {show ? (
             //   button for course update
             <div className="flex flex-wrap gap-2">

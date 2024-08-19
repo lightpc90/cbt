@@ -36,6 +36,7 @@ type FormDataType = {
   dept: string;
   gender: string;
   staffID: string;
+  admin: boolean;
   courseCodes?: string[];
 };
 const initialFormData = {
@@ -47,6 +48,7 @@ const initialFormData = {
   dept: "",
   staffID: "",
   gender: "",
+  admin: false,
   courseCodes: [],
 };
 
@@ -66,6 +68,7 @@ const StaffForm = ({
     dept: staff?.dept,
     gender: staff?.gender,
     staffID: staff?.staffID,
+    admin: staff?.admin
   };
   const [formData, setFormData] = useState<FormDataType>(
     isEditing ? updateInitialFormData : initialFormData
@@ -167,6 +170,12 @@ const StaffForm = ({
     }
   };
 
+  // set admin function
+  const handleSetAnAdmin=(e)=>{
+    console.log("setting an admin...")
+    setFormData({ ...formData, admin: e.target.checked });
+    console.log(formData.admin)
+  }
 
   // Update function
   const handleStaffUpdate = async () => {
@@ -213,128 +222,190 @@ const StaffForm = ({
   return (
     <div className="flex flex-col gap-2">
       {/* title */}
-      <label htmlFor="title" className="text-sm">
+      <label
+        htmlFor="title"
+        className="text-sm text-slate-400 flex flex-col gap-1 w-fit"
+      >
         Staff Title:
+        <select
+          name="title"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          required
+          className="bg-inherit border rounded-md p-2 "
+        >
+          {Titles.map((Title, i) => (
+            <option key={i} value={Title.value} className="text-slate-900">
+              {Title.name}
+            </option>
+          ))}
+        </select>
       </label>
-      <select
-        name="title"
-        value={formData.title}
-        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-        required
-        className="bg-inherit border rounded-md p-2 "
-      >
-        {Titles.map((Title, i) => (
-          <option key={i} value={Title.value} className="text-slate-900">
-            {Title.name}
-          </option>
-        ))}
-      </select>
-      {/* firstname */}
-      <label htmlFor="firstname" className="text-sm">
-        First Name:
-      </label>
-      <input
-        value={formData.firstname}
-        onChange={(e) =>
-          setFormData({ ...formData, firstname: e.target.value })
-        }
-        type="text"
-        name="firstname"
-        placeholder="John"
-        required
-        className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-      />
-      {/* middlename */}
-      <label htmlFor="middlename" className="text-sm">
-        Middle Name:
-      </label>
-      <input
-        value={formData.middlename}
-        onChange={(e) =>
-          setFormData({ ...formData, middlename: e.target.value })
-        }
-        type="text"
-        name="middlename"
-        placeholder="Miller"
-        className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-      />
+      <div className="flex gap-3">
+        {/* firstname */}
+        <label
+          htmlFor="firstname"
+          className="text-sm text-slate-400 flex flex-col gap-1 flex-1"
+        >
+          First Name:
+          <input
+            value={formData.firstname}
+            onChange={(e) =>
+              setFormData({ ...formData, firstname: e.target.value })
+            }
+            type="text"
+            name="firstname"
+            placeholder="John"
+            required
+            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+          />
+        </label>
+
+        {/* middlename */}
+        <label
+          htmlFor="middlename"
+          className="text-sm text-slate-400 flex flex-col gap-1 flex-1"
+        >
+          Middle Name:
+          <input
+            value={formData.middlename}
+            onChange={(e) =>
+              setFormData({ ...formData, middlename: e.target.value })
+            }
+            type="text"
+            name="middlename"
+            placeholder="Miller"
+            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+          />
+        </label>
+      </div>
       {/* lastname */}
-      <label htmlFor="lastname" className="text-sm">
+      <label
+        htmlFor="lastname"
+        className="text-sm flex flex-col text-slate-400 gap-1 w-6/12"
+      >
         Last Name:
+        <input
+          value={formData.lastname}
+          onChange={(e) =>
+            setFormData({ ...formData, lastname: e.target.value })
+          }
+          type="text"
+          name="lastname"
+          placeholder="Doe"
+          required
+          className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+        />
       </label>
-      <input
-        value={formData.lastname}
-        onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
-        type="text"
-        name="lastname"
-        placeholder="Doe"
-        required
-        className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-      />
       {/* email */}
-      <label htmlFor="email" className="text-sm">
+      <label
+        htmlFor="email"
+        className="text-sm text-slate-400 flex flex-col gap-1 w-6/12"
+      >
         Email:
+        <input
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          type="email"
+          name="email"
+          placeholder="staff@domain.com"
+          required
+          className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+        />
       </label>
-      <input
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        type="email"
-        name="email"
-        placeholder="staff@domain.com"
-        required
-        className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-      />
-      {/* gender select input */}
-      <label htmlFor="gender" className="text-sm">
-        Staff Gender:
-      </label>
-      <select
-        value={formData.gender}
-        name="gender"
-        onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-        required
-        className="bg-inherit border rounded-md p-2"
-      >
-        {Genders?.map((gender, i) => (
-          <option key={i} value={gender.value} className="text-slate-900">
-            {gender.name}
-          </option>
-        ))}
-      </select>
-      {/* dept select input */}
-      <label htmlFor="dept" className="text-sm">
-        Staff Department:
-      </label>
-      <select
-        value={formData.dept}
-        name="dept"
-        onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
-        required
-        className="bg-inherit border rounded-md p-2"
-      >
-        <option value="">Choose Dept</option>
-        {state.courses?.map((course: ICourse, i: number) => (
-          <option key={i} value={course.dept} className="text-slate-900">
-            {course.dept}
-          </option>
-        ))}
-      </select>
-      <p className="text-slate-500">
+
+      <div className="flex gap-3">
+        {/* gender select input */}
+        <label
+          htmlFor="gender"
+          className="text-sm flex flex-col gap-1 w-fit text-slate-400 "
+        >
+          Staff Gender:
+          <select
+            value={formData.gender}
+            name="gender"
+            onChange={(e) =>
+              setFormData({ ...formData, gender: e.target.value })
+            }
+            required
+            className="bg-inherit border rounded-md p-2"
+          >
+            {Genders?.map((gender, i) => (
+              <option key={i} value={gender.value} className="text-slate-900">
+                {gender.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        {/* dept select input */}
+        <label
+          htmlFor="dept"
+          className="text-sm flex flex-col gap-1 text-slate-400 w-fit"
+        >
+          Staff Department:
+          <select
+            value={formData.dept}
+            name="dept"
+            onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
+            required
+            className="bg-inherit border rounded-md p-2"
+          >
+            <option value="">Choose Dept</option>
+            {state.courses?.map((course: ICourse, i: number) => (
+              <option key={i} value={course.dept} className="text-slate-900">
+                {course.dept}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <p className="text-rose-500">
         NOTE: dept must first be registered via Course Registration
       </p>
-      {/* staff id */}
-      <label htmlFor="dept" className="text-sm">
-        Staff ID:
-      </label>
-      <input
-        value={formData.staffID}
-        onChange={(e) => setFormData({ ...formData, staffID: e.target.value })}
-        type="text"
-        name="staffID"
-        placeholder="School Staff ID"
-        required
-        className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
-      />
+      <div className="flex items-center">
+        {/* staff id */}
+        <label
+          htmlFor="dept"
+          className="text-sm text-slate-400 flex flex-col gap-1 w-fit"
+        >
+          Staff ID:
+          <input
+            value={formData.staffID}
+            onChange={(e) =>
+              setFormData({ ...formData, staffID: e.target.value })
+            }
+            type="text"
+            name="staffID"
+            placeholder="School Staff ID"
+            required
+            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+          />
+        </label>
+        {/* select input for making an admin */}
+        <input
+          type="checkbox"
+          id="admin"
+          hidden
+          onClick={handleSetAnAdmin}
+        />
+        <label
+          htmlFor="admin"
+          className="ml-auto cursor-pointer text-sm flex flex-col gap-1 text-slate-400 w-[200px] z-30"
+        >
+          {formData.admin ? `An Admin` : `Make an Admin`}
+          <div
+            className={`${
+              formData?.admin ? "bg-rose-700" : "bg-white"
+            } w-[45px] h-[20px] border-0 outline-none rounded-xl relative`}
+          >
+            <span
+              className={`${
+                formData.admin ? "right-0 bg-slate-200" : "left-0 bg-slate-900"
+              }  w-[18px] h-[18px] rounded-full top-[1px] absolute `}
+            ></span>
+          </div>
+        </label>
+      </div>
       {isEditing ? (
         // When Updating
         <button

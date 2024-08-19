@@ -124,7 +124,7 @@ const Examiner = ({ data }) => {
         {selectedMenu !== `set_test_questions` &&
           selectedMenu !== `manage_courses` &&
           selectedMenu !== `results` && (
-            <div>
+            <div className="">
               <p>Start by choosing any of your menu button</p>
             </div>
           )}

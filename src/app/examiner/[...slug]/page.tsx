@@ -66,7 +66,7 @@ const Page = async() => {
 
   return (
     <>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<p className="h-full flex items-center justify-center">Loading...</p>}>
         <Examiner data={data} />
       </Suspense>
     </>

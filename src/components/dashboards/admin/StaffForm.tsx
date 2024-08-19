@@ -232,7 +232,7 @@ const StaffForm = ({
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
-          className="bg-inherit border rounded-md p-2 "
+          className="bg-inherit text-white border rounded-md p-2 "
         >
           {Titles.map((Title, i) => (
             <option key={i} value={Title.value} className="text-slate-900">
@@ -257,7 +257,7 @@ const StaffForm = ({
             name="firstname"
             placeholder="John"
             required
-            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+            className="p-1 rounded-md text-white border-b-2 border-b-blue-800 bg-inherit"
           />
         </label>
 
@@ -275,7 +275,7 @@ const StaffForm = ({
             type="text"
             name="middlename"
             placeholder="Miller"
-            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+            className="p-1 rounded-md text-white border-b-2 border-b-blue-800 bg-inherit"
           />
         </label>
       </div>
@@ -294,7 +294,7 @@ const StaffForm = ({
           name="lastname"
           placeholder="Doe"
           required
-          className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+          className="p-1 rounded-md text-white border-b-2 border-b-blue-800 bg-inherit"
         />
       </label>
       {/* email */}
@@ -310,7 +310,7 @@ const StaffForm = ({
           name="email"
           placeholder="staff@domain.com"
           required
-          className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+          className="p-1 rounded-md text-white border-b-2 border-b-blue-800 bg-inherit"
         />
       </label>
 
@@ -328,7 +328,7 @@ const StaffForm = ({
               setFormData({ ...formData, gender: e.target.value })
             }
             required
-            className="bg-inherit border rounded-md p-2"
+            className="bg-inherit text-white border rounded-md p-2"
           >
             {Genders?.map((gender, i) => (
               <option key={i} value={gender.value} className="text-slate-900">
@@ -348,7 +348,7 @@ const StaffForm = ({
             name="dept"
             onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
             required
-            className="bg-inherit border rounded-md p-2"
+            className="bg-inherit text-white border rounded-md p-2"
           >
             <option value="">Choose Dept</option>
             {state.courses?.map((course: ICourse, i: number) => (
@@ -378,16 +378,11 @@ const StaffForm = ({
             name="staffID"
             placeholder="School Staff ID"
             required
-            className="p-1 rounded-md border-b-2 border-b-blue-800 bg-inherit"
+            className="p-1 text-white rounded-md border-b-2 border-b-blue-800 bg-inherit"
           />
         </label>
         {/* select input for making an admin */}
-        <input
-          type="checkbox"
-          id="admin"
-          hidden
-          onClick={handleSetAnAdmin}
-        />
+        <input type="checkbox" id="admin" hidden onClick={handleSetAnAdmin} />
         <label
           htmlFor="admin"
           className="ml-auto cursor-pointer text-sm flex flex-col gap-1 text-slate-400 w-[200px] z-30"
@@ -410,7 +405,7 @@ const StaffForm = ({
         // When Updating
         <button
           onClick={handleStaffUpdate}
-          className="bg-green-800 px-2 py-1 rounded-md hover:border-2 hover:border-white"
+          className="bg-slate-600 px-2 py-1 rounded-md hover:border-2 hover:border-white"
         >
           {updating ? "Updating..." : "Update"}
         </button>
@@ -441,7 +436,7 @@ const StaffForm = ({
 
           <button
             onClick={handleStaffRegistration}
-            className="bg-rose-700 text-white rounded-md hover:bg-slate-800 px-2 py-1"
+            className="bg-slate-600 text-white rounded-md hover:bg-slate-800 px-2 py-1"
           >
             {registering ? `Registering...` : `Register Lecturer`}
           </button>

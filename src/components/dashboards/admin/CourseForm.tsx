@@ -195,7 +195,7 @@ const CourseForm = ({ course, setShow, show = false }: FormUpdateProps) => {
             //   button for course registration
             <button
               onClick={handleCourseRegistration}
-              className="bg-slate-600 text-white rounded-md hover:bg-slate-700"
+              className="bg-slate-600 text-white rounded-md hover:bg-slate-700 w-fit py-1 px-2"
             >
               {registering ? `Registering...` : `Register Course`}
             </button>

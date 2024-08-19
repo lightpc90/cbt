@@ -407,7 +407,7 @@ const StaffForm = ({
         // When Updating
         <button
           onClick={handleStaffUpdate}
-          className="bg-slate-600 px-2 py-1 rounded-md hover:border-2 hover:border-white"
+          className="bg-slate-600 px-2 py-1 rounded-md hover:border-2 hover:border-white "
         >
           {updating ? "Updating..." : "Update"}
         </button>

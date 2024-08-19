@@ -165,7 +165,7 @@ const CourseForm = ({ course, setShow, show = false }: FormUpdateProps) => {
                 onChange={(e) =>
                   setCourseData({ ...courseData, level: e.target.value })
                 }
-                className="py-1 px-2 bg-inherit border rounded-md w-fit"
+                className="py-1 px-2 bg-inherit ring-blue-700 rounded-md w-fit"
               >
                 {Levels.map((level) => (
                   <option key={level} value={level}>
@@ -180,7 +180,7 @@ const CourseForm = ({ course, setShow, show = false }: FormUpdateProps) => {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={handleCourseUpdate}
-                className="bg-rose-800 text-white rounded-md hover:bg-slate-700 py-1 px-2"
+                className="bg-slate-600 text-white rounded-md hover:bg-slate-700 py-1 px-2"
               >
                 {updating ? `Updating...` : `Update Course`}
               </button>
@@ -188,14 +188,14 @@ const CourseForm = ({ course, setShow, show = false }: FormUpdateProps) => {
                 onClick={() => setShow(false)}
                 className="bg-rose-800 text-white rounded-md hover:bg-slate-700 py-1 px-2"
               >
-                Cancel
+                Close
               </button>
             </div>
           ) : (
             //   button for course registration
             <button
               onClick={handleCourseRegistration}
-              className="bg-rose-800 text-white rounded-md hover:bg-slate-700"
+              className="bg-slate-600 text-white rounded-md hover:bg-slate-700"
             >
               {registering ? `Registering...` : `Register Course`}
             </button>

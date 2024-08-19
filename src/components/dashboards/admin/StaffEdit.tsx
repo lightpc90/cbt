@@ -69,7 +69,7 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
           onClick={() => setIsEditing(false)}
           className="bg-rose-800 px-2 py-1 rounded-md hover:border-2 hover:border-white"
         >
-          Cancel
+          Close
         </button>
       </div>
       <div className="mt-10">
@@ -99,7 +99,7 @@ const StaffEdit = ({ staff, isEditing, setIsEditing }) => {
             <div className="space-x-2 mt-3">
               <button
                 onClick={handleStaffDelete}
-                className="bg-rose-900 py-1 px-2 hover:bg-rose-700"
+                className="bg-slate-600 rounded-md py-1 px-2 hover:bg-rose-700"
               >
                 {isDeleting ? `Deleting...` : `Delete Staff`}
               </button>

@@ -84,12 +84,12 @@ const CourseEdit = ({course, show, setShow}) => {
             <div className="space-x-2 mt-3">
               <button
                 onClick={handleCourseDelete}
-                className="bg-rose-900 py-1 px-2 hover:bg-rose-700"
+                className="bg-slate-600 text-white rounded-md py-1 px-2 hover:bg-rose-700"
               >
                 {isDeleting ? `Deleting...` : `Delete Staff`}
               </button>
               <button
-                className="border border-rose-900 py-1 px-2 hover:bg-rose-700"
+                className="border border-rose-900 py-1 px-2 hover:bg-rose-700 hover:text-white"
                 onClick={() => setOpenDeleteBox(false)}
               >
                 Cancel
